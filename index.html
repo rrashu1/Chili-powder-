@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>লঙ্কাগুঁড়ো Chili powder</title>
+    <!-- Icon Library (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
+
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* --- THEME UPDATE: BLACK & GOLDEN --- */
+        :root {
+            --bg-dark: #121212;
+            --bg-surface: #1e1e1e;
+            --bg-element: #2a2a2a;
+            --primary-gold: #FFD700;
+            --primary-gold-darker: #f0c419;
+            --text-primary: #e0e0e0;
+            --text-secondary: #aaa;
+            --border-color: #444;
+        }
+
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            padding-bottom: 80px; /* Space for fixed footer */
+        }
+
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background-color: var(--bg-surface);
+            min-height: 100vh;
+            box-shadow: 0 0 25px rgba(0,0,0,0.5);
+        }
+
+        /* --- VFX HEADER UPDATE --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--bg-element);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.3rem;
+            background: linear-gradient(45deg, var(--primary-gold-darker), var(--primary-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.2);
+            animation: shimmer 5s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .header-icons i {
+            font-size: 1.2rem;
+            margin-left: 15px;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+        .header-icons i:hover {
+            color: var(--primary-gold);
+        }
+
+        /* Profile Section */
+        .profile {
+            display: flex;
+            align-items: center;
+            padding: 20px 15px;
+        }
+        .avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-darker));
+            color: var(--bg-dark);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-right: 15px;
+            border: 2px solid var(--primary-gold);
+        }
+        .user-info .name {
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        .user-info .name i {
+            color: var(--primary-gold);
+            font-size: 1rem;
+            margin-left: 5px;
+        }
+        .user-info .balance {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        
+        /* Main Content */
+        main {
+            padding: 0 15px;
+            background-color: var(--bg-surface);
+        }
+        
+        .dashboard-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 20px 0 10px 0;
+            color: var(--primary-gold);
+        }
+
+        .cards-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            flex: 1;
+            background-color: var(--bg-element);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.1);
+        }
+        .card .card-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        .card .card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-gold);
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Refer & Task Sections */
+        .content-card {
+            background-color: var(--bg-element);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .content-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--primary-gold);
+        }
+        .content-card p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        .referral-link-box {
+            background-color: var(--bg-surface);
+            border: 1px dashed var(--border-color);
+            padding: 12px;
+            border-radius: 8px;
+            word-wrap: break-word;
+            text-align: left;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+        .buttons-group {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--bg-dark);
+            background: linear-gradient(45deg, var(--primary-gold-darker), var(--primary-gold));
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+
+        /* --- NEW TASK SECTION --- */
+        .channel-list a {
+            display: block;
+            background-color: var(--bg-surface);
+            color: var(--text-primary);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s, color 0.3s;
+            text-align: left;
+        }
+        .channel-list a i {
+            margin-right: 10px;
+            color: var(--primary-gold);
+        }
+        .channel-list a:hover {
+            background-color: var(--primary-gold);
+            color: var(--bg-dark);
+        }
+
+        /* Bottom Navigation */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--bg-element);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid var(--border-color);
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.3s;
+        }
+        .nav-item i {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+        .nav-item.active, .nav-item:hover {
+            color: var(--primary-gold);
+        }
+
+        /* Modal/Popup Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 15px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--bg-surface);
+            color: var(--text-primary);
+            padding: 25px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+            border: 1px solid var(--primary-gold);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.15);
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--bg-element);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .modal-content h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--primary-gold);
+        }
+        .modal-content p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .modal-content ul {
+            list-style: none;
+            text-align: left;
+            margin: 20px 0;
+        }
+        .modal-content ul li {
+            font-size: 1rem;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+        .modal-content ul li::before {
+            content: '\f005'; /* Font Awesome star icon */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--primary-gold);
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+        .modal-content ul li strong {
+            color: var(--primary-gold);
+        }
+
+        /* --- UPDATED PAYMENT INFO --- */
+        .withdrawal-rules {
+            margin: 25px 0;
+            padding: 15px;
+            border: 1px dashed var(--primary-gold);
+            border-radius: 8px;
+            text-align: left;
+        }
+        .withdrawal-rules h4 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--primary-gold);
+            text-align: center;
+        }
+        .withdrawal-rules p {
+            margin-bottom: 8px !important;
+            font-size: 1rem !important;
+        }
+
+        .modal-bottom-text {
+            background-color: var(--bg-element);
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        .modal-understand-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--primary-gold-darker), var(--primary-gold));
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        .modal-understand-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header>
+            <i class="fa-solid fa-xmark header-icons"></i>
+            <div class="header-title">
+                লঙ্কাগুঁড়ো Chili powder
+            </div>
+            <div class="header-icons">
+                <i class="fa-solid fa-chevron-down"></i>
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </div>
+        </header>
+
+        <section class="profile">
+            <div class="avatar">R</div>
+            <div class="user-info">
+                <div class="name">Rashu <i class="fa-solid fa-circle-check"></i></div>
+                <div class="balance">ব্যালেন্স: 50 টাকা 💰</div>
+            </div>
+        </section>
+
+        <main>
+            <h2 class="dashboard-title">Dashboard</h2>
+            <div class="cards-container">
+                <div class="card">
+                    <div class="card-label">Daily Ads Watched</div>
+                    <div class="card-value">0 / 10</div>
+                </div>
+                <div class="card">
+                    <div class="card-label">Total Referrals</div>
+                    <div class="card-value">0</div>
+                </div>
+            </div>
+
+            <div class="content-card refer-card">
+                <h3>Refer & Earn More!</h3>
+                <p>রেফার বোনাস পেতে লিংকটি কপি করে আপনার বন্ধুদের কাছে শেয়ার করুন। প্রতি রেফারে আয় 20 টাকা।</p>
+                <div class="referral-link-box">
+                    https://t.me/Red_Chilil_bot/app?startapp=8057
+                </div>
+                <div class="buttons-group">
+                    <button class="btn btn-copy">Copy Referral Link</button>
+                    <button class="btn btn-share">Share Now</button>
+                </div>
+            </div>
+
+            <!-- New Task Section -->
+            <div class="content-card task-card">
+                <h3>আমাদের চ্যানেল (Our Channels)</h3>
+                <p>গুরুত্বপূর্ণ আপডেট এবং পেমেন্ট প্রুফ পেতে আমাদের চ্যানেলগুলোতে যোগ দিন।</p>
+                <div class="channel-list">
+                    <a href="#" target="_blank"><i class="fa-solid fa-money-check-dollar"></i> Official Channel Payment</a>
+                    <a href="https://t.me/Red_Chilii_payment_proof" target="_blank"><i class="fa-solid fa-bell"></i> Official New Channel</a>
+                    <a href="https://t.me/longka_GuroOffcial" target="_blank"><i class="fa-brands fa-telegram"></i> Official লঙ্কা গুঁড়ো চ্যানেল</a>
+                </div>
+            </div>
+
+        </main>
+
+        <footer>
+            <a href="#" class="nav-item active">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-headset"></i>
+                <span>Support</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-tasks"></i>
+                <span>Tasks</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Withdraw</span>
+            </a>
+        </footer>
+    </div>
+
+    <!-- Welcome Popup Modal -->
+    <div class="modal-overlay active" id="welcomeModal">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="closeModalBtn">X</button>
+            <h2>স্বাগতম! 🔥</h2>
+            <p>
+                আসসালামু আলাইকুম, সততার সাথে পেমেন্ট করছি। <br>
+                নিয়ম মেনে কাজ করলে ১০০% পেমেন্ট পাবেন ইনশাআল্লাহ 🔥
+            </p>
+            <ul>
+                <li>⚡ জয়েন্ট বোনাস: <strong>50 টাকা</strong></li>
+                <li>💸 প্রতি রেফারে: <strong>20 টাকা</strong></li>
+                <li>💰 প্রতি বিজ্ঞাপনে: <strong>5 টাকা</strong></li>
+                <li>💖 প্রতিদিন ১০ টা করে বিজ্ঞাপন দেখার সুযোগ</li>
+                <li>👋 এই সাইটে কোন ইনভেস্ট করতে হবে না সম্পূর্ণ ফ্রিতে ইনকাম করতে পারবেন ধন্যবাদ।</li>
+            </ul>
+            
+            <!-- Updated Withdrawal Rules -->
+            <div class="withdrawal-rules">
+                <h4>টাকা তোলার নিয়ম (Withdraw Rules)</h4>
+                <p>✅ পেমেন্ট মেথড: <strong>বিকাশ, নগদ</strong></p>
+                <p>✅ সর্বনিম্ন উত্তোলন: <strong>1000 টাকা</strong></p>
+                <p>✅ টাকা তুলতে সর্বনিম্ন <strong>25 টি রেফার</strong> করতে হবে।</p>
+            </div>
+
+            <div class="modal-bottom-text">
+                ~ কাজ করার ক্ষেত্রে কোনো ধরনের VPN ব্যবহার করবেন না। নিয়ম মেনে কাজ করুন এবং আমাদের টেলিগ্রাম চ্যানেলে যুক্ত থাকুন ✅
+            </div>
+            <button class="modal-understand-btn" id="understandBtn">বুঝেছি</button>
+        </div>
+    </div>
+
+    <!-- Firebase CDN SDK -->
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-analytics.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyDiOpq4PP9l3IVCl_piiMGMHD5uw54bXIs",
+        authDomain: "newtube-6ebaa.firebaseapp.com",
+        databaseURL: "https://newtube-6ebaa-default-rtdb.firebaseio.com",
+        projectId: "newtube-6ebaa",
+        storageBucket: "newtube-6ebaa.firebasestorage.app",
+        messagingSenderId: "670278677155",
+        appId: "1:670278677155:web:a0cd2c44c5ea8cbc814516",
+        measurementId: "G-GMPQJ1B2WL"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+    </script>
+
+    <script>
+        // JavaScript to handle the modal popup
+        document.addEventListener('DOMContentLoaded', () => {
+            const welcomeModal = document.getElementById('welcomeModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const understandBtn = document.getElementById('understandBtn');
+
+            function hideModal() {
+                welcomeModal.classList.remove('active');
+            }
+
+            // Hide modal when close button is clicked
+            closeModalBtn.addEventListener('click', hideModal);
+
+            // Hide modal when 'বুঝেছি' button is clicked
+            understandBtn.addEventListener('click', hideModal);
+
+            // Optional: Hide modal if user clicks outside of the modal content
+            welcomeModal.addEventListener('click', (event) => {
+                if (event.target === welcomeModal) {
+                    hideModal();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
