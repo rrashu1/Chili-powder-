@@ -40,7 +40,7 @@
         .user-info .balance { color: var(--text-secondary); font-size: 1rem; }
         main { padding: 0 15px; }
         .page { display: none; }
-        .page.active { display: block; }
+        .page.active { display: block; animation: fadeIn 0.5s ease-in-out; }
         .page-title { font-size: 1.5rem; font-weight: 600; padding: 20px 0 10px 0; color: var(--primary-gold); }
         .cards-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .card { background-color: var(--bg-element); padding: 20px; border-radius: 10px; border: 1px solid var(--border-color); text-align: center; }
@@ -69,10 +69,7 @@
         .modal-content { background-color: var(--bg-surface); padding: 20px; border-radius: 15px; width: 100%; max-width: 360px; text-align: center; border: 1px solid var(--primary-gold); }
         
         /* --- ADMIN PANEL STYLES --- */
-        #admin-panel-container {
-            font-family: 'Roboto', sans-serif;
-            display: none; /* Hidden by default */
-        }
+        #admin-panel-container { font-family: 'Roboto', sans-serif; display: none; }
         #admin-panel-container .container { width: 100%; max-width: 1200px; padding: 20px; margin: auto; }
         #admin-panel-container header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         #admin-panel-container header h1 { color: #d32f2f; }
@@ -87,6 +84,27 @@
         .action-btn { padding: 6px 10px; margin-right: 5px; border-radius: 4px; cursor: pointer; border: none; color: #fff; font-size: 12px; }
         .approve-btn { background-color: #28a745; }
         .reject-btn { background-color: #dc3545; }
+
+        /* --- VISUAL ENHANCEMENTS (VFX) --- */
+        .card, .btn, .nav-item, .task-item, .method-btn {
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.1);
+            border-color: var(--primary-gold);
+        }
+        .btn:hover, .method-btn:hover {
+            transform: scale(1.03);
+            filter: brightness(1.15);
+        }
+        .nav-item:hover {
+            color: var(--primary-gold);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -186,9 +204,12 @@
             </footer>
         </div>
 
-        <!-- Welcome Modal -->
-        <div class="modal-overlay active" id="welcomeModal">
-             <div class="modal-content">...</div> <!-- Modal content from your code -->
+        <!-- Welcome Modal - Hidden by default now -->
+        <div class="modal-overlay" id="welcomeModal">
+             <div class="modal-content">
+                <h3>Loading App...</h3>
+                <p>Please wait a moment.</p>
+             </div>
         </div>
     </div>
 
@@ -253,6 +274,9 @@
             const tg = window.Telegram.WebApp;
             tg.ready();
             tg.expand();
+            
+            // Get referrer ID from start parameter
+            const referrerId = tg.initDataUnsafe.start_param; 
 
             if (!tg.initDataUnsafe?.user) {
                 document.getElementById('user-app-container').innerHTML = `<div style="color:white; text-align:center; padding: 20px;">Please open this app inside Telegram.</div>`;
@@ -263,23 +287,41 @@
             let userData = {};
 
             // Realtime listener for user data
-            onSnapshot(userRef, (docSnap) => {
+            onSnapshot(userRef, async (docSnap) => {
                 if (docSnap.exists()) {
                     userData = docSnap.data();
                     const today = new Date().toISOString().split('T')[0];
                     if (userData.lastAdWatchDate !== today) {
-                        updateDoc(userRef, { adsWatchedToday: 0, lastAdWatchDate: today });
+                        // Reset daily ad count if it's a new day
+                        await updateDoc(userRef, { adsWatchedToday: 0, lastAdWatchDate: today, lastLogin: serverTimestamp() });
                     } else {
+                         // Update UI with existing data for today
                          updateUI(userData);
                     }
                 } else {
+                    // This is a new user
                     const newUserData = {
                         userId: currentUser.id, firstName: currentUser.first_name, userName: currentUser.username || 'N/A',
-                        balance: 50, referrals: 0, adsWatchedToday: 0,
+                        balance: 50, // Initial balance
+                        referrals: 0, adsWatchedToday: 0,
                         lastAdWatchDate: new Date().toISOString().split('T')[0],
                         joinDate: serverTimestamp(), lastLogin: serverTimestamp()
                     };
-                    setDoc(userRef, newUserData);
+
+                    // If the user was referred, process the referral
+                    if (referrerId && referrerId !== String(currentUser.id)) { // Cannot refer yourself
+                        const referrerRef = doc(db, "users", referrerId);
+                        const referrerSnap = await getDoc(referrerRef);
+                        if (referrerSnap.exists()) {
+                            // Award the referrer
+                            await updateDoc(referrerRef, {
+                                referrals: increment(1),
+                                balance: increment(25) // 25 Taka bonus for referral
+                            });
+                            newUserData.referredBy = referrerId; // Track who referred this user
+                        }
+                    }
+                    await setDoc(userRef, newUserData);
                 }
             });
 
@@ -300,14 +342,23 @@
                     const isCompleted = i <= watchedCount;
                     const taskItem = document.createElement('div');
                     taskItem.className = 'task-item';
-                    taskItem.innerHTML = `<span><i class="fa-solid fa-play-circle"></i> Watch Ad #${i}</span><button class="btn-watch" ${isCompleted ? 'disabled' : ''}>${isCompleted ? 'Watched' : 'Watch'}</button>`;
+                    taskItem.innerHTML = `<span><i class="fa-solid fa-play-circle"></i> Watch Ad #${i}</span><button class="btn btn-watch" ${isCompleted ? 'disabled' : ''}>${isCompleted ? 'Watched' : 'Watch'}</button>`;
                     taskListContainer.appendChild(taskItem);
                 }
             }
 
             // Event Listeners for User App
-            document.querySelector('.btn-copy').addEventListener('click', () => { /* Add copy logic */ });
-            document.querySelector('.btn-share').addEventListener('click', () => { /* Add share logic */ });
+            document.querySelector('.btn-copy').addEventListener('click', () => { 
+                const link = document.getElementById('referralLink').textContent;
+                navigator.clipboard.writeText(link).then(() => {
+                    tg.HapticFeedback.notificationOccurred('success');
+                    tg.showAlert('Referral link copied!');
+                });
+            });
+            document.querySelector('.btn-share').addEventListener('click', () => { 
+                const link = document.getElementById('referralLink').textContent;
+                tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent('Join and earn money!')}`);
+            });
             
             document.getElementById('taskList').addEventListener('click', async (e) => {
                 if (e.target.classList.contains('btn-watch') && !e.target.disabled) {
@@ -325,13 +376,16 @@
                 if (!method || !accNum || isNaN(amount)) return tg.showAlert('Please fill all fields correctly.');
                 if (amount < 1000) return tg.showAlert('Minimum withdrawal is 1000 Taka.');
                 if (userData.balance < amount) return tg.showAlert('Insufficient balance.');
-                if (userData.referrals < 25) return tg.showAlert('Minimum 25 referrals needed.');
+                if (userData.referrals < 25) return tg.showAlert('Minimum 25 referrals needed to withdraw.');
 
                 await addDoc(collection(db, "withdrawals"), {
                     userId: currentUser.id, userName: userData.firstName, amount, method, accountNumber: accNum,
                     status: "pending", requestTimestamp: serverTimestamp(), userReferralsAtRequest: userData.referrals
                 });
                 tg.showAlert('Withdrawal request submitted!');
+                
+                // Deduct balance after request
+                await updateDoc(userRef, { balance: increment(-amount) });
             });
              // Navigation logic
             document.querySelectorAll('.nav-item').forEach(item => {
@@ -376,7 +430,7 @@
                         const row = requestsTableBody.insertRow();
                         const date = req.requestTimestamp?.toDate()?.toLocaleDateString('en-GB') || 'N/A';
                         row.innerHTML = `<td>${req.userName}</td><td>${req.amount}</td><td>${req.method}</td><td>${req.accountNumber}</td><td><b>${req.userReferralsAtRequest}</b></td><td>${date}</td>
-                        <td><button class="action-btn approve-btn" data-id="${doc.id}">Approve</button><button class="action-btn reject-btn" data-id="${doc.id}">Reject</button></td>`;
+                        <td><button class="action-btn approve-btn" data-id="${doc.id}" data-user-id="${req.userId}" data-amount="${req.amount}">Approve</button><button class="action-btn reject-btn" data-id="${doc.id}" data-user-id="${req.userId}" data-amount="${req.amount}">Reject</button></td>`;
                     });
                     addEventListenersToButtons();
                 });
@@ -389,11 +443,21 @@
 
             async function handleWithdrawal(event) {
                 const id = event.target.dataset.id;
+                const userId = event.target.dataset.userId;
+                const amount = parseInt(event.target.dataset.amount, 10);
                 const isApprove = event.target.classList.contains('approve-btn');
+                
                 if (!confirm(`Are you sure you want to ${isApprove ? 'approve' : 'reject'} this request?`)) return;
                 
                 const newStatus = isApprove ? 'completed' : 'rejected';
                 await updateDoc(doc(db, "withdrawals", id), { status: newStatus });
+
+                // If rejected, refund the user's balance
+                if (!isApprove) {
+                    const userRef = doc(db, "users", userId);
+                    await updateDoc(userRef, { balance: increment(amount) });
+                }
+
                 alert(`Request has been ${newStatus}.`);
             }
 
