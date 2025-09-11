@@ -15,6 +15,8 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <!-- Monetag Ads SDK -->
     <script src='//libtl.com/sdk.js' data-zone='9858506' data-sdk='show_9858506'></script>
+    <!-- Giga Pub Ads SDK (Replace with your actual Giga Pub SDK URL) -->
+    <script src="https://path-to-your/giga-pub-sdk.js"></script> 
 
     <style>
         /* --- GLOBAL STYLES --- */
@@ -91,13 +93,15 @@
         .stat-card { background-color: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center; }
         .stat-card h3 { margin: 0 0 10px; color: #555; font-size: 16px; }
         .stat-card p { margin: 0; font-size: 32px; font-weight: 700; color: #d32f2f; }
-        .section { background-color: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .section { background-color: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-top: 30px;}
         #admin-panel-container table { width: 100%; border-collapse: collapse; color: #333; }
         #admin-panel-container th, #admin-panel-container td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
         #admin-panel-container th { background-color: #f2f2f2; }
         .action-btn { padding: 6px 10px; margin-right: 5px; border-radius: 4px; cursor: pointer; border: none; color: #fff; font-size: 12px; }
         .approve-btn { background-color: #28a745; }
         .reject-btn { background-color: #dc3545; }
+        #admin-panel-container input { padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+
 
         /* --- VISUAL ENHANCEMENTS (VFX) --- */
         .card, .btn, .nav-item, .task-item, .method-btn { transition: all 0.3s ease; }
@@ -151,7 +155,7 @@
                 </div>
             </div>
 
-            <!-- Page 2: Tasks (Renamed from Support) -->
+            <!-- Page 2: Tasks -->
             <div id="tasksPage" class="page">
                  <h2 class="page-title">Tasks & Channels</h2>
                  <div class="content-card">
@@ -170,6 +174,13 @@
                            <div class="task-text"><i class="fa-brands fa-telegram"></i> লঙ্কা গুঁড়ো Payment চ্যানেল</div>
                            <i class="fa-solid fa-arrow-right"></i>
                         </a>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <h3>Complete Tasks for Rewards</h3>
+                    <p>নিচের কাজগুলো সম্পন্ন করে অতিরিক্ত টাকা আয় করুন।</p>
+                    <div id="dynamic-task-list" class="task-list">
+                        <!-- Dynamic tasks from admin panel will be loaded here -->
                     </div>
                 </div>
             </div>
@@ -275,6 +286,23 @@
                     </table>
                 </div>
             </div>
+            <!-- Task Management Section for Admin -->
+            <div class="section">
+                <h2>Task Management</h2>
+                <form id="create-task-form" style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <input type="text" id="task-title" placeholder="Task Title (e.g., Join Channel)" required style="flex: 2;">
+                    <input type="url" id="task-link" placeholder="Task URL" required style="flex: 3;">
+                    <input type="number" id="task-reward" placeholder="Reward (Taka)" required style="flex: 1;">
+                    <button type="submit" style="padding: 10px 20px; background-color: #d32f2f; color: white; border: none; border-radius: 4px; cursor: pointer;">Add Task</button>
+                </form>
+                <h3>Existing Tasks</h3>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead><tr><th>Title</th><th>URL</th><th>Reward</th><th>Actions</th></tr></thead>
+                        <tbody id="tasks-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -285,7 +313,7 @@
     <script type="module">
         // --- 1. FIREBASE INITIALIZATION (GLOBAL) ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot, updateDoc, increment, collection, addDoc, serverTimestamp, getDocs, query, where, Timestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot, updateDoc, increment, collection, addDoc, serverTimestamp, getDocs, query, where, Timestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDiOpq4PP9l3IVCl_piiMGMHD5uw54bXIs",
@@ -356,6 +384,8 @@
                         }
                     }
                     await setDoc(userRef, newUserData);
+                    userData = newUserData; // Set local userData for immediate use
+                    updateUI(userData); // Update UI for the new user
                     showWelcomeModalIfNeeded(newUserData, true);
                 }
             });
@@ -394,7 +424,7 @@
                 tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent('Join and earn money!')}`);
             });
             
-            // New Monetag Ad Watch Logic
+            // Monetag & Giga Pub Ad Watch Logic
             document.getElementById('watchAdButton').addEventListener('click', () => {
                 if (userData.adsWatchedToday >= 15) {
                     return tg.showAlert('You have watched all ads for today. Come back tomorrow!');
@@ -416,22 +446,41 @@
                         timerFinished = true;
                     }
                 }, 1000);
+                
+                // Randomly choose an ad provider
+                const adProviders = [
+                    () => typeof show_9858506 === 'function' ? show_9858506() : Promise.reject('Monetag not loaded'),
+                    () => typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.reject('GigaPub not loaded')
+                ];
+                const chosenAdProvider = adProviders[Math.floor(Math.random() * adProviders.length)];
 
-                show_9858506().then(async () => {
+                chosenAdProvider().then(() => {
                     clearInterval(countdownInterval);
                     adTimerModal.classList.remove('active');
 
                     if (timerFinished) {
-                        await updateDoc(userRef, {
+                        // "Game Logic": Update UI instantly
+                        userData.adsWatchedToday += 1;
+                        userData.balance += 5;
+                        updateUI(userData);
+
+                        // Sync with Firebase in the background
+                        updateDoc(userRef, {
                             adsWatchedToday: increment(1),
                             balance: increment(5)
-                        });
+                        }).catch(err => console.error("Firebase sync failed:", err));
+
                         tg.HapticFeedback.notificationOccurred('success');
                         tg.showAlert('Congratulations! 5 Taka has been added to your balance.');
                     } else {
                         tg.HapticFeedback.notificationOccurred('error');
                         tg.showAlert('Ad closed too early! You must watch for 13 seconds to get the reward.');
                     }
+                }).catch(error => {
+                    console.error("Ad failed to show:", error);
+                    clearInterval(countdownInterval);
+                    adTimerModal.classList.remove('active');
+                    tg.showAlert('Ad could not be loaded. Please try again.');
                 });
             });
 
@@ -452,10 +501,84 @@
                 tg.showAlert('Withdrawal request submitted!');
             });
             
-            // **FIXED:** Welcome Modal close button functionality
             document.getElementById('welcomeModalCloseBtn').addEventListener('click', () => {
                 document.getElementById('welcomeModal').classList.remove('active');
             });
+            
+            // Dynamic Task Loading Logic
+            async function loadAndDisplayTasks() {
+                const tasksCollectionRef = collection(db, "tasks");
+                const completedTasksCollectionRef = collection(db, "users", String(currentUser.id), "completedTasks");
+                const dynamicTaskListEl = document.getElementById('dynamic-task-list');
+
+                const completedSnapshot = await getDocs(completedTasksCollectionRef);
+                const completedTaskIds = new Set(completedSnapshot.docs.map(doc => doc.id));
+
+                onSnapshot(tasksCollectionRef, (snapshot) => {
+                    dynamicTaskListEl.innerHTML = '';
+                    if (snapshot.empty) {
+                        dynamicTaskListEl.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">No tasks available right now.</p>';
+                        return;
+                    }
+                    snapshot.forEach(doc => {
+                        const task = doc.data();
+                        const taskId = doc.id;
+                        const isCompleted = completedTaskIds.has(taskId);
+
+                        const taskItem = document.createElement('a');
+                        taskItem.className = 'task-item';
+                        taskItem.dataset.taskId = taskId;
+                        taskItem.dataset.reward = task.reward;
+                        taskItem.dataset.link = task.link;
+                        
+                        taskItem.innerHTML = `
+                            <div class="task-text"><i class="fa-solid fa-star"></i> ${task.title} (+${task.reward} টাকা)</div>
+                            <i class="fa-solid ${isCompleted ? 'fa-circle-check' : 'fa-arrow-right'}"></i>
+                        `;
+                        
+                        if (isCompleted) {
+                            taskItem.style.opacity = '0.6';
+                        } else {
+                            taskItem.addEventListener('click', handleTaskClick);
+                        }
+                        dynamicTaskListEl.appendChild(taskItem);
+                    });
+                });
+            }
+            
+            async function handleTaskClick(event) {
+                event.preventDefault();
+                const taskItem = event.currentTarget;
+                const { taskId, reward, link } = taskItem.dataset;
+                
+                taskItem.removeEventListener('click', handleTaskClick);
+                taskItem.style.opacity = '0.6';
+                taskItem.querySelector('.fa-arrow-right').classList.replace('fa-arrow-right', 'fa-circle-check');
+
+                // "Game Logic": Update UI instantly
+                userData.balance += parseInt(reward, 10);
+                updateUI(userData);
+                
+                // Open link immediately for better UX
+                tg.openLink(link);
+
+                // Sync with Firebase in the background
+                try {
+                    const completedTaskRef = doc(db, "users", String(currentUser.id), "completedTasks", taskId);
+                    await setDoc(completedTaskRef, { completedAt: serverTimestamp() });
+                    await updateDoc(userRef, { balance: increment(parseInt(reward, 10)) });
+                    
+                    tg.HapticFeedback.notificationOccurred('success');
+                    tg.showAlert(`Task completed! ${reward} Taka added.`);
+                } catch (error) {
+                    console.error("Error completing task:", error);
+                    tg.showAlert('Could not save task progress. Please try again.');
+                    // Revert local balance if save fails (optional, for consistency)
+                    userData.balance -= parseInt(reward, 10);
+                    updateUI(userData);
+                }
+            }
+            loadAndDisplayTasks();
 
              // Navigation logic
             document.querySelectorAll('.nav-item').forEach(item => {
@@ -502,35 +625,60 @@
                         row.innerHTML = `<td>${req.userName}</td><td>${req.amount}</td><td>${req.method}</td><td>${req.accountNumber}</td><td><b>${req.userReferralsAtRequest}</b></td><td>${date}</td>
                         <td><button class="action-btn approve-btn" data-id="${doc.id}" data-user-id="${req.userId}" data-amount="${req.amount}">Approve</button><button class="action-btn reject-btn" data-id="${doc.id}" data-user-id="${req.userId}" data-amount="${req.amount}">Reject</button></td>`;
                     });
-                    addEventListenersToButtons();
+                    document.querySelectorAll('.approve-btn, .reject-btn').forEach(b => b.onclick = handleWithdrawal);
                 });
-            }
-            
-            function addEventListenersToButtons() {
-                document.querySelectorAll('.approve-btn').forEach(b => b.onclick = handleWithdrawal);
-                document.querySelectorAll('.reject-btn').forEach(b => b.onclick = handleWithdrawal);
             }
 
             async function handleWithdrawal(event) {
-                const id = event.target.dataset.id;
-                const userId = event.target.dataset.userId;
-                const amount = parseInt(event.target.dataset.amount, 10);
+                const { id, userId, amount } = event.target.dataset;
                 const isApprove = event.target.classList.contains('approve-btn');
-                
                 if (!confirm(`Are you sure you want to ${isApprove ? 'approve' : 'reject'} this request?`)) return;
                 
                 const newStatus = isApprove ? 'completed' : 'rejected';
                 await updateDoc(doc(db, "withdrawals", id), { status: newStatus });
 
                 if (!isApprove) {
-                    const userRef = doc(db, "users", userId);
-                    await updateDoc(userRef, { balance: increment(amount) });
+                    await updateDoc(doc(db, "users", userId), { balance: increment(parseInt(amount)) });
                 }
                 alert(`Request has been ${newStatus}.`);
             }
 
+            // Task management for admin
+            function listenAndDisplayTasks() {
+                const tasksTableBody = document.getElementById('tasks-table-body');
+                onSnapshot(collection(db, "tasks"), (snapshot) => {
+                    tasksTableBody.innerHTML = '';
+                    snapshot.forEach(doc => {
+                        const task = doc.data();
+                        const row = tasksTableBody.insertRow();
+                        row.innerHTML = `
+                            <td>${task.title}</td><td>${task.link}</td><td>${task.reward}</td>
+                            <td><button class="action-btn reject-btn delete-task-btn" data-id="${doc.id}">Delete</button></td>`;
+                    });
+                    document.querySelectorAll('.delete-task-btn').forEach(btn => {
+                        btn.addEventListener('click', async (e) => {
+                            if (confirm('Delete this task?')) await deleteDoc(doc(db, "tasks", e.target.dataset.id));
+                        });
+                    });
+                });
+            }
+
+            document.getElementById('create-task-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const title = document.getElementById('task-title').value.trim();
+                const link = document.getElementById('task-link').value.trim();
+                const reward = parseInt(document.getElementById('task-reward').value, 10);
+
+                if (!title || !link || isNaN(reward) || reward <= 0) return alert('Please fill all fields correctly.');
+                
+                await addDoc(collection(db, "tasks"), { title, link, reward, createdAt: serverTimestamp() });
+                alert('Task added!');
+                e.target.reset();
+            });
+
             loadDashboardData();
             listenForWithdrawalRequests();
+            listenAndDisplayTasks();
         }
     </script>
 </body>
