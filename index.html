@@ -240,7 +240,7 @@
                     <p><strong>✅ পেমেন্ট:</strong> ১০০% গ্যারান্টি (বিকাশ, নগদ)</p>
                 </div>
                 <p style="color: var(--error-color); font-weight: bold;">কাজ করার ক্ষেত্রে কোনো ধরনের VPN ব্যবহার করবেন না।</p>
-                <button class="btn close-modal-btn">Close</button>
+                <button class="btn" id="welcomeModalCloseBtn">Close</button>
              </div>
         </div>
 
@@ -354,7 +354,6 @@
                         }
                     }
                     await setDoc(userRef, newUserData);
-                    // For a new user, show the welcome modal immediately
                     showWelcomeModalIfNeeded(newUserData, true);
                 }
             });
@@ -417,8 +416,7 @@
                 }, 1000);
 
                 show_9858506().then(async () => {
-                    // This code runs after the user closes the ad
-                    clearInterval(countdownInterval); // Stop timer just in case
+                    clearInterval(countdownInterval);
                     adTimerModal.classList.remove('active');
 
                     if (timerFinished) {
@@ -452,8 +450,8 @@
                 tg.showAlert('Withdrawal request submitted!');
             });
             
-            // Modal close button
-            document.querySelector('#welcomeModal .close-modal-btn').addEventListener('click', () => {
+            // **FIX:** Welcome Modal close button functionality
+            document.getElementById('welcomeModalCloseBtn').addEventListener('click', () => {
                 document.getElementById('welcomeModal').classList.remove('active');
             });
 
@@ -522,7 +520,6 @@
                 const newStatus = isApprove ? 'completed' : 'rejected';
                 await updateDoc(doc(db, "withdrawals", id), { status: newStatus });
 
-                // If rejected, refund the user's balance
                 if (!isApprove) {
                     const userRef = doc(db, "users", userId);
                     await updateDoc(userRef, { balance: increment(amount) });
