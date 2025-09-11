@@ -11,6 +11,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Orbitron:wght@700;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Telegram Script -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Monetag Ads SDK -->
+    <script src='//libtl.com/sdk.js' data-zone='9858506' data-sdk='show_9858506'></script>
 
     <style>
         /* --- GLOBAL STYLES --- */
@@ -51,23 +53,33 @@
         .content-card p { color: var(--text-secondary); margin-bottom: 20px; }
         .referral-link-box { background-color: var(--bg-surface); border: 1px dashed var(--border-color); padding: 12px; border-radius: 8px; word-wrap: break-word; text-align: left; margin-bottom: 20px; font-size: 0.9rem; color: var(--text-primary); }
         .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; color: var(--bg-dark); background: linear-gradient(45deg, var(--primary-gold-darker), var(--primary-gold)); }
-        .task-list .task-item { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border-color); }
-        .task-item .btn-watch:disabled { background-color: var(--border-color); color: var(--text-secondary); cursor: not-allowed; }
+        .btn:disabled { background: var(--border-color); color: var(--text-secondary); cursor: not-allowed; filter: none; transform: none; }
+        .task-list .task-item { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border-color); text-decoration: none; color: var(--text-primary); }
+        .task-item .task-text { display: flex; align-items: center; gap: 10px; }
+        .task-item i { color: var(--primary-gold); }
         .withdraw-form .form-group { margin-bottom: 15px; text-align: left; }
         .withdraw-form label { display: block; margin-bottom: 5px; color: var(--text-secondary); }
         .withdraw-form .payment-methods { display: flex; gap: 10px; margin-bottom: 15px; }
         .withdraw-form .method-btn { flex: 1; padding: 10px; border: 2px solid var(--border-color); background: var(--bg-element); color: var(--text-primary); border-radius: 8px; cursor: pointer; }
-        .withdraw-form .method-btn.selected { border-color: var(--primary-gold); }
-        .withdraw-form input { width: 100%; padding: 12px; background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 1rem; }
+        .withdraw-form .method-btn.selected { border-color: var(--primary-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); animation: pulse 1.5s infinite; }
+        .withdraw-form input { width: 100%; padding: 12px; background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 1rem; transition: all 0.3s ease; }
+        .withdraw-form input:focus { border-color: var(--primary-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
         .info-box { padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; border: 1px dashed var(--primary-gold); }
         footer { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background-color: var(--bg-element); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid var(--border-color); border-radius: 15px 15px 0 0; z-index: 100; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; cursor: pointer; }
-        .nav-item i { font-size: 1.5rem; margin-bottom: 4px; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-secondary); text-decoration: none; font-size: 0.75rem; cursor: pointer; flex: 1; text-align: center; }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
         .nav-item.active { color: var(--primary-gold); }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 15px; opacity: 0; visibility: hidden; transition: opacity 0.3s; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 15px; opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-content { background-color: var(--bg-surface); padding: 20px; border-radius: 15px; width: 100%; max-width: 360px; text-align: center; border: 1px solid var(--primary-gold); }
-        
+        .modal-content { background-color: var(--bg-surface); padding: 25px; border-radius: 15px; width: 100%; max-width: 360px; text-align: center; border: 1px solid var(--primary-gold); box-shadow: 0 0 20px rgba(255,215,0,0.2); }
+        .modal-content h3 { color: var(--primary-gold); font-size: 1.5rem; margin-bottom: 15px; }
+        .modal-content p { color: var(--text-secondary); margin-bottom: 10px; line-height: 1.6; }
+        .modal-content .info-list { text-align: left; margin: 20px 0; color: var(--text-primary); }
+        .modal-content .info-list p { margin-bottom: 8px; }
+        .modal-content .info-list strong { color: var(--primary-gold); }
+        #countdown-timer { font-size: 3rem; font-weight: bold; color: var(--primary-gold); margin: 15px 0; }
+        .close-modal-btn { margin-top: 20px; padding: 10px 20px; }
+
         /* --- ADMIN PANEL STYLES --- */
         #admin-panel-container { font-family: 'Roboto', sans-serif; display: none; }
         #admin-panel-container .container { width: 100%; max-width: 1200px; padding: 20px; margin: auto; }
@@ -86,130 +98,160 @@
         .reject-btn { background-color: #dc3545; }
 
         /* --- VISUAL ENHANCEMENTS (VFX) --- */
-        .card, .btn, .nav-item, .task-item, .method-btn {
-            transition: all 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.1);
-            border-color: var(--primary-gold);
-        }
-        .btn:hover, .method-btn:hover {
-            transform: scale(1.03);
-            filter: brightness(1.15);
-        }
-        .nav-item:hover {
-            color: var(--primary-gold);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .card, .btn, .nav-item, .task-item, .method-btn { transition: all 0.3s ease; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(255, 215, 0, 0.1); border-color: var(--primary-gold); }
+        .btn:hover:not(:disabled) { transform: scale(1.03); filter: brightness(1.15); }
+        .nav-item:hover { color: var(--primary-gold); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); } 50% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); } 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); } }
     </style>
 </head>
 <body>
 
     <!-- VIEW 1: USER MINI APP -->
     <div id="user-app-container">
-        <div class="app-container">
-            <header>
-                <i class="fa-solid fa-bars"></i>
-                <div class="header-title">লঙ্কাগুঁড়ো</div>
-                <i class="fa-solid fa-bell"></i>
-            </header>
+        <header>
+            <i class="fa-solid fa-bars"></i>
+            <div class="header-title">লঙ্কাগুঁড়ো</div>
+            <i class="fa-solid fa-bell"></i>
+        </header>
 
-            <section class="profile">
-                <div class="avatar" id="userAvatar">?</div>
-                <div class="user-info">
-                    <div class="name" id="userName">Loading...</div>
-                    <div class="balance">ব্যালেন্স: <span id="userBalance">0</span> টাকা 💰</div>
-                </div>
-            </section>
+        <section class="profile">
+            <div class="avatar" id="userAvatar">?</div>
+            <div class="user-info">
+                <div class="name" id="userName">Loading...</div>
+                <div class="balance">ব্যালেন্স: <span id="userBalance">0</span> টাকা 💰</div>
+            </div>
+        </section>
 
-            <main>
-                <!-- Page 1: Home -->
-                <div id="homePage" class="page active">
-                    <h2 class="page-title">Dashboard</h2>
-                    <div class="cards-container">
-                        <div class="card">
-                            <div class="card-label">Daily Ads Watched</div>
-                            <div class="card-value" id="adsWatchedCount">0 / 10</div>
-                        </div>
-                        <div class="card">
-                            <div class="card-label">Total Referrals</div>
-                            <div class="card-value" id="referralCount">0</div>
-                        </div>
+        <main>
+            <!-- Page 1: Home -->
+            <div id="homePage" class="page active">
+                <h2 class="page-title">Dashboard</h2>
+                <div class="cards-container">
+                    <div class="card">
+                        <div class="card-label">Daily Ads Watched</div>
+                        <div class="card-value" id="adsWatchedCount">0 / 15</div>
                     </div>
-                    <div class="content-card">
-                        <h3>Refer & Earn More!</h3>
-                        <p>প্রতি রেফারে আয় 25 টাকা। লিংকটি কপি করে শেয়ার করুন।</p>
-                        <div class="referral-link-box" id="referralLink">Loading...</div>
-                        <div class="buttons-group" style="display:flex; gap:10px;">
-                            <button class="btn btn-copy">Copy Link</button>
-                            <button class="btn btn-share">Share Now</button>
-                        </div>
+                    <div class="card">
+                        <div class="card-label">Total Referrals</div>
+                        <div class="card-value" id="referralCount">0</div>
                     </div>
                 </div>
-
-                <!-- Page 2: Support -->
-                <div id="supportPage" class="page">
-                     <h2 class="page-title">Support</h2>
-                     <div class="content-card">
-                        <h3>কিভাবে কাজ করবেন?</h3>
-                        <p>কাজের নিয়মাবলী বুঝতে নিচের ভিডিওটি দেখুন।</p>
-                        <a href="https://youtu.be/E7SifrcY5QY?si=TcVoyzmtai2rGZsv" target="_blank" class="btn" style="display: block; text-decoration: none;"><i class="fa-solid fa-video"></i> Work Tutorial</a>
+                <div class="content-card">
+                    <h3>Refer & Earn More!</h3>
+                    <p>প্রতি রেফারে আয় 25 টাকা। লিংকটি কপি করে শেয়ার করুন।</p>
+                    <div class="referral-link-box" id="referralLink">Loading...</div>
+                    <div class="buttons-group" style="display:flex; gap:10px;">
+                        <button class="btn btn-copy">Copy Link</button>
+                        <button class="btn btn-share">Share Now</button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Page 3: Tasks (Ads) -->
-                <div id="tasksPage" class="page">
-                    <h2 class="page-title">Watch Ads</h2>
-                    <div class="content-card">
-                        <p>প্রতিদিন ১০টি বিজ্ঞাপন দেখুন। প্রতিটি বিজ্ঞাপনের জন্য পাবেন ৫ টাকা।</p>
-                        <div class="task-list" id="taskList"></div>
+            <!-- Page 2: Tasks (Renamed from Support) -->
+            <div id="tasksPage" class="page">
+                 <h2 class="page-title">Tasks & Channels</h2>
+                 <div class="content-card">
+                    <h3>Join Our Channels</h3>
+                    <p>আমাদের অফিসিয়াল চ্যানেলগুলোতে যোগ দিন এবং সর্বশেষ আপডেট পান।</p>
+                    <div class="task-list">
+                        <a href="https://t.me/Red_Chilii_payment_proof" target="_blank" class="task-item">
+                            <div class="task-text"><i class="fa-brands fa-telegram"></i> Red Chili Office Channel</div>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="https://t.me/longka_GuroOffcial" target="_blank" class="task-item">
+                            <div class="task-text"><i class="fa-brands fa-telegram"></i> লঙ্কা গুঁড়ো অফিসিয়াল চ্যানেল</div>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="https://t.me/Chili_powder_Payment" target="_blank" class="task-item">
+                           <div class="task-text"><i class="fa-brands fa-telegram"></i> লঙ্কা গুঁড়ো Payment চ্যানেল</div>
+                           <i class="fa-solid fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
+            </div>
 
-                <!-- Page 4: Withdraw -->
-                <div id="withdrawPage" class="page">
-                    <h2 class="page-title">Withdraw Funds</h2>
-                    <div class="content-card withdraw-form">
-                        <h3>টাকা তোলার আবেদন</h3>
-                        <div class="form-group">
-                            <label>Select Payment Method</label>
-                            <div class="payment-methods">
-                                <button class="method-btn" data-method="Bkash">বিকাশ</button>
-                                <button class="method-btn" data-method="Nagad">নগদ</button>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="accountNumber">Your Account Number</label>
-                            <input type="tel" id="accountNumber" placeholder="e.g., 01700000000">
-                        </div>
-                        <div class="form-group">
-                            <label for="amount">Amount (Taka)</label>
-                            <input type="number" id="amount" placeholder="Minimum 1000 Taka">
-                        </div>
-                        <button id="submitWithdrawalBtn" class="btn" style="width: 100%;">Submit Request</button>
-                        <div class="info-box">টাকা তুলতে সর্বনিম্ন <strong>1000 টাকা</strong> এবং <strong>25 টি রেফার</strong> প্রয়োজন।</div>
-                    </div>
+            <!-- Page 3: Ads (New Section) -->
+            <div id="adsPage" class="page">
+                <h2 class="page-title">Earn From Ads</h2>
+                <div class="content-card">
+                    <h3>Watch Ads to Earn</h3>
+                    <p>প্রতিদিন ১৫টি বিজ্ঞাপন দেখুন। প্রতিটি সফল বিজ্ঞাপনের জন্য পাবেন ৫ টাকা। বিজ্ঞাপনটি ১৩ সেকেন্ড দেখতে হবে।</p>
+                    <button class="btn" id="watchAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Ads to earn</button>
                 </div>
-            </main>
+            </div>
 
-            <footer>
-                <a class="nav-item active" data-page="homePage"><i class="fa-solid fa-house"></i><span>Home</span></a>
-                <a class="nav-item" data-page="supportPage"><i class="fa-solid fa-headset"></i><span>Support</span></a>
-                <a class="nav-item" data-page="tasksPage"><i class="fa-solid fa-tasks"></i><span>Tasks</span></a>
-                <a class="nav-item" data-page="withdrawPage"><i class="fa-solid fa-wallet"></i><span>Withdraw</span></a>
-            </footer>
-        </div>
+            <!-- Page 4: Withdraw -->
+            <div id="withdrawPage" class="page">
+                <h2 class="page-title">Withdraw Funds</h2>
+                <div class="content-card withdraw-form">
+                    <h3>টাকা তোলার আবেদন</h3>
+                    <div class="form-group">
+                        <label>Select Payment Method</label>
+                        <div class="payment-methods">
+                            <button class="method-btn" data-method="Bkash">বিকাশ</button>
+                            <button class="method-btn" data-method="Nagad">নগদ</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="accountNumber">Your Account Number</label>
+                        <input type="tel" id="accountNumber" placeholder="e.g., 01700000000">
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Amount (Taka)</label>
+                        <input type="number" id="amount" placeholder="Minimum 1000 Taka">
+                    </div>
+                    <button id="submitWithdrawalBtn" class="btn" style="width: 100%;">Submit Request</button>
+                    <div class="info-box">উইথড্র করার জন্য আপনার কমপক্ষে <strong>২৫টি সফল রেফার</strong> প্রয়োজন। ২৫টি রেফার সম্পন্ন হলে আপনি টাকা তোলার জন্য যোগ্য হবেন।</div>
+                </div>
+            </div>
+            
+             <!-- Page 5: Support -->
+            <div id="supportPage" class="page">
+                 <h2 class="page-title">Support</h2>
+                 <div class="content-card">
+                    <h3>কিভাবে কাজ করবেন?</h3>
+                    <p>কাজের নিয়মাবলী বুঝতে নিচের ভিডিওটি দেখুন।</p>
+                    <a href="https://youtu.be/E7SifrcY5QY?si=TcVoyzmtai2rGZsv" target="_blank" class="btn" style="display: block; text-decoration: none;"><i class="fa-solid fa-video"></i> Work Tutorial</a>
+                </div>
+            </div>
 
-        <!-- Welcome Modal - Hidden by default now -->
+        </main>
+
+        <footer>
+            <a class="nav-item active" data-page="homePage"><i class="fa-solid fa-house"></i><span>Home</span></a>
+            <a class="nav-item" data-page="tasksPage"><i class="fa-solid fa-list-check"></i><span>Tasks</span></a>
+            <a class="nav-item" data-page="adsPage"><i class="fa-solid fa-rectangle-ad"></i><span>Ads</span></a>
+            <a class="nav-item" data-page="withdrawPage"><i class="fa-solid fa-wallet"></i><span>Withdraw</span></a>
+            <a class="nav-item" data-page="supportPage"><i class="fa-solid fa-headset"></i><span>Support</span></a>
+        </footer>
+
+        <!-- Welcome Modal -->
         <div class="modal-overlay" id="welcomeModal">
              <div class="modal-content">
-                <h3>Loading App...</h3>
-                <p>Please wait a moment.</p>
+                <h3>স্বাগতম!</h3>
+                <p>আসসালামু আলাইকুম, সততার সাথে পেমেন্ট করছি। নিয়ম মেনে কাজ করলে ১০০% পেমেন্ট পাবেন ইনশাআল্লাহ।</p>
+                <div class="info-list">
+                    <p><strong>🎁 জয়েন্ট বোনাস:</strong> ৫০ টাকা</p>
+                    <p><strong>🤝 প্রতি রেফারে:</strong> ২৫ টাকা</p>
+                    <p><strong>📺 প্রতি বিজ্ঞাপনে:</strong> ৫ টাকা (প্রতিদিন ১৫টি)</p>
+                    <p><strong>💰 ইনভেস্ট:</strong> কোনো ইনভেস্ট করতে হবে না!</p>
+                    <p><strong>✅ পেমেন্ট:</strong> ১০০% গ্যারান্টি (বিকাশ, নগদ)</p>
+                </div>
+                <p style="color: var(--error-color); font-weight: bold;">কাজ করার ক্ষেত্রে কোনো ধরনের VPN ব্যবহার করবেন না।</p>
+                <button class="btn close-modal-btn">Close</button>
              </div>
+        </div>
+
+        <!-- Ad Countdown Timer Modal -->
+        <div class="modal-overlay" id="adTimerModal">
+            <div class="modal-content">
+                <h3>Ad is running...</h3>
+                <p>Please watch the ad for the full duration to receive your reward.</p>
+                <div id="countdown-timer">13</div>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Do not close this window.</p>
+            </div>
         </div>
     </div>
 
@@ -275,7 +317,6 @@
             tg.ready();
             tg.expand();
             
-            // Get referrer ID from start parameter
             const referrerId = tg.initDataUnsafe.start_param; 
 
             if (!tg.initDataUnsafe?.user) {
@@ -286,42 +327,35 @@
             const userRef = doc(db, "users", String(currentUser.id));
             let userData = {};
 
-            // Realtime listener for user data
             onSnapshot(userRef, async (docSnap) => {
                 if (docSnap.exists()) {
                     userData = docSnap.data();
                     const today = new Date().toISOString().split('T')[0];
                     if (userData.lastAdWatchDate !== today) {
-                        // Reset daily ad count if it's a new day
                         await updateDoc(userRef, { adsWatchedToday: 0, lastAdWatchDate: today, lastLogin: serverTimestamp() });
                     } else {
-                         // Update UI with existing data for today
                          updateUI(userData);
                     }
+                    showWelcomeModalIfNeeded(userData);
                 } else {
-                    // This is a new user
                     const newUserData = {
                         userId: currentUser.id, firstName: currentUser.first_name, userName: currentUser.username || 'N/A',
-                        balance: 50, // Initial balance
-                        referrals: 0, adsWatchedToday: 0,
+                        balance: 50, referrals: 0, adsWatchedToday: 0,
                         lastAdWatchDate: new Date().toISOString().split('T')[0],
-                        joinDate: serverTimestamp(), lastLogin: serverTimestamp()
+                        joinDate: serverTimestamp(), lastLogin: serverTimestamp(),
+                        lastWelcomeMessageSeen: null
                     };
-
-                    // If the user was referred, process the referral
-                    if (referrerId && referrerId !== String(currentUser.id)) { // Cannot refer yourself
+                    if (referrerId && referrerId !== String(currentUser.id)) {
                         const referrerRef = doc(db, "users", referrerId);
                         const referrerSnap = await getDoc(referrerRef);
                         if (referrerSnap.exists()) {
-                            // Award the referrer
-                            await updateDoc(referrerRef, {
-                                referrals: increment(1),
-                                balance: increment(25) // 25 Taka bonus for referral
-                            });
-                            newUserData.referredBy = referrerId; // Track who referred this user
+                            await updateDoc(referrerRef, { referrals: increment(1), balance: increment(25) });
+                            newUserData.referredBy = referrerId;
                         }
                     }
                     await setDoc(userRef, newUserData);
+                    // For a new user, show the welcome modal immediately
+                    showWelcomeModalIfNeeded(newUserData, true);
                 }
             });
 
@@ -329,25 +363,24 @@
                 document.getElementById('userName').innerHTML = `${data.firstName} <i class="fa-solid fa-circle-check"></i>`;
                 document.getElementById('userAvatar').textContent = data.firstName.charAt(0).toUpperCase();
                 document.getElementById('userBalance').textContent = data.balance;
-                document.getElementById('adsWatchedCount').textContent = `${data.adsWatchedToday} / 10`;
+                document.getElementById('adsWatchedCount').textContent = `${data.adsWatchedToday || 0} / 15`;
                 document.getElementById('referralCount').textContent = data.referrals;
-                document.getElementById('referralLink').textContent = `http://t.me/Chili_powder_Bot/Chilipowder?startapp=${currentUser.id}`;
-                generateTasks(data.adsWatchedToday);
+                document.getElementById('referralLink').textContent = `https://t.me/Chili_powder_Bot/Chilipowder?startapp=${currentUser.id}`;
             }
 
-            function generateTasks(watchedCount) {
-                const taskListContainer = document.getElementById('taskList');
-                taskListContainer.innerHTML = '';
-                for (let i = 1; i <= 10; i++) {
-                    const isCompleted = i <= watchedCount;
-                    const taskItem = document.createElement('div');
-                    taskItem.className = 'task-item';
-                    taskItem.innerHTML = `<span><i class="fa-solid fa-play-circle"></i> Watch Ad #${i}</span><button class="btn btn-watch" ${isCompleted ? 'disabled' : ''}>${isCompleted ? 'Watched' : 'Watch'}</button>`;
-                    taskListContainer.appendChild(taskItem);
+            async function showWelcomeModalIfNeeded(data, isNewUser = false) {
+                const welcomeModal = document.getElementById('welcomeModal');
+                const now = new Date();
+                const lastSeen = data.lastWelcomeMessageSeen?.toDate();
+                const twentyFourHours = 24 * 60 * 60 * 1000;
+
+                if (isNewUser || !lastSeen || (now.getTime() - lastSeen.getTime() > twentyFourHours)) {
+                    welcomeModal.classList.add('active');
+                    await updateDoc(userRef, { lastWelcomeMessageSeen: serverTimestamp() });
                 }
             }
 
-            // Event Listeners for User App
+            // --- Event Listeners for User App ---
             document.querySelector('.btn-copy').addEventListener('click', () => { 
                 const link = document.getElementById('referralLink').textContent;
                 navigator.clipboard.writeText(link).then(() => {
@@ -360,13 +393,46 @@
                 tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent('Join and earn money!')}`);
             });
             
-            document.getElementById('taskList').addEventListener('click', async (e) => {
-                if (e.target.classList.contains('btn-watch') && !e.target.disabled) {
-                    if (userData.adsWatchedToday >= 10) { return tg.showAlert('All ads watched for today.'); }
-                    e.target.disabled = true; e.target.textContent = '...';
-                    await updateDoc(userRef, { adsWatchedToday: increment(1), balance: increment(5) });
-                    tg.HapticFeedback.notificationOccurred('success');
+            // New Monetag Ad Watch Logic
+            document.getElementById('watchAdButton').addEventListener('click', () => {
+                if (userData.adsWatchedToday >= 15) {
+                    return tg.showAlert('You have watched all ads for today. Come back tomorrow!');
                 }
+
+                const adTimerModal = document.getElementById('adTimerModal');
+                const countdownEl = document.getElementById('countdown-timer');
+                let countdown = 13;
+                let timerFinished = false;
+                
+                adTimerModal.classList.add('active');
+                countdownEl.textContent = countdown;
+                
+                const countdownInterval = setInterval(() => {
+                    countdown--;
+                    countdownEl.textContent = countdown;
+                    if (countdown <= 0) {
+                        clearInterval(countdownInterval);
+                        timerFinished = true;
+                    }
+                }, 1000);
+
+                show_9858506().then(async () => {
+                    // This code runs after the user closes the ad
+                    clearInterval(countdownInterval); // Stop timer just in case
+                    adTimerModal.classList.remove('active');
+
+                    if (timerFinished) {
+                        await updateDoc(userRef, {
+                            adsWatchedToday: increment(1),
+                            balance: increment(5)
+                        });
+                        tg.HapticFeedback.notificationOccurred('success');
+                        tg.showAlert('Congratulations! 5 Taka has been added to your balance.');
+                    } else {
+                        tg.HapticFeedback.notificationOccurred('error');
+                        tg.showAlert('Ad closed too early! You must watch for 13 seconds to get the reward.');
+                    }
+                });
             });
 
             document.getElementById('submitWithdrawalBtn').addEventListener('click', async () => {
@@ -382,11 +448,15 @@
                     userId: currentUser.id, userName: userData.firstName, amount, method, accountNumber: accNum,
                     status: "pending", requestTimestamp: serverTimestamp(), userReferralsAtRequest: userData.referrals
                 });
-                tg.showAlert('Withdrawal request submitted!');
-                
-                // Deduct balance after request
                 await updateDoc(userRef, { balance: increment(-amount) });
+                tg.showAlert('Withdrawal request submitted!');
             });
+            
+            // Modal close button
+            document.querySelector('#welcomeModal .close-modal-btn').addEventListener('click', () => {
+                document.getElementById('welcomeModal').classList.remove('active');
+            });
+
              // Navigation logic
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', () => {
@@ -457,7 +527,6 @@
                     const userRef = doc(db, "users", userId);
                     await updateDoc(userRef, { balance: increment(amount) });
                 }
-
                 alert(`Request has been ${newStatus}.`);
             }
 
