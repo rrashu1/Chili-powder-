@@ -79,12 +79,10 @@
         .modal-content { background-color: var(--bg-surface); padding: 25px; border-radius: 15px; width: 100%; max-width: 360px; text-align: center; border: 1px solid var(--primary-gold); box-shadow: 0 0 20px rgba(255,215,0,0.2); position: relative; }
         .modal-content h3 { color: var(--primary-gold); font-size: 1.5rem; margin-bottom: 15px; }
         .modal-content p { color: var(--text-secondary); margin-bottom: 10px; line-height: 1.6; }
-        .modal-content .info-list { text-align: left; margin: 20px 0; color: var(--text-primary); }
-        .modal-content .info-list p { margin-bottom: 8px; }
-        .modal-content .info-list strong { color: var(--primary-gold); }
+        .info-list { text-align: left; margin: 20px 0; color: var(--text-primary); list-style: none; padding-left: 0; }
+        .info-list p { margin-bottom: 8px; }
+        .info-list strong { color: var(--primary-gold); }
         #countdown-timer { font-size: 3rem; font-weight: bold; color: var(--primary-gold); margin: 15px 0; }
-        .close-modal-icon { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 2rem; color: var(--text-secondary); cursor: pointer; line-height: 1; padding: 0; transition: color 0.3s ease; }
-        .close-modal-icon:hover { color: var(--primary-gold); }
         
         .history-section { margin-top: 30px; }
         .history-section h3 { color: var(--primary-gold); margin-bottom: 15px; font-size: 1.3rem; text-align: left;}
@@ -260,6 +258,19 @@
                     <p>কাজের নিয়মাবলী বুঝতে নিচের ভিডিওটি দেখুন।</p>
                     <a href="https://youtu.be/E7SifrcY5QY?si=TcVoyzmtai2rGZsv" target="_blank" class="btn" style="display: block; text-decoration: none;"><i class="fa-solid fa-video"></i> Work Tutorial</a>
                 </div>
+                <!-- MODIFICATION: Welcome notice added here as a card -->
+                <div class="content-card">
+                    <h3>🌸 আসসালামু আলাইকুম, স্বাগতম!</h3>
+                    <p>আমরা সম্পূর্ণ সততার সাথে পেমেন্ট করে থাকি। নিয়ম মেনে কাজ করলে ইনশাআল্লাহ ১০০% টাকা পাবেন।</p>
+                    <div class="info-list">
+                        <p><strong>🎁 নতুন ইউজার লগইন বোনাস:</strong> ৫০ টাকা</p>
+                        <p><strong>🤝 প্রত্যেক রেফারে:</strong> ২৫ টাকা</p>
+                        <p><strong>📺 প্রতিদিন বিজ্ঞাপন দেখলে (১৫টি পর্যন্ত):</strong> প্রতি বিজ্ঞাপনে ৫ টাকা</p>
+                        <p><strong>💰 কোনো ইনভেস্ট করার প্রয়োজন নেই</strong></p>
+                        <p><strong>✅ পেমেন্ট গ্যারান্টি:</strong> বিকাশ / নগদে ১০০%</p>
+                    </div>
+                    <p style="color: var(--error-color); font-weight: bold;">⚠️ কাজ করার সময় VPN ব্যবহার করবেন না।</p>
+                 </div>
             </div>
 
         </main>
@@ -272,25 +283,7 @@
             <a class="nav-item" data-page="supportPage"><i class="fa-solid fa-headset"></i><span>Support</span></a>
         </footer>
 
-        <!-- Welcome Modal -->
-        <div class="modal-overlay" id="welcomeModal">
-             <div class="modal-content">
-                <!-- UPDATED: This button will now correctly close the modal -->
-                <button class="close-modal-icon" id="welcomeModalCloseBtn">&times;</button>
-                
-                <!-- UPDATED: New notice text -->
-                <h3>🌸 আসসালামু আলাইকুম, স্বাগতম!</h3>
-                <p>আমরা সম্পূর্ণ সততার সাথে পেমেন্ট করে থাকি। নিয়ম মেনে কাজ করলে ইনশাআল্লাহ ১০০% টাকা পাবেন।</p>
-                <div class="info-list">
-                    <p><strong>🎁 নতুন ইউজার লগইন বোনাস:</strong> ৫০ টাকা</p>
-                    <p><strong>🤝 প্রত্যেক রেফারে:</strong> ২৫ টাকা</p>
-                    <p><strong>📺 প্রতিদিন বিজ্ঞাপন দেখলে (১৫টি পর্যন্ত):</strong> প্রতি বিজ্ঞাপনে ৫ টাকা</p>
-                    <p><strong>💰 কোনো ইনভেস্ট করার প্রয়োজন নেই</strong></p>
-                    <p><strong>✅ পেমেন্ট গ্যারান্টি:</strong> বিকাশ / নগদে ১০০%</p>
-                </div>
-                <p style="color: var(--error-color); font-weight: bold;">⚠️ কাজ করার সময় VPN ব্যবহার করবেন না।</p>
-             </div>
-        </div>
+        <!-- MODIFICATION: Welcome Modal has been removed -->
 
         <!-- Ad Countdown Timer Modal -->
         <div class="modal-overlay" id="adTimerModal">
@@ -401,7 +394,6 @@
                     } else {
                          updateUI(userData);
                     }
-                    showWelcomeModalIfNeeded(userData);
                 } else {
                     const newUserData = {
                         userId: currentUser.id, firstName: currentUser.first_name, userName: currentUser.username || 'N/A',
@@ -409,7 +401,6 @@
                         monetagAdsWatchedToday: 0, gigaAdsWatchedToday: 0,
                         lastAdWatchDate: new Date().toISOString().split('T')[0],
                         joinDate: serverTimestamp(), lastLogin: serverTimestamp(),
-                        lastWelcomeMessageSeen: null
                     };
                     if (referrerId && referrerId !== String(currentUser.id)) {
                         const referrerRef = doc(db, "users", referrerId);
@@ -422,7 +413,6 @@
                     await setDoc(userRef, newUserData);
                     userData = newUserData; // Set local userData for immediate use
                     updateUI(userData); // Update UI for the new user
-                    showWelcomeModalIfNeeded(newUserData, true);
                 }
             });
             
@@ -457,22 +447,7 @@
                 if (gigaLeft <= 0) gigaButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
             }
 
-            async function showWelcomeModalIfNeeded(data, isNewUser = false) {
-                const welcomeModal = document.getElementById('welcomeModal');
-                const now = new Date();
-                const lastSeen = data.lastWelcomeMessageSeen?.toDate();
-                const twentyFourHours = 24 * 60 * 60 * 1000;
-
-                if (isNewUser || !lastSeen || (now.getTime() - lastSeen.getTime() > twentyFourHours)) {
-                    welcomeModal.classList.add('active');
-                    await updateDoc(userRef, { lastWelcomeMessageSeen: serverTimestamp() });
-                    
-                    // NEW: Auto-close the modal after 5 seconds
-                    setTimeout(() => {
-                        welcomeModal.classList.remove('active');
-                    }, 5000); // 5000 milliseconds = 5 seconds
-                }
-            }
+            // MODIFICATION: The showWelcomeModalIfNeeded function has been removed.
 
             async function handleAdWatch(config) {
                 const { buttonId, adProvider, limit, watchedCount, firebaseField } = config;
@@ -619,10 +594,7 @@
                 tg.showAlert('Withdrawal request submitted!');
             });
             
-            // UPDATED: Event listener for the cross/cancel button now works correctly.
-            document.getElementById('welcomeModalCloseBtn').addEventListener('click', () => {
-                document.getElementById('welcomeModal').classList.remove('active');
-            });
+            // MODIFICATION: Event listener for the welcome modal close button has been removed.
             
             async function loadAndDisplayTasks() {
                 const tasksCollectionRef = collection(db, "tasks");
