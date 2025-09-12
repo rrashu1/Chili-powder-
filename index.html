@@ -13,8 +13,10 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <!-- Monetag Ads SDK -->
     <script src='//libtl.com/sdk.js' data-zone='9858506' data-sdk='show_9858506'></script>
-    <!-- Giga Pub Ads SDK (Replace with your actual Giga Pub SDK URL) -->
-    <script src="https://path-to-your/giga-pub-sdk.js"></script> 
+    
+    <!-- Giga Pub Ads SDK -->
+    <!-- *** IMPORTANT: REPLACE THE 'src' URL BELOW with the actual SDK link from your Giga Pub dashboard! *** -->
+    <script src="https://your-giga-pub-sdk-url/sdk.js"></script> 
 
     <style>
         /* --- GLOBAL STYLES --- */
@@ -71,7 +73,7 @@
         .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-secondary); text-decoration: none; font-size: 0.75rem; cursor: pointer; flex: 1; text-align: center; }
         .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
         .nav-item.active { color: var(--primary-gold); }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 15px; opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 15px; opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-content { background-color: var(--bg-surface); padding: 25px; border-radius: 15px; width: 100%; max-width: 360px; text-align: center; border: 1px solid var(--primary-gold); box-shadow: 0 0 20px rgba(255,215,0,0.2); }
         .modal-content h3 { color: var(--primary-gold); font-size: 1.5rem; margin-bottom: 15px; }
@@ -431,6 +433,11 @@
                 if (isNewUser || !lastSeen || (now.getTime() - lastSeen.getTime() > twentyFourHours)) {
                     welcomeModal.classList.add('active');
                     await updateDoc(userRef, { lastWelcomeMessageSeen: serverTimestamp() });
+
+                    // *** NEW: Automatically close the modal after 5 seconds ***
+                    setTimeout(() => {
+                        welcomeModal.classList.remove('active');
+                    }, 5000); // 5000 milliseconds = 5 seconds
                 }
             }
 
@@ -442,6 +449,7 @@
                 button.disabled = true; // Disable immediately to prevent double clicks
 
                 if (watchedCount >= limit) {
+                    button.disabled = false; // Re-enable if limit is already reached
                     return tg.showAlert(`You have watched all ads from this provider for today.`);
                 }
 
@@ -508,7 +516,7 @@
             document.getElementById('watchMonetagAdButton').addEventListener('click', () => {
                 handleAdWatch({
                     buttonId: 'watchMonetagAdButton',
-                    adProvider: () => typeof show_9858506 === 'function' ? show_9858506() : Promise.reject('Monetag not loaded'),
+                    adProvider: () => typeof show_9858506 === 'function' ? show_9858506() : Promise.reject('Monetag SDK not loaded'),
                     limit: 8,
                     watchedCount: userData.monetagAdsWatchedToday || 0,
                     firebaseField: 'monetagAdsWatchedToday'
@@ -518,8 +526,8 @@
             document.getElementById('watchGigaAdButton').addEventListener('click', () => {
                 handleAdWatch({
                     buttonId: 'watchGigaAdButton',
-                    adProvider: () => typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.reject('GigaPub not loaded'),
-                    limit: 7, // 8 (Monetag) + 7 (Giga) = 15 total ads
+                    adProvider: () => typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.reject('GigaPub SDK not loaded'),
+                    limit: 7, 
                     watchedCount: userData.gigaAdsWatchedToday || 0,
                     firebaseField: 'gigaAdsWatchedToday'
                 });
@@ -609,14 +617,11 @@
                 taskItem.style.opacity = '0.6';
                 taskItem.querySelector('.fa-arrow-right').classList.replace('fa-arrow-right', 'fa-circle-check');
 
-                // "Game Logic": Update UI instantly
                 userData.balance += parseInt(reward, 10);
                 updateUI(userData);
                 
-                // Open link immediately for better UX
                 tg.openLink(link);
 
-                // Sync with Firebase in the background
                 try {
                     const completedTaskRef = doc(db, "users", String(currentUser.id), "completedTasks", taskId);
                     await setDoc(completedTaskRef, { completedAt: serverTimestamp() });
@@ -627,7 +632,6 @@
                 } catch (error) {
                     console.error("Error completing task:", error);
                     tg.showAlert('Could not save task progress. Please try again.');
-                    // Revert local balance if save fails (optional, for consistency)
                     userData.balance -= parseInt(reward, 10);
                     updateUI(userData);
                 }
