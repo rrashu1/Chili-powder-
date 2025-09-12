@@ -76,25 +76,16 @@
         .nav-item.active { color: var(--primary-gold); }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 15px; opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-content { background-color: var(--bg-surface); padding: 25px; border-radius: 15px; width: 100%; max-width: 360px; text-align: center; border: 1px solid var(--primary-gold); box-shadow: 0 0 20px rgba(255,215,0,0.2); position: relative; /* UPDATED: Added for positioning the close button */ }
+        .modal-content { background-color: var(--bg-surface); padding: 25px; border-radius: 15px; width: 100%; max-width: 360px; text-align: center; border: 1px solid var(--primary-gold); box-shadow: 0 0 20px rgba(255,215,0,0.2); position: relative; }
         .modal-content h3 { color: var(--primary-gold); font-size: 1.5rem; margin-bottom: 15px; }
         .modal-content p { color: var(--text-secondary); margin-bottom: 10px; line-height: 1.6; }
         .modal-content .info-list { text-align: left; margin: 20px 0; color: var(--text-primary); }
         .modal-content .info-list p { margin-bottom: 8px; }
         .modal-content .info-list strong { color: var(--primary-gold); }
         #countdown-timer { font-size: 3rem; font-weight: bold; color: var(--primary-gold); margin: 15px 0; }
-        .close-modal-btn { margin-top: 20px; padding: 10px 20px; }
-        /* NEW: Styles for the cross/cancel button on the modal */
-        .close-modal-icon {
-            position: absolute; top: 10px; right: 15px;
-            background: none; border: none;
-            font-size: 2rem; color: var(--text-secondary);
-            cursor: pointer; line-height: 1;
-            padding: 0; transition: color 0.3s ease;
-        }
+        .close-modal-icon { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 2rem; color: var(--text-secondary); cursor: pointer; line-height: 1; padding: 0; transition: color 0.3s ease; }
         .close-modal-icon:hover { color: var(--primary-gold); }
         
-        /* NEW: Styles for Withdrawal History */
         .history-section { margin-top: 30px; }
         .history-section h3 { color: var(--primary-gold); margin-bottom: 15px; font-size: 1.3rem; text-align: left;}
         .history-list { list-style: none; padding: 0; }
@@ -284,19 +275,20 @@
         <!-- Welcome Modal -->
         <div class="modal-overlay" id="welcomeModal">
              <div class="modal-content">
-                <!-- UPDATED: Replaced button with a cross icon -->
+                <!-- UPDATED: This button will now correctly close the modal -->
                 <button class="close-modal-icon" id="welcomeModalCloseBtn">&times;</button>
-                <h3>স্বাগতম!</h3>
-                <p>আসসালামু আলাইকুম, সততার সাথে পেমেন্ট করছি। নিয়ম মেনে কাজ করলে ১০০% পেমেন্ট পাবেন ইনশাআল্লাহ।</p>
+                
+                <!-- UPDATED: New notice text -->
+                <h3>🌸 আসসালামু আলাইকুম, স্বাগতম!</h3>
+                <p>আমরা সম্পূর্ণ সততার সাথে পেমেন্ট করে থাকি। নিয়ম মেনে কাজ করলে ইনশাআল্লাহ ১০০% টাকা পাবেন।</p>
                 <div class="info-list">
-                    <p><strong>🎁 জয়েন্ট বোনাস:</strong> ৫০ টাকা</p>
-                    <p><strong>🤝 প্রতি রেফারে:</strong> ২৫ টাকা</p>
-                    <p><strong>📺 প্রতি বিজ্ঞাপনে:</strong> ৫ টাকা (প্রতিদিন ১৫টি)</p>
-                    <p><strong>💰 ইনভেস্ট:</strong> কোনো ইনভেস্ট করতে হবে না!</p>
-                    <p><strong>✅ পেমেন্ট:</strong> ১০০% গ্যারান্টি (বিকাশ, নগদ)</p>
+                    <p><strong>🎁 নতুন ইউজার লগইন বোনাস:</strong> ৫০ টাকা</p>
+                    <p><strong>🤝 প্রত্যেক রেফারে:</strong> ২৫ টাকা</p>
+                    <p><strong>📺 প্রতিদিন বিজ্ঞাপন দেখলে (১৫টি পর্যন্ত):</strong> প্রতি বিজ্ঞাপনে ৫ টাকা</p>
+                    <p><strong>💰 কোনো ইনভেস্ট করার প্রয়োজন নেই</strong></p>
+                    <p><strong>✅ পেমেন্ট গ্যারান্টি:</strong> বিকাশ / নগদে ১০০%</p>
                 </div>
-                <p style="color: var(--error-color); font-weight: bold;">কাজ করার ক্ষেত্রে কোনো ধরনের VPN ব্যবহার করবেন না।</p>
-                <!-- UPDATED: Removed the old close button -->
+                <p style="color: var(--error-color); font-weight: bold;">⚠️ কাজ করার সময় VPN ব্যবহার করবেন না।</p>
              </div>
         </div>
 
@@ -471,11 +463,14 @@
                 const lastSeen = data.lastWelcomeMessageSeen?.toDate();
                 const twentyFourHours = 24 * 60 * 60 * 1000;
 
-                // UPDATED: Logic to show modal if new user, never seen, or 24 hours have passed
                 if (isNewUser || !lastSeen || (now.getTime() - lastSeen.getTime() > twentyFourHours)) {
                     welcomeModal.classList.add('active');
                     await updateDoc(userRef, { lastWelcomeMessageSeen: serverTimestamp() });
-                    // UPDATED: Removed the auto-close timeout. Now user must click the 'x' button.
+                    
+                    // NEW: Auto-close the modal after 5 seconds
+                    setTimeout(() => {
+                        welcomeModal.classList.remove('active');
+                    }, 5000); // 5000 milliseconds = 5 seconds
                 }
             }
 
@@ -624,7 +619,7 @@
                 tg.showAlert('Withdrawal request submitted!');
             });
             
-            // UPDATED: Event listener for the new cross/cancel button on the welcome modal
+            // UPDATED: Event listener for the cross/cancel button now works correctly.
             document.getElementById('welcomeModalCloseBtn').addEventListener('click', () => {
                 document.getElementById('welcomeModal').classList.remove('active');
             });
