@@ -14,9 +14,8 @@
     <!-- Monetag Ads SDK -->
     <script src='//libtl.com/sdk.js' data-zone='9858506' data-sdk='show_9858506'></script>
     
-    <!-- Giga Pub Ads SDK -->
-    <!-- *** IMPORTANT: REPLACE THE 'src' URL BELOW with the actual SDK link from your Giga Pub dashboard! *** -->
-    <script src="https://your-giga-pub-sdk-url/sdk.js"></script> 
+    <!-- Giga Pub Ads SDK (Updated) -->
+    <script src="https://ad.gigapub.tech/script?id=2925"></script>
 
     <style>
         /* --- GLOBAL STYLES --- */
@@ -66,6 +65,9 @@
         .withdraw-form .payment-methods { display: flex; gap: 10px; margin-bottom: 15px; }
         .withdraw-form .method-btn { flex: 1; padding: 10px; border: 2px solid var(--border-color); background: var(--bg-element); color: var(--text-primary); border-radius: 8px; cursor: pointer; }
         .withdraw-form .method-btn.selected { border-color: var(--primary-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); animation: pulse 1.5s infinite; }
+        /* NEW: Custom colors for withdrawal buttons */
+        .withdraw-form .method-btn[data-method="Bkash"] { background: linear-gradient(45deg, #D90429, #EF233C); color: white; }
+        .withdraw-form .method-btn[data-method="Nagad"] { background: linear-gradient(45deg, #FAB914, #F09819); color: #111; }
         .withdraw-form input { width: 100%; padding: 12px; background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 1rem; transition: all 0.3s ease; }
         .withdraw-form input:focus { border-color: var(--primary-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
         .info-box { padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; border: 1px dashed var(--primary-gold); }
@@ -83,6 +85,19 @@
         .modal-content .info-list strong { color: var(--primary-gold); }
         #countdown-timer { font-size: 3rem; font-weight: bold; color: var(--primary-gold); margin: 15px 0; }
         .close-modal-btn { margin-top: 20px; padding: 10px 20px; }
+        
+        /* NEW: Styles for Withdrawal History */
+        .history-section { margin-top: 30px; }
+        .history-section h3 { color: var(--primary-gold); margin-bottom: 15px; font-size: 1.3rem; text-align: left;}
+        .history-list { list-style: none; padding: 0; }
+        .history-item { background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .history-item-info .amount { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); }
+        .history-item-info .details { font-size: 0.8rem; color: var(--text-secondary); }
+        .history-item-status { font-weight: bold; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; text-transform: capitalize; }
+        .history-item-status.pending { color: #f0c419; background-color: rgba(255, 215, 0, 0.1); border: 1px solid #f0c419; }
+        .history-item-status.completed { color: #28a745; background-color: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; }
+        .history-item-status.rejected { color: #dc3545; background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; }
+
 
         /* --- ADMIN PANEL STYLES --- */
         #admin-panel-container { font-family: 'Roboto', sans-serif; display: none; }
@@ -185,26 +200,27 @@
                 </div>
             </div>
 
-            <!-- Page 3: Ads (New Section) -->
+            <!-- Page 3: Ads (Updated Section) -->
             <div id="adsPage" class="page">
                 <h2 class="page-title">Earn From Ads</h2>
                 <div class="content-card">
                     <h3>Watch Monetag Ads</h3>
                     <p>এই বিজ্ঞাপনটি দিনে ৮ বার দেখতে পারবেন। প্রতিটি সফল বিজ্ঞাপনের জন্য পাবেন ৫ টাকা। বিজ্ঞাপনটি ১৩ সেকেন্ড দেখতে হবে।</p>
                     <button class="btn" id="watchMonetagAdButton" style="width: 100%;">
-                        <i class="fa-solid fa-play"></i> Watch Ad (Monetag) <span id="monetagAdsLeft">(8 left)</span>
+                        <i class="fa-solid fa-play"></i> Claim Reward 8 Time
                     </button>
                 </div>
                 <div class="content-card">
                     <h3>Watch Giga Pub Ads</h3>
                     <p>এই বিজ্ঞাপনটি দিনে ৭ বার দেখতে পারবেন। প্রতিটি সফল বিজ্ঞাপনের জন্য পাবেন ৫ টাকা। বিজ্ঞাপনটি ১৩ সেকেন্ড দেখতে হবে।</p>
                     <button class="btn" id="watchGigaAdButton" style="width: 100%;">
-                        <i class="fa-solid fa-play"></i> Watch Ad (Giga Pub) <span id="gigaAdsLeft">(7 left)</span>
+                        <i class="fa-solid fa-play"></i> Claim Reward 7 Time
                     </button>
                 </div>
             </div>
 
-            <!-- Page 4: Withdraw -->
+
+            <!-- Page 4: Withdraw (Updated Section) -->
             <div id="withdrawPage" class="page">
                 <h2 class="page-title">Withdraw Funds</h2>
                 <div class="content-card withdraw-form">
@@ -226,6 +242,14 @@
                     </div>
                     <button id="submitWithdrawalBtn" class="btn" style="width: 100%;">Submit Request</button>
                     <div class="info-box">উইথড্র করার জন্য আপনার কমপক্ষে <strong>২৫টি সফল রেফার</strong> প্রয়োজন। ২৫টি রেফার সম্পন্ন হলে আপনি টাকা তোলার জন্য যোগ্য হবেন।</div>
+                </div>
+                <!-- NEW: Withdrawal History Section -->
+                <div class="history-section">
+                    <h3>Withdrawal History</h3>
+                    <div id="withdrawal-history-list" class="history-list">
+                        <!-- History items will be injected here by JS -->
+                        <p style="color: var(--text-secondary); text-align: center;">Loading history...</p>
+                    </div>
                 </div>
             </div>
             
@@ -399,6 +423,8 @@
                     showWelcomeModalIfNeeded(newUserData, true);
                 }
             });
+            
+            loadWithdrawalHistory(String(currentUser.id));
 
             function updateUI(data) {
                 document.getElementById('userName').innerHTML = `${data.firstName} <i class="fa-solid fa-circle-check"></i>`;
@@ -415,13 +441,18 @@
 
                 // Update Monetag Ad Button
                 const monetagButton = document.getElementById('watchMonetagAdButton');
-                document.getElementById('monetagAdsLeft').textContent = `(${8 - monetagWatched} left)`;
-                monetagButton.disabled = monetagWatched >= 8;
+                const monetagLeft = 8 - monetagWatched;
+                monetagButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${monetagLeft} Time`;
+                monetagButton.disabled = monetagLeft <= 0;
+                if (monetagLeft <=0) monetagButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
+
 
                 // Update Giga Pub Ad Button
                 const gigaButton = document.getElementById('watchGigaAdButton');
-                document.getElementById('gigaAdsLeft').textContent = `(${7 - gigaWatched} left)`;
-                gigaButton.disabled = gigaWatched >= 7;
+                const gigaLeft = 7 - gigaWatched;
+                gigaButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${gigaLeft} Time`;
+                gigaButton.disabled = gigaLeft <= 0;
+                if (gigaLeft <= 0) gigaButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
             }
 
             async function showWelcomeModalIfNeeded(data, isNewUser = false) {
@@ -433,23 +464,17 @@
                 if (isNewUser || !lastSeen || (now.getTime() - lastSeen.getTime() > twentyFourHours)) {
                     welcomeModal.classList.add('active');
                     await updateDoc(userRef, { lastWelcomeMessageSeen: serverTimestamp() });
-
-                    // *** NEW: Automatically close the modal after 5 seconds ***
-                    setTimeout(() => {
-                        welcomeModal.classList.remove('active');
-                    }, 5000); // 5000 milliseconds = 5 seconds
+                    setTimeout(() => { welcomeModal.classList.remove('active'); }, 5000);
                 }
             }
 
-            // Reusable function to handle watching ads
             async function handleAdWatch(config) {
                 const { buttonId, adProvider, limit, watchedCount, firebaseField } = config;
-
                 const button = document.getElementById(buttonId);
-                button.disabled = true; // Disable immediately to prevent double clicks
+                button.disabled = true;
 
                 if (watchedCount >= limit) {
-                    button.disabled = false; // Re-enable if limit is already reached
+                    button.disabled = false;
                     return tg.showAlert(`You have watched all ads from this provider for today.`);
                 }
 
@@ -462,7 +487,6 @@
                 const startTimer = () => {
                     adTimerModal.classList.add('active');
                     countdownEl.textContent = countdown;
-                    
                     countdownInterval = setInterval(() => {
                         countdown--;
                         countdownEl.textContent = countdown;
@@ -476,28 +500,22 @@
                 const cleanup = () => {
                     clearInterval(countdownInterval);
                     adTimerModal.classList.remove('active');
-                    // updateUI will handle reenabling the button if necessary
                     updateUI(userData);
                 };
 
                 startTimer();
 
                 try {
-                    await adProvider(); // Call the specific ad function
-                    
+                    await adProvider();
                     if (timerFinished) {
-                        // "Game Logic": Update UI instantly
                         userData[firebaseField] = (userData[firebaseField] || 0) + 1;
                         userData.balance += 5;
-                        cleanup(); // Cleanup after successful ad view
+                        cleanup();
                         updateUI(userData);
-
-                        // Sync with Firebase in the background
                         updateDoc(userRef, {
-                            [firebaseField]: increment(1), // Use computed property name
+                            [firebaseField]: increment(1),
                             balance: increment(5)
                         }).catch(err => console.error("Firebase sync failed:", err));
-
                         tg.HapticFeedback.notificationOccurred('success');
                         tg.showAlert('Congratulations! 5 Taka has been added to your balance.');
                     } else {
@@ -511,6 +529,38 @@
                     tg.showAlert('Ad could not be loaded. Please try again.');
                 }
             }
+
+            async function loadWithdrawalHistory(userId) {
+                const historyListEl = document.getElementById('withdrawal-history-list');
+                const q = query(collection(db, "withdrawals"), where("userId", "==", userId));
+
+                onSnapshot(q, (snapshot) => {
+                    if (snapshot.empty) {
+                        historyListEl.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">No withdrawal history found.</p>';
+                        return;
+                    }
+                    
+                    historyListEl.innerHTML = '';
+                    const docs = snapshot.docs.sort((a, b) => b.data().requestTimestamp - a.data().requestTimestamp);
+
+                    docs.forEach(doc => {
+                        const data = doc.data();
+                        const date = data.requestTimestamp?.toDate()?.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) || 'N/A';
+                        const status = data.status || 'pending';
+                        
+                        const item = document.createElement('div');
+                        item.className = 'history-item';
+                        item.innerHTML = `
+                            <div class="history-item-info">
+                                <div class="amount">${data.amount} টাকা</div>
+                                <div class="details">${data.method} - ${date}</div>
+                            </div>
+                            <div class="history-item-status ${status}">${status}</div>`;
+                        historyListEl.appendChild(item);
+                    });
+                });
+            }
+
 
             // --- Event Listeners for User App ---
             document.getElementById('watchMonetagAdButton').addEventListener('click', () => {
@@ -567,7 +617,6 @@
                 document.getElementById('welcomeModal').classList.remove('active');
             });
             
-            // Dynamic Task Loading Logic
             async function loadAndDisplayTasks() {
                 const tasksCollectionRef = collection(db, "tasks");
                 const completedTasksCollectionRef = collection(db, "users", String(currentUser.id), "completedTasks");
@@ -586,18 +635,14 @@
                         const task = doc.data();
                         const taskId = doc.id;
                         const isCompleted = completedTaskIds.has(taskId);
-
                         const taskItem = document.createElement('a');
                         taskItem.className = 'task-item';
                         taskItem.dataset.taskId = taskId;
                         taskItem.dataset.reward = task.reward;
                         taskItem.dataset.link = task.link;
-                        
                         taskItem.innerHTML = `
                             <div class="task-text"><i class="fa-solid fa-star"></i> ${task.title} (+${task.reward} টাকা)</div>
-                            <i class="fa-solid ${isCompleted ? 'fa-circle-check' : 'fa-arrow-right'}"></i>
-                        `;
-                        
+                            <i class="fa-solid ${isCompleted ? 'fa-circle-check' : 'fa-arrow-right'}"></i>`;
                         if (isCompleted) {
                             taskItem.style.opacity = '0.6';
                         } else {
@@ -612,21 +657,16 @@
                 event.preventDefault();
                 const taskItem = event.currentTarget;
                 const { taskId, reward, link } = taskItem.dataset;
-                
                 taskItem.removeEventListener('click', handleTaskClick);
                 taskItem.style.opacity = '0.6';
                 taskItem.querySelector('.fa-arrow-right').classList.replace('fa-arrow-right', 'fa-circle-check');
-
                 userData.balance += parseInt(reward, 10);
                 updateUI(userData);
-                
                 tg.openLink(link);
-
                 try {
                     const completedTaskRef = doc(db, "users", String(currentUser.id), "completedTasks", taskId);
                     await setDoc(completedTaskRef, { completedAt: serverTimestamp() });
                     await updateDoc(userRef, { balance: increment(parseInt(reward, 10)) });
-                    
                     tg.HapticFeedback.notificationOccurred('success');
                     tg.showAlert(`Task completed! ${reward} Taka added.`);
                 } catch (error) {
@@ -638,7 +678,6 @@
             }
             loadAndDisplayTasks();
 
-             // Navigation logic
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', () => {
                     document.querySelector('.nav-item.active').classList.remove('active');
@@ -665,7 +704,6 @@
             async function loadDashboardData() {
                 const usersColl = collection(db, 'users');
                 onSnapshot(usersColl, (snapshot) => { totalUsersEl.textContent = snapshot.size; });
-                
                 const today = new Date(); today.setHours(0, 0, 0, 0);
                 const q = query(usersColl, where("lastLogin", ">=", Timestamp.fromDate(today)));
                 onSnapshot(q, (snapshot) => { dailyActiveUsersEl.textContent = snapshot.size; });
@@ -691,17 +729,14 @@
                 const { id, userId, amount } = event.target.dataset;
                 const isApprove = event.target.classList.contains('approve-btn');
                 if (!confirm(`Are you sure you want to ${isApprove ? 'approve' : 'reject'} this request?`)) return;
-                
                 const newStatus = isApprove ? 'completed' : 'rejected';
                 await updateDoc(doc(db, "withdrawals", id), { status: newStatus });
-
                 if (!isApprove) {
                     await updateDoc(doc(db, "users", userId), { balance: increment(parseInt(amount)) });
                 }
                 alert(`Request has been ${newStatus}.`);
             }
 
-            // Task management for admin
             function listenAndDisplayTasks() {
                 const tasksTableBody = document.getElementById('tasks-table-body');
                 onSnapshot(collection(db, "tasks"), (snapshot) => {
@@ -709,8 +744,7 @@
                     snapshot.forEach(doc => {
                         const task = doc.data();
                         const row = tasksTableBody.insertRow();
-                        row.innerHTML = `
-                            <td>${task.title}</td><td>${task.link}</td><td>${task.reward}</td>
+                        row.innerHTML = `<td>${task.title}</td><td>${task.link}</td><td>${task.reward}</td>
                             <td><button class="action-btn reject-btn delete-task-btn" data-id="${doc.id}">Delete</button></td>`;
                     });
                     document.querySelectorAll('.delete-task-btn').forEach(btn => {
@@ -726,9 +760,7 @@
                 const title = document.getElementById('task-title').value.trim();
                 const link = document.getElementById('task-link').value.trim();
                 const reward = parseInt(document.getElementById('task-reward').value, 10);
-
                 if (!title || !link || isNaN(reward) || reward <= 0) return alert('Please fill all fields correctly.');
-                
                 await addDoc(collection(db, "tasks"), { title, link, reward, createdAt: serverTimestamp() });
                 alert('Task added!');
                 e.target.reset();
