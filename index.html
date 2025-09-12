@@ -1,5 +1,3 @@
---- START OF FILE index.html ---
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -15,8 +13,8 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <!-- Monetag Ads SDK -->
     <script src='//libtl.com/sdk.js' data-zone='9858506' data-sdk='show_9858506'></script>
-    <!-- Giga Pub Ads SDK -->
-    <script src="https://cdn.gigapub.com/sdk.js"></script> 
+    <!-- Giga Pub Ads SDK (Replace with your actual Giga Pub SDK URL) -->
+    <script src="https://path-to-your/giga-pub-sdk.js"></script> 
 
     <style>
         /* --- GLOBAL STYLES --- */
@@ -189,9 +187,18 @@
             <div id="adsPage" class="page">
                 <h2 class="page-title">Earn From Ads</h2>
                 <div class="content-card">
-                    <h3>Watch Ads to Earn</h3>
-                    <p>প্রতিদিন ১৫টি বিজ্ঞাপন দেখুন। প্রতিটি সফল বিজ্ঞাপনের জন্য পাবেন ৫ টাকা। বিজ্ঞাপনটি ১৩ সেকেন্ড দেখতে হবে।</p>
-                    <button class="btn" id="watchAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Ads to earn</button>
+                    <h3>Watch Monetag Ads</h3>
+                    <p>এই বিজ্ঞাপনটি দিনে ৮ বার দেখতে পারবেন। প্রতিটি সফল বিজ্ঞাপনের জন্য পাবেন ৫ টাকা। বিজ্ঞাপনটি ১৩ সেকেন্ড দেখতে হবে।</p>
+                    <button class="btn" id="watchMonetagAdButton" style="width: 100%;">
+                        <i class="fa-solid fa-play"></i> Watch Ad (Monetag) <span id="monetagAdsLeft">(8 left)</span>
+                    </button>
+                </div>
+                <div class="content-card">
+                    <h3>Watch Giga Pub Ads</h3>
+                    <p>এই বিজ্ঞাপনটি দিনে ৭ বার দেখতে পারবেন। প্রতিটি সফল বিজ্ঞাপনের জন্য পাবেন ৫ টাকা। বিজ্ঞাপনটি ১৩ সেকেন্ড দেখতে হবে।</p>
+                    <button class="btn" id="watchGigaAdButton" style="width: 100%;">
+                        <i class="fa-solid fa-play"></i> Watch Ad (Giga Pub) <span id="gigaAdsLeft">(7 left)</span>
+                    </button>
                 </div>
             </div>
 
@@ -362,7 +369,7 @@
                     userData = docSnap.data();
                     const today = new Date().toISOString().split('T')[0];
                     if (userData.lastAdWatchDate !== today) {
-                        await updateDoc(userRef, { adsWatchedToday: 0, lastAdWatchDate: today, lastLogin: serverTimestamp() });
+                        await updateDoc(userRef, { monetagAdsWatchedToday: 0, gigaAdsWatchedToday: 0, lastAdWatchDate: today, lastLogin: serverTimestamp() });
                     } else {
                          updateUI(userData);
                     }
@@ -370,7 +377,8 @@
                 } else {
                     const newUserData = {
                         userId: currentUser.id, firstName: currentUser.first_name, userName: currentUser.username || 'N/A',
-                        balance: 50, referrals: 0, adsWatchedToday: 0,
+                        balance: 50, referrals: 0, 
+                        monetagAdsWatchedToday: 0, gigaAdsWatchedToday: 0,
                         lastAdWatchDate: new Date().toISOString().split('T')[0],
                         joinDate: serverTimestamp(), lastLogin: serverTimestamp(),
                         lastWelcomeMessageSeen: null
@@ -394,9 +402,24 @@
                 document.getElementById('userName').innerHTML = `${data.firstName} <i class="fa-solid fa-circle-check"></i>`;
                 document.getElementById('userAvatar').textContent = data.firstName.charAt(0).toUpperCase();
                 document.getElementById('userBalance').textContent = data.balance;
-                document.getElementById('adsWatchedCount').textContent = `${data.adsWatchedToday || 0} / 15`;
+                
+                const monetagWatched = data.monetagAdsWatchedToday || 0;
+                const gigaWatched = data.gigaAdsWatchedToday || 0;
+                const totalWatched = monetagWatched + gigaWatched;
+                document.getElementById('adsWatchedCount').textContent = `${totalWatched} / 15`;
+                
                 document.getElementById('referralCount').textContent = data.referrals;
                 document.getElementById('referralLink').textContent = `https://t.me/Chili_powder_Bot/Chilipowder?startapp=${currentUser.id}`;
+
+                // Update Monetag Ad Button
+                const monetagButton = document.getElementById('watchMonetagAdButton');
+                document.getElementById('monetagAdsLeft').textContent = `(${8 - monetagWatched} left)`;
+                monetagButton.disabled = monetagWatched >= 8;
+
+                // Update Giga Pub Ad Button
+                const gigaButton = document.getElementById('watchGigaAdButton');
+                document.getElementById('gigaAdsLeft').textContent = `(${7 - gigaWatched} left)`;
+                gigaButton.disabled = gigaWatched >= 7;
             }
 
             async function showWelcomeModalIfNeeded(data, isNewUser = false) {
@@ -411,7 +434,97 @@
                 }
             }
 
+            // Reusable function to handle watching ads
+            async function handleAdWatch(config) {
+                const { buttonId, adProvider, limit, watchedCount, firebaseField } = config;
+
+                const button = document.getElementById(buttonId);
+                button.disabled = true; // Disable immediately to prevent double clicks
+
+                if (watchedCount >= limit) {
+                    return tg.showAlert(`You have watched all ads from this provider for today.`);
+                }
+
+                const adTimerModal = document.getElementById('adTimerModal');
+                const countdownEl = document.getElementById('countdown-timer');
+                let countdown = 13;
+                let timerFinished = false;
+                let countdownInterval;
+
+                const startTimer = () => {
+                    adTimerModal.classList.add('active');
+                    countdownEl.textContent = countdown;
+                    
+                    countdownInterval = setInterval(() => {
+                        countdown--;
+                        countdownEl.textContent = countdown;
+                        if (countdown <= 0) {
+                            clearInterval(countdownInterval);
+                            timerFinished = true;
+                        }
+                    }, 1000);
+                };
+
+                const cleanup = () => {
+                    clearInterval(countdownInterval);
+                    adTimerModal.classList.remove('active');
+                    // updateUI will handle reenabling the button if necessary
+                    updateUI(userData);
+                };
+
+                startTimer();
+
+                try {
+                    await adProvider(); // Call the specific ad function
+                    
+                    if (timerFinished) {
+                        // "Game Logic": Update UI instantly
+                        userData[firebaseField] = (userData[firebaseField] || 0) + 1;
+                        userData.balance += 5;
+                        cleanup(); // Cleanup after successful ad view
+                        updateUI(userData);
+
+                        // Sync with Firebase in the background
+                        updateDoc(userRef, {
+                            [firebaseField]: increment(1), // Use computed property name
+                            balance: increment(5)
+                        }).catch(err => console.error("Firebase sync failed:", err));
+
+                        tg.HapticFeedback.notificationOccurred('success');
+                        tg.showAlert('Congratulations! 5 Taka has been added to your balance.');
+                    } else {
+                        cleanup();
+                        tg.HapticFeedback.notificationOccurred('error');
+                        tg.showAlert('Ad closed too early! You must watch for 13 seconds to get the reward.');
+                    }
+                } catch (error) {
+                    console.error("Ad failed to show:", error);
+                    cleanup();
+                    tg.showAlert('Ad could not be loaded. Please try again.');
+                }
+            }
+
             // --- Event Listeners for User App ---
+            document.getElementById('watchMonetagAdButton').addEventListener('click', () => {
+                handleAdWatch({
+                    buttonId: 'watchMonetagAdButton',
+                    adProvider: () => typeof show_9858506 === 'function' ? show_9858506() : Promise.reject('Monetag not loaded'),
+                    limit: 8,
+                    watchedCount: userData.monetagAdsWatchedToday || 0,
+                    firebaseField: 'monetagAdsWatchedToday'
+                });
+            });
+            
+            document.getElementById('watchGigaAdButton').addEventListener('click', () => {
+                handleAdWatch({
+                    buttonId: 'watchGigaAdButton',
+                    adProvider: () => typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.reject('GigaPub not loaded'),
+                    limit: 7, // 8 (Monetag) + 7 (Giga) = 15 total ads
+                    watchedCount: userData.gigaAdsWatchedToday || 0,
+                    firebaseField: 'gigaAdsWatchedToday'
+                });
+            });
+
             document.querySelector('.btn-copy').addEventListener('click', () => { 
                 const link = document.getElementById('referralLink').textContent;
                 navigator.clipboard.writeText(link).then(() => {
@@ -419,71 +532,12 @@
                     tg.showAlert('Referral link copied!');
                 });
             });
+
             document.querySelector('.btn-share').addEventListener('click', () => { 
                 const link = document.getElementById('referralLink').textContent;
                 tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent('Join and earn money!')}`);
             });
             
-            // Monetag & Giga Pub Ad Watch Logic
-            document.getElementById('watchAdButton').addEventListener('click', () => {
-                if (userData.adsWatchedToday >= 15) {
-                    return tg.showAlert('You have watched all ads for today. Come back tomorrow!');
-                }
-
-                const adTimerModal = document.getElementById('adTimerModal');
-                const countdownEl = document.getElementById('countdown-timer');
-                let countdown = 13;
-                let timerFinished = false;
-                
-                adTimerModal.classList.add('active');
-                countdownEl.textContent = countdown;
-                
-                const countdownInterval = setInterval(() => {
-                    countdown--;
-                    countdownEl.textContent = countdown;
-                    if (countdown <= 0) {
-                        clearInterval(countdownInterval);
-                        timerFinished = true;
-                    }
-                }, 1000);
-                
-                // Randomly choose an ad provider
-                const adProviders = [
-                    () => typeof show_9858506 === 'function' ? show_9858506() : Promise.reject('Monetag not loaded'),
-                    () => typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.reject('GigaPub not loaded')
-                ];
-                const chosenAdProvider = adProviders[Math.floor(Math.random() * adProviders.length)];
-
-                chosenAdProvider().then(() => {
-                    clearInterval(countdownInterval);
-                    adTimerModal.classList.remove('active');
-
-                    if (timerFinished) {
-                        // "Game Logic": Update UI instantly
-                        userData.adsWatchedToday += 1;
-                        userData.balance += 5;
-                        updateUI(userData);
-
-                        // Sync with Firebase in the background
-                        updateDoc(userRef, {
-                            adsWatchedToday: increment(1),
-                            balance: increment(5)
-                        }).catch(err => console.error("Firebase sync failed:", err));
-
-                        tg.HapticFeedback.notificationOccurred('success');
-                        tg.showAlert('Congratulations! 5 Taka has been added to your balance.');
-                    } else {
-                        tg.HapticFeedback.notificationOccurred('error');
-                        tg.showAlert('Ad closed too early! You must watch for 13 seconds to get the reward.');
-                    }
-                }).catch(error => {
-                    console.error("Ad failed to show:", error);
-                    clearInterval(countdownInterval);
-                    adTimerModal.classList.remove('active');
-                    tg.showAlert('Ad could not be loaded. Please try again.');
-                });
-            });
-
             document.getElementById('submitWithdrawalBtn').addEventListener('click', async () => {
                 const method = document.querySelector('.method-btn.selected')?.dataset.method;
                 const accNum = document.getElementById('accountNumber').value.trim();
