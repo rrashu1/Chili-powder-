@@ -65,7 +65,6 @@
         .withdraw-form .payment-methods { display: flex; gap: 10px; margin-bottom: 15px; }
         .withdraw-form .method-btn { flex: 1; padding: 10px; border: 2px solid var(--border-color); background: var(--bg-element); color: var(--text-primary); border-radius: 8px; cursor: pointer; }
         .withdraw-form .method-btn.selected { border-color: var(--primary-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); animation: pulse 1.5s infinite; }
-        /* NEW: Custom colors for withdrawal buttons */
         .withdraw-form .method-btn[data-method="Bkash"] { background: linear-gradient(45deg, #D90429, #EF233C); color: white; }
         .withdraw-form .method-btn[data-method="Nagad"] { background: linear-gradient(45deg, #FAB914, #F09819); color: #111; }
         .withdraw-form input { width: 100%; padding: 12px; background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 1rem; transition: all 0.3s ease; }
@@ -77,7 +76,7 @@
         .nav-item.active { color: var(--primary-gold); }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 15px; opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-content { background-color: var(--bg-surface); padding: 25px; border-radius: 15px; width: 100%; max-width: 360px; text-align: center; border: 1px solid var(--primary-gold); box-shadow: 0 0 20px rgba(255,215,0,0.2); }
+        .modal-content { background-color: var(--bg-surface); padding: 25px; border-radius: 15px; width: 100%; max-width: 360px; text-align: center; border: 1px solid var(--primary-gold); box-shadow: 0 0 20px rgba(255,215,0,0.2); position: relative; /* UPDATED: Added for positioning the close button */ }
         .modal-content h3 { color: var(--primary-gold); font-size: 1.5rem; margin-bottom: 15px; }
         .modal-content p { color: var(--text-secondary); margin-bottom: 10px; line-height: 1.6; }
         .modal-content .info-list { text-align: left; margin: 20px 0; color: var(--text-primary); }
@@ -85,6 +84,15 @@
         .modal-content .info-list strong { color: var(--primary-gold); }
         #countdown-timer { font-size: 3rem; font-weight: bold; color: var(--primary-gold); margin: 15px 0; }
         .close-modal-btn { margin-top: 20px; padding: 10px 20px; }
+        /* NEW: Styles for the cross/cancel button on the modal */
+        .close-modal-icon {
+            position: absolute; top: 10px; right: 15px;
+            background: none; border: none;
+            font-size: 2rem; color: var(--text-secondary);
+            cursor: pointer; line-height: 1;
+            padding: 0; transition: color 0.3s ease;
+        }
+        .close-modal-icon:hover { color: var(--primary-gold); }
         
         /* NEW: Styles for Withdrawal History */
         .history-section { margin-top: 30px; }
@@ -276,6 +284,8 @@
         <!-- Welcome Modal -->
         <div class="modal-overlay" id="welcomeModal">
              <div class="modal-content">
+                <!-- UPDATED: Replaced button with a cross icon -->
+                <button class="close-modal-icon" id="welcomeModalCloseBtn">&times;</button>
                 <h3>স্বাগতম!</h3>
                 <p>আসসালামু আলাইকুম, সততার সাথে পেমেন্ট করছি। নিয়ম মেনে কাজ করলে ১০০% পেমেন্ট পাবেন ইনশাআল্লাহ।</p>
                 <div class="info-list">
@@ -286,7 +296,7 @@
                     <p><strong>✅ পেমেন্ট:</strong> ১০০% গ্যারান্টি (বিকাশ, নগদ)</p>
                 </div>
                 <p style="color: var(--error-color); font-weight: bold;">কাজ করার ক্ষেত্রে কোনো ধরনের VPN ব্যবহার করবেন না।</p>
-                <button class="btn" id="welcomeModalCloseBtn">Close</button>
+                <!-- UPDATED: Removed the old close button -->
              </div>
         </div>
 
@@ -461,10 +471,11 @@
                 const lastSeen = data.lastWelcomeMessageSeen?.toDate();
                 const twentyFourHours = 24 * 60 * 60 * 1000;
 
+                // UPDATED: Logic to show modal if new user, never seen, or 24 hours have passed
                 if (isNewUser || !lastSeen || (now.getTime() - lastSeen.getTime() > twentyFourHours)) {
                     welcomeModal.classList.add('active');
                     await updateDoc(userRef, { lastWelcomeMessageSeen: serverTimestamp() });
-                    setTimeout(() => { welcomeModal.classList.remove('active'); }, 5000);
+                    // UPDATED: Removed the auto-close timeout. Now user must click the 'x' button.
                 }
             }
 
@@ -613,6 +624,7 @@
                 tg.showAlert('Withdrawal request submitted!');
             });
             
+            // UPDATED: Event listener for the new cross/cancel button on the welcome modal
             document.getElementById('welcomeModalCloseBtn').addEventListener('click', () => {
                 document.getElementById('welcomeModal').classList.remove('active');
             });
