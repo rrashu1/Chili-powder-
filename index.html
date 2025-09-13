@@ -1,3 +1,5 @@
+--- START OF FILE index.html ---
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -449,14 +451,14 @@
 
             // MODIFICATION: The showWelcomeModalIfNeeded function has been removed.
 
-            async function handleAdWatch(config) {
-                const { buttonId, adProvider, limit, watchedCount, firebaseField } = config;
-                const button = document.getElementById(buttonId);
+            // Specific handler for Monetag Ads with a 13-second timer
+            async function handleMonetagAdWatch() {
+                const button = document.getElementById('watchMonetagAdButton');
                 button.disabled = true;
 
-                if (watchedCount >= limit) {
+                if ((userData.monetagAdsWatchedToday || 0) >= 8) {
                     button.disabled = false;
-                    return tg.showAlert(`You have watched all ads from this provider for today.`);
+                    return tg.showAlert(`You have watched all Monetag ads for today.`);
                 }
 
                 const adTimerModal = document.getElementById('adTimerModal');
@@ -483,18 +485,20 @@
                     adTimerModal.classList.remove('active');
                     updateUI(userData);
                 };
-
+                
                 startTimer();
 
                 try {
-                    await adProvider();
+                    // Call Monetag SDK
+                    await (typeof show_9858506 === 'function' ? show_9858506() : Promise.reject('Monetag SDK not loaded'));
+                    
                     if (timerFinished) {
-                        userData[firebaseField] = (userData[firebaseField] || 0) + 1;
+                        userData.monetagAdsWatchedToday = (userData.monetagAdsWatchedToday || 0) + 1;
                         userData.balance += 5;
                         cleanup();
                         updateUI(userData);
                         updateDoc(userRef, {
-                            [firebaseField]: increment(1),
+                            monetagAdsWatchedToday: increment(1),
                             balance: increment(5)
                         }).catch(err => console.error("Firebase sync failed:", err));
                         tg.HapticFeedback.notificationOccurred('success');
@@ -508,6 +512,39 @@
                     console.error("Ad failed to show:", error);
                     cleanup();
                     tg.showAlert('Ad could not be loaded. Please try again.');
+                }
+            }
+
+            // Specific handler for Giga Pub Ads without a timer
+            async function handleGigaAdWatch() {
+                const button = document.getElementById('watchGigaAdButton');
+                button.disabled = true;
+
+                if ((userData.gigaAdsWatchedToday || 0) >= 7) {
+                    button.disabled = false;
+                    return tg.showAlert(`You have watched all Giga Pub ads for today.`);
+                }
+                
+                try {
+                    // Call Giga Pub SDK
+                    await (typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.reject('GigaPub SDK not loaded'));
+                    
+                    // On successful ad completion, grant the reward immediately
+                    userData.gigaAdsWatchedToday = (userData.gigaAdsWatchedToday || 0) + 1;
+                    userData.balance += 5;
+                    updateUI(userData);
+                    
+                    await updateDoc(userRef, {
+                        gigaAdsWatchedToday: increment(1),
+                        balance: increment(5)
+                    });
+                    
+                    tg.HapticFeedback.notificationOccurred('success');
+                    tg.showAlert('Congratulations! 5 Taka has been added to your balance.');
+                } catch (error) {
+                    console.error("Giga Ad failed to show:", error);
+                    tg.showAlert('Ad could not be loaded. Please try again.');
+                    button.disabled = false; // Re-enable button on error
                 }
             }
 
@@ -544,25 +581,9 @@
 
 
             // --- Event Listeners for User App ---
-            document.getElementById('watchMonetagAdButton').addEventListener('click', () => {
-                handleAdWatch({
-                    buttonId: 'watchMonetagAdButton',
-                    adProvider: () => typeof show_9858506 === 'function' ? show_9858506() : Promise.reject('Monetag SDK not loaded'),
-                    limit: 8,
-                    watchedCount: userData.monetagAdsWatchedToday || 0,
-                    firebaseField: 'monetagAdsWatchedToday'
-                });
-            });
+            document.getElementById('watchMonetagAdButton').addEventListener('click', handleMonetagAdWatch);
             
-            document.getElementById('watchGigaAdButton').addEventListener('click', () => {
-                handleAdWatch({
-                    buttonId: 'watchGigaAdButton',
-                    adProvider: () => typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.reject('GigaPub SDK not loaded'),
-                    limit: 7, 
-                    watchedCount: userData.gigaAdsWatchedToday || 0,
-                    firebaseField: 'gigaAdsWatchedToday'
-                });
-            });
+            document.getElementById('watchGigaAdButton').addEventListener('click', handleGigaAdWatch);
 
             document.querySelector('.btn-copy').addEventListener('click', () => { 
                 const link = document.getElementById('referralLink').textContent;
