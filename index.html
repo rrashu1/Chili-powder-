@@ -80,7 +80,6 @@
         .task-timer { font-size: 1.2rem; font-weight: bold; color: var(--accent-gold); min-width: 40px; text-align: center; }
         .claim-btn { padding: 8px 15px; font-size: 0.9rem; flex-grow: 0; flex-shrink: 0; min-width: 70px; }
         .task-done-animation { font-size: 1.5rem; animation: checkmark-pop 0.5s ease-out; }
-
         .task-item.completed {
             background-color: var(--bg-dark);
             border-left: 5px solid var(--accent-gold);
@@ -182,7 +181,6 @@
         .btn:hover:not(:disabled) { transform: scale(1.03); filter: brightness(1.15); }
         .nav-item:hover { color: var(--primary-red); }
         
-        /* UPDATE 2: History Button VFX */
         .history-vfx-btn {
             font-size: 1.4rem; /* Bigger icon */
             margin-left: 15px;
@@ -249,7 +247,7 @@
                 </div>
                 <div class="content-card">
                     <h3>Refer & Earn More!</h3>
-                    <!-- UPDATE 3: Referral Description Updated -->
+                    <!-- UPDATE 2: Referral Description Updated -->
                     <p>Earn 0.006 USDT for each valid referral who joins using your link.</p>
                     <div class="referral-link-box" id="referralLink">Loading...</div>
                     <div class="buttons-group" style="display:flex; gap:10px;">
@@ -267,9 +265,9 @@
                     <p>Stay updated with our latest news and payment proofs. (No reward for joining).</p>
                     <div class="task-list">
                         <a href="https://t.me/newtube12" target="_blank" class="task-item"><div class="task-text"><i class="fa-brands fa-telegram"></i> NewTube Payment Channel</div><i class="fa-solid fa-arrow-right"></i></a>
-                        <a href="https://t.me/NewTube12_bot/newtubecash" target="_blank" class="task-item"><div class="task-text"><i class="fa-solid fa-robot"></i> NewTube Earning Bot</div><i class="fa-solid fa-arrow-right"></i></a>
-                        <a href="https://t.me/Chili_powder_Payment" target="_blank" class="task-item"><div class="task-text"><i class="fa-brands fa-telegram"></i> Chili Powder Payment Channel</div><i class="fa-solid fa-arrow-right"></i></a>
-                        <a href="https://t.me/chili_powder_USDT" target="_blank" class="task-item"><div class="task-text"><i class="fa-brands fa-telegram"></i> Chili Powder Official</div><i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="https.me/NewTube12_bot/newtubecash" target="_blank" class="task-item"><div class="task-text"><i class="fa-solid fa-robot"></i> NewTube Earning Bot</div><i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="https.me/Chili_powder_Payment" target="_blank" class="task-item"><div class="task-text"><i class="fa-brands fa-telegram"></i> Chili Powder Payment Channel</div><i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="https.me/chili_powder_USDT" target="_blank" class="task-item"><div class="task-text"><i class="fa-brands fa-telegram"></i> Chili Powder Official</div><i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="content-card">
@@ -346,7 +344,6 @@
                         <label for="accountNumber">Your Account (ID / Number)</label>
                         <input type="text" id="accountNumber" placeholder="e.g., Binance ID or 017...">
                     </div>
-                    <!-- UPDATE 2: Hiding the selected amount field -->
                     <div class="form-group" style="display: none;">
                         <label for="amount">Selected Amount (USDT)</label>
                         <input type="number" id="amount" placeholder="Select a plan above" readonly>
@@ -378,7 +375,7 @@
                  <div class="content-card">
                     <h3>Earning Rules</h3>
                      <p style="text-align: left; color: var(--text-light);">
-                        <!-- UPDATE 3: Referral Reward Rule Updated -->
+                        <!-- UPDATE 2: Referral Reward Rule Updated -->
                         <strong>🤝 Per Valid Referral:</strong> 0.006 USDT<br>
                         <strong>📺 Daily Ads (15 total):</strong> 0.0002 USDT per ad<br>
                         <strong>📹 Video Watching:</strong> Earn for every 15 seconds<br>
@@ -596,7 +593,7 @@
                         const referrerDoc = await transaction.get(referrerRef);
                         if (!referrerDoc.exists()) return;
                         
-                        // UPDATE 3: Changed referral reward from 0.008 to 0.006
+                        // UPDATE 2: Referral reward is 0.006 USDT
                         transaction.update(referrerRef, { 
                             referrals: increment(1), 
                             balance: increment(0.006) 
