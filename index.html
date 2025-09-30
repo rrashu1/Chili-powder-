@@ -55,7 +55,7 @@
         .avatar { width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary-red), var(--primary-red-darker)); color: var(--text-light); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; font-weight: bold; margin-right: 15px; border: 2px solid var(--primary-red); }
         .user-info .name { font-weight: 600; font-size: 1.2rem; }
         .user-info .name i { color: var(--accent-gold); font-size: 1rem; margin-left: 5px; }
-        .user-info .balance { color: var(--text-secondary); font-size: 1rem; }
+        .user-info .balance { color: var(--text-secondary); font-size: 1rem; display: flex; align-items: center; }
         main { padding: 0 15px; }
         .page { display: none; }
         .page.active { display: block; animation: fadeIn 0.5s ease-in-out; }
@@ -74,7 +74,6 @@
         .task-item .task-text { display: flex; align-items: center; gap: 10px; }
         .task-item i { color: var(--accent-gold); }
         
-        /* --- UPDATE 1: Tasks Section Update --- */
         .task-item.completed {
             background-color: var(--bg-dark);
             border-left: 5px solid var(--accent-gold);
@@ -83,10 +82,10 @@
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
         }
         .task-item.completed .task-text i {
-            color: var(--accent-gold); /* First icon remains gold */
+            color: var(--accent-gold); 
         }
         .task-item.completed i:last-child {
-            color: var(--success-color); /* Checkmark icon becomes green */
+            color: var(--success-color);
         }
         
         .buy-tasks-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
@@ -98,12 +97,13 @@
         /* --- Withdraw Page --- */
         .withdraw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         .withdraw-box { background: var(--bg-element); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; border: 2px solid var(--border-color); transition: all 0.3s ease; position: relative; overflow: hidden; }
-        .withdraw-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, rgba(217, 4, 41, 0.3), transparent 30%); animation: rotate 4s linear infinite; }
+        .withdraw-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, rgba(217, 4, 41, 0.3), transparent 30%); animation: rotate 4s linear infinite; animation-play-state: paused; }
         .withdraw-box:hover { border-color: var(--primary-red); box-shadow: 0 0 15px rgba(217, 4, 41, 0.4); }
+        .withdraw-box.selected { border-color: var(--accent-gold); box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
+        .withdraw-box.selected::before, .withdraw-box:hover::before { animation-play-state: running; }
         .withdraw-box .amount { font-size: 2.2rem; font-weight: 700; color: var(--primary-red); margin-bottom: 5px; }
         .withdraw-box .requirement { font-size: 0.8rem; color: var(--text-secondary); }
         .withdraw-box .requirement i { color: var(--accent-gold); }
-        #withdraw-form-container { display: none; }
         .withdraw-form .form-group { margin-bottom: 15px; text-align: left; }
         .withdraw-form label { display: block; margin-bottom: 5px; color: var(--text-secondary); }
         .withdraw-form .payment-methods { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
@@ -178,10 +178,27 @@
         .card:hover, .video-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(217, 4, 41, 0.1); border-color: var(--primary-red); }
         .btn:hover:not(:disabled) { transform: scale(1.03); filter: brightness(1.15); }
         .nav-item:hover { color: var(--primary-red); }
+        
+        /* UPDATE 2: History Button VFX */
+        .history-vfx-btn {
+            font-size: 1.4rem; /* Bigger icon */
+            margin-left: 15px;
+            color: var(--accent-gold);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+            animation: pulse-gold 2s infinite;
+        }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse-red { 0% { box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); } 50% { box-shadow: 0 0 15px rgba(217, 4, 41, 0.6); } 100% { box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); } }
         @keyframes pulse-lootbox { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulse-gold {
+            0% { transform: scale(1); text-shadow: 0 0 8px rgba(255, 215, 0, 0.6); }
+            50% { transform: scale(1.15); text-shadow: 0 0 16px rgba(255, 215, 0, 0.9); }
+            100% { transform: scale(1); text-shadow: 0 0 8px rgba(255, 215, 0, 0.6); }
+        }
     </style>
 </head>
 <body>
@@ -200,8 +217,10 @@
             <div class="avatar" id="userAvatar">?</div>
             <div class="user-info">
                 <div class="name" id="userName">Loading...</div>
-                <!-- UPDATE 2: History Icon Added -->
-                <div class="balance">Balance: <span id="userBalance">0.00</span> USDT 💵 <i class="fa-solid fa-history" id="historyBtn" style="cursor: pointer; margin-left: 10px; color: var(--accent-gold);"></i></div>
+                <div class="balance">
+                    Balance: <span id="userBalance">0.00</span> USDT 💵 
+                    <i class="fa-solid fa-history history-vfx-btn" id="historyBtn"></i>
+                </div>
             </div>
         </section>
 
@@ -230,7 +249,7 @@
                 </div>
             </div>
 
-            <!-- Page 2: Tasks (Update 3 Applied) -->
+            <!-- Page 2: Tasks -->
             <div id="tasksPage" class="page">
                  <h2 class="page-title">Tasks & Channels</h2>
                  <div class="content-card">
@@ -255,7 +274,7 @@
                 </div>
             </div>
 
-            <!-- Page 3: Ads (Update 4 Applied) -->
+            <!-- Page 3: Ads -->
             <div id="adsPage" class="page">
                 <h2 class="page-title">Earn From Ads</h2>
                 <div class="content-card">
@@ -292,7 +311,7 @@
             <div id="withdrawPage" class="page">
                 <h2 class="page-title">Withdraw Funds</h2>
                 <div class="content-card">
-                    <h3>Select a Withdrawal Plan</h3>
+                    <h3>1. Select a Withdrawal Plan</h3>
                     <div class="withdraw-grid">
                         <div class="withdraw-box" data-amount="0.2" data-referrals="2"><div class="amount">0.2$</div><div class="requirement"><i class="fa-solid fa-user-group"></i> 2 Refs</div></div>
                         <div class="withdraw-box" data-amount="0.5" data-referrals="3"><div class="amount">0.5$</div><div class="requirement"><i class="fa-solid fa-user-group"></i> 3 Refs</div></div>
@@ -303,8 +322,8 @@
                     </div>
                 </div>
 
-                <div id="withdraw-form-container" class="content-card withdraw-form">
-                    <h3>Submit Your Request</h3>
+                <div class="content-card withdraw-form">
+                    <h3>2. Submit Your Request</h3>
                     <div class="form-group">
                         <label>Select Payment Method</label>
                         <div class="payment-methods">
@@ -318,8 +337,8 @@
                         <input type="text" id="accountNumber" placeholder="e.g., Binance ID or 017...">
                     </div>
                     <div class="form-group">
-                        <label for="amount">Amount (USDT)</label>
-                        <input type="number" id="amount" readonly>
+                        <label for="amount">Selected Amount (USDT)</label>
+                        <input type="number" id="amount" placeholder="Select a plan above" readonly>
                     </div>
                     <button id="submitWithdrawalBtn" class="btn" style="width: 100%;">Submit Request</button>
                 </div>
@@ -385,7 +404,7 @@
             </div>
         </div>
         
-        <!-- Create Task Modal (Update 3) -->
+        <!-- Create Task Modal -->
         <div class="modal-overlay" id="createTaskModal">
             <div class="modal-content">
                 <button id="closeCreateTaskModalBtn" class="close-modal-btn" data-modal-id="createTaskModal"><i class="fa-solid fa-times"></i></button>
@@ -420,7 +439,7 @@
             </div>
         </div>
 
-        <!-- UPDATE 2: History Modal -->
+        <!-- History Modal -->
         <div class="modal-overlay" id="historyModal">
             <div class="modal-content">
                 <button class="close-modal-btn" data-modal-id="historyModal"><i class="fa-solid fa-times"></i></button>
@@ -496,7 +515,7 @@
 
 
     <script type="module">
-        // --- 1. FIREBASE INITIALIZATION (UPDATED) ---
+        // --- 1. FIREBASE INITIALIZATION ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
         import { getFirestore, doc, getDoc, setDoc, onSnapshot, updateDoc, increment, collection, addDoc, serverTimestamp, getDocs, query, where, Timestamp, deleteDoc, runTransaction, orderBy } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
@@ -549,6 +568,9 @@
             let adCheckCounter = 0; 
             const AD_INTERVAL_SECONDS = 300; // 5 minutes
 
+            // Initial state for withdraw page
+            document.getElementById('submitWithdrawalBtn').disabled = true;
+
             // --- REFERRAL LOGIC ---
             async function checkAndProcessReferral(userDocRef) {
                 const userSnap = await getDoc(userDocRef);
@@ -591,7 +613,7 @@
                 } else {
                     const newUserData = {
                         userId: currentUser.id, firstName: currentUser.first_name, userName: currentUser.username || 'N/A',
-                        balance: 0, // UPDATE 1 & 2: Sign up bonus removed, start from 0
+                        balance: 0,
                         referrals: 0, 
                         totalEarned: 0,
                         referralStatus: 'none',
@@ -611,7 +633,7 @@
                 }
             });
             
-            loadWithdrawalHistory(String(currentUser.id), 'withdrawal-history-list'); // Load history on withdraw page
+            loadWithdrawalHistory(String(currentUser.id), 'withdrawal-history-list');
             loadAndDisplayTasks();
             loadAndDisplayVideos();
 
@@ -644,7 +666,7 @@
                 claimLootBtn.textContent = lootBalance >= 0.05 ? 'Claim Now!' : 'Claim';
             }
             
-            // --- Ad Handlers (Update 4) ---
+            // --- Ad Handlers ---
             async function handleMonetagAdWatch() {
                 const button = document.getElementById('watchMonetagAdButton');
                 if ((userData.monetagAdsWatchedToday || 0) >= 8) return tg.showAlert(`You have watched all Monetag ads for today.`);
@@ -663,7 +685,7 @@
                     await (typeof show_9858506 === 'function' ? show_9858506() : Promise.reject('Monetag SDK not loaded'));
                     if (countdown <= 0) {
                         await updateDoc(userRef, { monetagAdsWatchedToday: increment(1) });
-                        await addEarnings(0.0002); // UPDATE 4: Reward changed
+                        await addEarnings(0.0002);
                         tg.HapticFeedback.notificationOccurred('success');
                         tg.showAlert('Congratulations! 0.0002 USDT has been added.');
                     } else {
@@ -685,7 +707,7 @@
                 try {
                     await (typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.reject('GigaPub SDK not loaded'));
                     await updateDoc(userRef, { gigaAdsWatchedToday: increment(1) });
-                    await addEarnings(0.0002); // UPDATE 4: Reward changed
+                    await addEarnings(0.0002);
                     tg.HapticFeedback.notificationOccurred('success');
                     tg.showAlert('Congratulations! 0.0002 USDT has been added.');
                 } catch (error) { tg.showAlert('Ad could not be loaded. Please try again.');
@@ -694,12 +716,11 @@
                 }
             }
 
-            // --- UPDATE 2: Refactored History & New Referral History ---
+            // --- History Logic ---
             async function loadWithdrawalHistory(userId, containerId) {
                 const historyListEl = document.getElementById(containerId);
                 const q = query(collection(db, "withdrawals"), where("userId", "==", userId), orderBy("requestTimestamp", "desc"));
                 
-                // Use onSnapshot to listen for real-time updates
                 onSnapshot(q, (snapshot) => {
                     historyListEl.innerHTML = snapshot.empty ? `<p style="color: var(--text-secondary); text-align: center;">No withdrawal history found.</p>` : '';
                     snapshot.forEach(doc => {
@@ -732,7 +753,7 @@
                     const referredUser = doc.data();
                     const joinDate = referredUser.joinDate?.toDate()?.toLocaleDateString('en-GB') || 'N/A';
                     const status = referredUser.referralStatus === 'completed' ? 'Completed' : 'Pending';
-                    const statusClass = referredUser.referralStatus; // 'completed' or 'pending'
+                    const statusClass = referredUser.referralStatus;
 
                     const item = document.createElement('div');
                     item.className = 'history-item';
@@ -746,23 +767,28 @@
                 });
             }
 
-
+            // --- Withdraw Logic ---
             document.querySelectorAll('.withdraw-box').forEach(box => {
                 box.addEventListener('click', () => {
                     const amount = parseFloat(box.dataset.amount);
                     const requiredRefs = parseInt(box.dataset.referrals);
                     
+                    document.querySelectorAll('.withdraw-box').forEach(b => b.classList.remove('selected'));
+                    
                     if ((userData.balance || 0) < amount) {
+                        document.getElementById('submitWithdrawalBtn').disabled = true;
+                        document.getElementById('amount').value = '';
                         return tg.showAlert(`Insufficient balance. You need at least ${amount} USDT.`);
                     }
                     if ((userData.referrals || 0) < requiredRefs) {
+                        document.getElementById('submitWithdrawalBtn').disabled = true;
+                        document.getElementById('amount').value = '';
                         return tg.showAlert(`You need at least ${requiredRefs} valid referrals to withdraw this amount.`);
                     }
-
+                    
+                    box.classList.add('selected');
                     document.getElementById('amount').value = amount;
-                    const formContainer = document.getElementById('withdraw-form-container');
-                    formContainer.style.display = 'block';
-                    formContainer.scrollIntoView({ behavior: 'smooth' });
+                    document.getElementById('submitWithdrawalBtn').disabled = false;
                 });
             });
 
@@ -771,19 +797,40 @@
                 const accNum = document.getElementById('accountNumber').value.trim();
                 const amount = parseFloat(document.getElementById('amount').value);
 
-                if (!method || !accNum || isNaN(amount)) return tg.showAlert('Please select a method and enter your account details.');
+                if (!method || !accNum || isNaN(amount) || amount <= 0) {
+                    return tg.showAlert('Please select a valid plan, a payment method, and enter your account details.');
+                }
+                
+                const submitBtn = document.getElementById('submitWithdrawalBtn');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Submitting...';
 
-                await addDoc(collection(db, "withdrawals"), {
-                    userId: currentUser.id, userName: userData.firstName, amount,
-                    method, accountNumber: accNum, status: "pending", 
-                    requestTimestamp: serverTimestamp(), userReferralsAtRequest: userData.referrals
-                });
-                await updateDoc(userRef, { balance: increment(-amount) });
-                tg.showAlert(`Withdrawal request for ${amount} USDT submitted successfully!`);
-                document.getElementById('withdraw-form-container').style.display = 'none';
+                try {
+                    await addDoc(collection(db, "withdrawals"), {
+                        userId: currentUser.id, userName: userData.firstName, amount,
+                        method, accountNumber: accNum, status: "pending", 
+                        requestTimestamp: serverTimestamp(), userReferralsAtRequest: userData.referrals
+                    });
+                    await updateDoc(userRef, { balance: increment(-amount) });
+                    
+                    tg.showAlert(`Withdrawal request for ${amount} USDT submitted successfully!`);
+
+                    // Reset form
+                    document.getElementById('accountNumber').value = '';
+                    document.getElementById('amount').value = '';
+                    document.querySelectorAll('.method-btn.selected').forEach(b => b.classList.remove('selected'));
+                    document.querySelectorAll('.withdraw-box.selected').forEach(b => b.classList.remove('selected'));
+
+                } catch (error) {
+                    tg.showAlert('There was an error submitting your request. Please try again.');
+                    console.error("Withdrawal error: ", error);
+                } finally {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Submit Request';
+                }
             });
 
-            // --- Task Logic (Update 3) ---
+            // --- Task Logic ---
             async function loadAndDisplayTasks() {
                 const taskListEl = document.getElementById('dynamic-task-list');
                 const completedRef = collection(db, "users", String(currentUser.id), "completedTasks");
@@ -819,9 +866,8 @@
                 });
             }
             
-            // UPDATE 1: Task click handler updated for VFX
             async function handleTaskClick(item, taskId, reward, taskType) {
-                item.classList.add('completed'); // Add class for visual effect
+                item.classList.add('completed');
                 item.querySelector('i:last-child').className = 'fa-solid fa-circle-check';
                 
                 if (taskType === 'user') {
@@ -838,7 +884,6 @@
                 tg.HapticFeedback.notificationOccurred('success');
             }
             
-            // Logic for the new "Add Task" modal
             const createTaskModal = document.getElementById('createTaskModal');
             const taskStep1 = document.getElementById('task-step-1');
             const taskStep2 = document.getElementById('task-step-2');
@@ -1016,7 +1061,6 @@
             document.querySelector('.btn-copy').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('referralLink').textContent).then(() => tg.showAlert('Referral link copied!')); });
             document.querySelector('.btn-share').addEventListener('click', () => { tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(document.getElementById('referralLink').textContent)}`); });
             
-            // --- UPDATE 2: History Modal Listeners ---
             document.getElementById('historyBtn').addEventListener('click', () => {
                 document.getElementById('historyModal').classList.add('active');
                 loadWithdrawalHistory(String(currentUser.id), 'modal-withdrawal-history');
