@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,7 +34,7 @@
         :root {
             --bg-dark: #121212; --bg-surface: #1e1e1e; --bg-element: #2a2a2a;
             --primary-red: #D90429; --primary-red-darker: #a1031f;
-            --accent-gold: #FFD700; --accent-gold-darker: #b39700;
+            --accent-gold: #FFD700;
             --text-light: #f0f0f0; --text-secondary: #aaa;
             --border-color: #444; --success-color: #28a745; --error-color: #dc3545;
         }
@@ -51,7 +49,6 @@
             box-shadow: 0 0 25px rgba(0,0,0,0.5);
             padding-bottom: 80px;
         }
-        main { position: relative; } /* Needed for reward animation */
         #user-app-container header { display: flex; justify-content: space-between; align-items: center; padding: 15px; background-color: var(--bg-element); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
         .header-title { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.3rem; background: linear-gradient(45deg, var(--primary-red-darker), var(--primary-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 5px rgba(217, 4, 41, 0.4); }
         .profile { display: flex; align-items: center; padding: 20px 15px; }
@@ -59,6 +56,7 @@
         .user-info .name { font-weight: 600; font-size: 1.2rem; }
         .user-info .name i { color: var(--accent-gold); font-size: 1rem; margin-left: 5px; }
         .user-info .balance { color: var(--text-secondary); font-size: 1rem; }
+        main { padding: 0 15px; }
         .page { display: none; }
         .page.active { display: block; animation: fadeIn 0.5s ease-in-out; }
         .page-title { font-size: 1.5rem; font-weight: 600; padding: 20px 0 10px 0; color: var(--primary-red); }
@@ -72,38 +70,23 @@
         .referral-link-box { background-color: var(--bg-surface); border: 1px dashed var(--border-color); padding: 12px; border-radius: 8px; word-wrap: break-word; text-align: left; margin-bottom: 20px; font-size: 0.9rem; color: var(--text-light); }
         .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; color: var(--text-light); background: linear-gradient(45deg, var(--primary-red-darker), var(--primary-red)); }
         .btn:disabled { background: var(--border-color); color: var(--text-secondary); cursor: not-allowed; filter: none; transform: none; }
-
-        /* --- UPDATE 1: Tasks Section VFX --- */
-        .task-list .task-item { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border-color); text-decoration: none; color: var(--text-light); }
-        .task-item .task-text { display: flex; align-items: center; gap: 10px; flex-grow: 1; }
+        .task-list .task-item { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border-color); text-decoration: none; color: var(--text-light); border-left: 5px solid transparent; }
+        .task-item .task-text { display: flex; align-items: center; gap: 10px; }
         .task-item i { color: var(--accent-gold); }
-        .task-list .admin-task-item {
-            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
-            border: 1px solid var(--accent-gold);
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
-            animation: pulse-gold 2s infinite;
+        
+        /* --- UPDATE 1: Tasks Section Update --- */
+        .task-item.completed {
+            background-color: var(--bg-dark);
+            border-left: 5px solid var(--accent-gold);
+            opacity: 0.7;
+            pointer-events: none;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
         }
-        .task-go-btn {
-            padding: 8px 20px; border: none; border-radius: 6px;
-            background: linear-gradient(45deg, var(--accent-gold-darker), var(--accent-gold));
-            color: var(--bg-dark); font-weight: 700; cursor: pointer;
-            transition: all 0.2s ease-in-out;
+        .task-item.completed .task-text i {
+            color: var(--accent-gold); /* First icon remains gold */
         }
-        .task-go-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
-        .reward-animation {
-            position: absolute; color: var(--accent-gold); font-weight: bold;
-            font-size: 1.2rem; padding: 5px 10px; border-radius: 5px;
-            background-color: rgba(0,0,0,0.7); pointer-events: none;
-            z-index: 9999; animation: fly-up 2s ease-out forwards;
-        }
-        @keyframes fly-up {
-            0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(-80px); opacity: 0; }
-        }
-        @keyframes pulse-gold {
-            0% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
-            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
-            100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
+        .task-item.completed i:last-child {
+            color: var(--success-color); /* Checkmark icon becomes green */
         }
         
         .buy-tasks-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
@@ -112,27 +95,22 @@
         .buy-task-box .task-count { font-size: 1.8rem; font-weight: 700; color: var(--primary-red); }
         .buy-task-box .task-price { font-size: 1rem; font-weight: 500; color: var(--accent-gold); }
         
-        /* --- UPDATE 2: Withdraw Section VFX --- */
+        /* --- Withdraw Page (UPDATE 2) --- */
         .withdraw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         .withdraw-box { background: var(--bg-element); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; border: 2px solid var(--border-color); transition: all 0.3s ease; position: relative; overflow: hidden; }
-        .withdraw-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, rgba(255, 215, 0, 0.3), transparent 30%); animation: rotate 4s linear infinite; }
-        .withdraw-box:hover { border-color: var(--accent-gold); box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); animation: pulse-gold-box 1.5s infinite; }
-        .withdraw-box .amount { font-size: 2.2rem; font-weight: 700; color: var(--accent-gold); margin-bottom: 5px; }
+        .withdraw-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, rgba(217, 4, 41, 0.3), transparent 30%); animation: rotate 4s linear infinite; }
+        .withdraw-box:hover { border-color: var(--primary-red); box-shadow: 0 0 15px rgba(217, 4, 41, 0.4); }
+        .withdraw-box .amount { font-size: 2.2rem; font-weight: 700; color: var(--primary-red); margin-bottom: 5px; }
         .withdraw-box .requirement { font-size: 0.8rem; color: var(--text-secondary); }
         .withdraw-box .requirement i { color: var(--accent-gold); }
-        @keyframes pulse-gold-box {
-            0% { transform: scale(1); box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); }
-            50% { transform: scale(1.03); box-shadow: 0 0 25px rgba(255, 215, 0, 0.5); }
-            100% { transform: scale(1); box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); }
-        }
         #withdraw-form-container { display: none; }
         .withdraw-form .form-group { margin-bottom: 15px; text-align: left; }
         .withdraw-form label { display: block; margin-bottom: 5px; color: var(--text-secondary); }
         .withdraw-form .payment-methods { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
         .withdraw-form .method-btn { flex: 1; min-width: 80px; padding: 10px; border: 2px solid var(--border-color); background: var(--bg-element); color: var(--text-light); border-radius: 8px; cursor: pointer; }
-        .withdraw-form .method-btn.selected { border-color: var(--accent-gold); animation: pulse-red 1.5s infinite; } /* Re-using pulse-red, but with yellow border it's fine */
+        .withdraw-form .method-btn.selected { border-color: var(--primary-red); box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); animation: pulse-red 1.5s infinite; }
         .withdraw-form input, .modal-form input { width: 100%; padding: 12px; background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-light); font-size: 1rem; margin-bottom: 10px; }
-        .withdraw-form input:focus, .modal-form input:focus { border-color: var(--accent-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+        .withdraw-form input:focus, .modal-form input:focus { border-color: var(--primary-red); box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); }
         .info-box { padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; border: 1px dashed var(--accent-gold); }
         
         /* --- Footer & Modals --- */
@@ -148,7 +126,8 @@
         .close-modal-btn { position: absolute; top: 10px; right: 10px; background: var(--border-color); color: var(--text-light); border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 1rem; cursor: pointer; }
         #countdown-timer { font-size: 3rem; font-weight: bold; color: var(--primary-red); margin: 15px 0; }
         .history-section { margin-top: 30px; }
-        .history-section h3 { color: var(--primary-red); margin-bottom: 15px; font-size: 1.3rem; text-align: left;}
+        .history-section h3, .history-section h4 { color: var(--primary-red); margin-bottom: 15px; font-size: 1.3rem; text-align: left;}
+        .history-section h4 { font-size: 1.1rem; color: var(--accent-gold); }
         .history-item { background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
         .history-item-info .amount { font-size: 1.1rem; font-weight: 600; color: var(--text-light); }
         .history-item-info .details { font-size: 0.8rem; color: var(--text-secondary); }
@@ -156,6 +135,7 @@
         .history-item-status.pending { color: #f0c419; background-color: rgba(255, 215, 0, 0.1); border: 1px solid #f0c419; }
         .history-item-status.completed { color: #28a745; background-color: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; }
         .history-item-status.rejected { color: #dc3545; background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; }
+        .history-list { max-height: 250px; overflow-y: auto; padding-right: 5px; } /* For scrollbar styling */
 
         /* --- VIDEO SECTION STYLES --- */
         .loot-box-card { background-color: var(--bg-element); padding: 20px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
@@ -220,7 +200,8 @@
             <div class="avatar" id="userAvatar">?</div>
             <div class="user-info">
                 <div class="name" id="userName">Loading...</div>
-                <div class="balance">Balance: <span id="userBalance">0.00</span> USDT 馃挼</div>
+                <!-- UPDATE 2: History Icon Added -->
+                <div class="balance">Balance: <span id="userBalance">0.00</span> USDT 馃挼 <i class="fa-solid fa-history" id="historyBtn" style="cursor: pointer; margin-left: 10px; color: var(--accent-gold);"></i></div>
             </div>
         </section>
 
@@ -240,8 +221,7 @@
                 </div>
                 <div class="content-card">
                     <h3>Refer & Earn More!</h3>
-                    <!-- UPDATE 3: Text updated -->
-                    <p>Earn 0.008 USDT for each friend who joins and earns at least 0.01 USDT.</p>
+                    <p>Earn 0.008 USDT for each friend who joins and earns at least 0.02 USDT.</p>
                     <div class="referral-link-box" id="referralLink">Loading...</div>
                     <div class="buttons-group" style="display:flex; gap:10px;">
                         <button class="btn btn-copy">Copy Link</button>
@@ -250,7 +230,7 @@
                 </div>
             </div>
 
-            <!-- Page 2: Tasks -->
+            <!-- Page 2: Tasks (Update 1 Applied) -->
             <div id="tasksPage" class="page">
                  <h2 class="page-title">Tasks & Channels</h2>
                  <div class="content-card">
@@ -308,7 +288,7 @@
                 </div>
             </div>
 
-            <!-- Page 4: Withdraw -->
+            <!-- Page 4: Withdraw (UPDATE 2 Applied) -->
             <div id="withdrawPage" class="page">
                 <h2 class="page-title">Withdraw Funds</h2>
                 <div class="content-card">
@@ -371,7 +351,7 @@
                         <strong>馃 Per Valid Referral:</strong> 0.008 USDT<br>
                         <strong>馃摵 Daily Ads (15 total):</strong> 0.0002 USDT per ad<br>
                         <strong>馃摴 Video Watching:</strong> Earn for every 15 seconds<br>
-                        <strong>鉁� Payment Methods:</strong> Binance / Bkash / Nagad
+                        <strong>鉁� Payment Methods:</strong> Binance / Bkash / Nagad
                     </p>
                     <p style="color: var(--error-color); font-weight: bold;">鈿狅笍 Do NOT use a VPN while working.</p>
                  </div>
@@ -400,7 +380,7 @@
         <!-- Video Player Modal -->
         <div class="modal-overlay" id="videoPlayerModal">
             <div class="modal-content">
-                <button id="closeVideoBtn" class="close-modal-btn"><i class="fa-solid fa-times"></i></button>
+                <button id="closeVideoBtn" class="close-modal-btn" data-modal-id="videoPlayerModal"><i class="fa-solid fa-times"></i></button>
                 <div id="videoPlayerContainer"></div>
             </div>
         </div>
@@ -408,7 +388,7 @@
         <!-- Create Task Modal -->
         <div class="modal-overlay" id="createTaskModal">
             <div class="modal-content">
-                <button class="close-modal-btn" data-modal-id="createTaskModal"><i class="fa-solid fa-times"></i></button>
+                <button id="closeCreateTaskModalBtn" class="close-modal-btn" data-modal-id="createTaskModal"><i class="fa-solid fa-times"></i></button>
                 
                 <div id="task-step-1">
                     <h3>Create a New Task</h3>
@@ -439,12 +419,32 @@
                 </div>
             </div>
         </div>
+
+        <!-- UPDATE 2: History Modal -->
+        <div class="modal-overlay" id="historyModal">
+            <div class="modal-content">
+                <button class="close-modal-btn" data-modal-id="historyModal"><i class="fa-solid fa-times"></i></button>
+                <h3>Transaction History</h3>
+                <div class="history-section" style="margin-top: 15px; text-align: left;">
+                    <h4>Withdrawals</h4>
+                    <div id="modal-withdrawal-history" class="history-list" style="max-height: 150px; overflow-y: auto;">
+                        <p style="color: var(--text-secondary); text-align: center;">Loading...</p>
+                    </div>
+                </div>
+                <div class="history-section" style="margin-top: 20px; text-align: left;">
+                    <h4>Referrals</h4>
+                    <div id="modal-referral-history" class="history-list" style="max-height: 150px; overflow-y: auto;">
+                        <p style="color: var(--text-secondary); text-align: center;">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- VIEW 2: ADMIN PANEL -->
     <div id="admin-panel-container">
         <div class="container">
-            <header><h1>馃尪锔� Chili Powder Admin Panel</h1></header>
+            <header><h1>馃尪锔� Chili Powder Admin Panel</h1></header>
             <div class="dashboard-stats">
                 <div class="stat-card"><h3>Total Users</h3><p id="total-users">0</p></div>
                 <div class="stat-card"><h3>Daily Active Users</h3><p id="daily-active-users">0</p></div>
@@ -548,15 +548,13 @@
             let sessionWatchTime = 0;
             let adCheckCounter = 0; 
             const AD_INTERVAL_SECONDS = 300; // 5 minutes
-            const mainContainer = document.querySelector('main');
 
-            // --- UPDATE 3: REFERRAL LOGIC UPDATED ---
+            // --- REFERRAL & EARNINGS LOGIC (UPDATE 3 APPLIED) ---
             async function checkAndProcessReferral(userDocRef) {
                 const userSnap = await getDoc(userDocRef);
                 const uData = userSnap.data();
 
-                // Reward is given when the referred user earns at least 0.01 USDT
-                if (uData.referredBy && uData.referralStatus === 'pending' && (uData.totalEarned || 0) >= 0.01) {
+                if (uData.referredBy && uData.referralStatus === 'pending' && (uData.totalEarned || 0) >= 0.02) {
                     const referrerRef = doc(db, "users", uData.referredBy);
                     await runTransaction(db, async (transaction) => {
                         const referrerDoc = await transaction.get(referrerRef);
@@ -569,6 +567,14 @@
                         transaction.update(userDocRef, { 
                             referralStatus: 'completed' 
                         });
+                        // Add a transaction record for the referrer
+                        const referralBonusRef = doc(collection(db, "users", uData.referredBy, "transactions"));
+                        transaction.set(referralBonusRef, {
+                            type: 'referral_bonus',
+                            amount: 0.008,
+                            fromUser: uData.firstName,
+                            timestamp: serverTimestamp()
+                        });
                     });
                     console.log(`Referral reward processed for referrer: ${uData.referredBy}`);
                 }
@@ -579,7 +585,7 @@
                     balance: increment(amount),
                     totalEarned: increment(amount)
                 });
-                // Check if this earning qualifies the user for a referral reward for their referrer
+                // Check for referral completion after earnings are added
                 await checkAndProcessReferral(userRef);
             }
 
@@ -614,7 +620,7 @@
                 }
             });
             
-            loadWithdrawalHistory(String(currentUser.id));
+            loadWithdrawalHistory(String(currentUser.id), 'withdrawal-history-list'); // Load history on withdraw page
             loadAndDisplayTasks();
             loadAndDisplayVideos();
 
@@ -697,12 +703,13 @@
                 }
             }
 
-            // --- Withdrawal & History ---
-            async function loadWithdrawalHistory(userId) {
-                const historyListEl = document.getElementById('withdrawal-history-list');
+            // --- HISTORY LOGIC (UPDATE 2) ---
+            async function loadWithdrawalHistory(userId, containerId) {
+                const historyListEl = document.getElementById(containerId);
                 const q = query(collection(db, "withdrawals"), where("userId", "==", userId), orderBy("requestTimestamp", "desc"));
+                
                 onSnapshot(q, (snapshot) => {
-                    historyListEl.innerHTML = snapshot.empty ? '<p style="color: var(--text-secondary); text-align: center;">No withdrawal history found.</p>' : '';
+                    historyListEl.innerHTML = snapshot.empty ? `<p style="color: var(--text-secondary); text-align: center;">No withdrawal history found.</p>` : '';
                     snapshot.forEach(doc => {
                         const data = doc.data();
                         const date = data.requestTimestamp?.toDate()?.toLocaleDateString('en-GB') || 'N/A';
@@ -711,9 +718,42 @@
                         item.innerHTML = `<div class="history-item-info"><div class="amount">${data.amount} USDT</div><div class="details">${data.method} - ${date}</div></div><div class="history-item-status ${data.status}">${data.status}</div>`;
                         historyListEl.appendChild(item);
                     });
+                }, (error) => {
+                    console.error("Error loading withdrawal history:", error);
+                    historyListEl.innerHTML = `<p style="color: var(--error-color); text-align: center;">Could not load history.</p>`;
                 });
             }
 
+            async function loadReferralHistory(userId) {
+                const container = document.getElementById('modal-referral-history');
+                container.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading...</p>`;
+                const q = query(collection(db, "users"), where("referredBy", "==", userId), orderBy("joinDate", "desc"));
+                
+                onSnapshot(q, (snapshot) => {
+                    if (snapshot.empty) {
+                        container.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">You have not referred anyone yet.</p>';
+                        return;
+                    }
+                    container.innerHTML = '';
+                    snapshot.forEach(doc => {
+                        const referredUser = doc.data();
+                        const joinDate = referredUser.joinDate?.toDate()?.toLocaleDateString('en-GB') || 'N/A';
+                        const status = referredUser.referralStatus === 'completed' ? 'Completed' : 'Pending';
+                        const statusClass = referredUser.referralStatus === 'completed' ? 'completed' : 'pending';
+                        const item = document.createElement('div');
+                        item.className = 'history-item';
+                        item.innerHTML = `
+                            <div class="history-item-info">
+                                <div class="amount">${referredUser.firstName}</div>
+                                <div class="details">Earned: ${(referredUser.totalEarned || 0).toFixed(4)} USDT</div>
+                            </div>
+                            <div class="history-item-status ${statusClass}">${status}</div>`;
+                        container.appendChild(item);
+                    });
+                });
+            }
+
+            // --- WITHDRAW LOGIC (UPDATE 2) ---
             document.querySelectorAll('.withdraw-box').forEach(box => {
                 box.addEventListener('click', () => {
                     const amount = parseFloat(box.dataset.amount);
@@ -740,91 +780,71 @@
 
                 if (!method || !accNum || isNaN(amount)) return tg.showAlert('Please select a method and enter your account details.');
 
-                await addDoc(collection(db, "withdrawals"), {
-                    userId: currentUser.id, userName: userData.firstName, amount,
-                    method, accountNumber: accNum, status: "pending", 
-                    requestTimestamp: serverTimestamp(), userReferralsAtRequest: userData.referrals
-                });
-                await updateDoc(userRef, { balance: increment(-amount) });
-                tg.showAlert(`Withdrawal request for ${amount} USDT submitted successfully!`);
-                document.getElementById('withdraw-form-container').style.display = 'none';
+                const btn = document.getElementById('submitWithdrawalBtn');
+                btn.disabled = true;
+                btn.textContent = 'Submitting...';
+
+                try {
+                    await addDoc(collection(db, "withdrawals"), {
+                        userId: currentUser.id, userName: userData.firstName, amount,
+                        method, accountNumber: accNum, status: "pending", 
+                        requestTimestamp: serverTimestamp(), userReferralsAtRequest: userData.referrals
+                    });
+                    await updateDoc(userRef, { balance: increment(-amount) });
+                    tg.showAlert(`Withdrawal request for ${amount} USDT submitted successfully!`);
+                    document.getElementById('withdraw-form-container').style.display = 'none';
+                    document.getElementById('accountNumber').value = '';
+                    document.querySelector('.method-btn.selected')?.classList.remove('selected');
+                } catch (error) {
+                    tg.showAlert('Failed to submit request. Please try again.');
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'Submit Request';
+                }
             });
 
-            // --- UPDATE 1: Task Logic & VFX ---
-            function showRewardAnimation(clickedElement, rewardAmount) {
-                const rect = clickedElement.getBoundingClientRect();
-                const mainRect = mainContainer.getBoundingClientRect();
-
-                const animationEl = document.createElement('div');
-                animationEl.className = 'reward-animation';
-                animationEl.innerHTML = `+${rewardAmount.toFixed(4)} USDT`;
-                
-                animationEl.style.left = `${rect.left - mainRect.left + rect.width / 2 - 50}px`;
-                animationEl.style.top = `${rect.top - mainRect.top - 20}px`;
-                
-                mainContainer.appendChild(animationEl);
-
-                setTimeout(() => {
-                    animationEl.remove();
-                }, 2000);
-            }
-
+            // --- TASK LOGIC (UPDATE 1 APPLIED) ---
             async function loadAndDisplayTasks() {
                 const taskListEl = document.getElementById('dynamic-task-list');
                 const completedRef = collection(db, "users", String(currentUser.id), "completedTasks");
-                const completedSnap = await getDocs(completedRef);
-                const completedIds = new Set(completedSnap.docs.map(d => d.id));
-
-                const adminTasksQuery = getDocs(collection(db, "tasks"));
-                const userTasksQuery = getDocs(query(collection(db, "userTasks"), where("remainingQuantity", ">", 0)));
                 
-                const [adminTasksSnap, userTasksSnap] = await Promise.all([adminTasksQuery, userTasksQuery]);
-                
-                let allTasks = [];
-                adminTasksSnap.forEach(doc => {
-                    if (!completedIds.has(doc.id)) {
-                        allTasks.push({ id: doc.id, ...doc.data(), type: 'admin' });
-                    }
-                });
-                userTasksSnap.forEach(doc => {
-                    if (!completedIds.has(doc.id) && doc.data().creatorId !== String(currentUser.id)) {
-                        allTasks.push({ id: doc.id, ...doc.data(), type: 'user', reward: 0.0005 });
-                    }
-                });
-
-                taskListEl.innerHTML = allTasks.length === 0 ? '<p style="color: var(--text-secondary);">No new tasks available.</p>' : '';
-                allTasks.forEach(task => {
-                    const item = document.createElement('div');
-                    item.className = 'task-item';
+                onSnapshot(completedRef, (completedSnap) => {
+                    const completedIds = new Set(completedSnap.docs.map(d => d.id));
                     
-                    if (task.type === 'admin') {
-                        item.classList.add('admin-task-item');
-                        item.innerHTML = `
-                            <div class="task-text"><i class="fa-solid fa-star"></i> ${task.title} (+${task.reward.toFixed(4)} USDT)</div>
-                            <button class="task-go-btn">Go</button>`;
-                        const goBtn = item.querySelector('.task-go-btn');
-                        goBtn.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            window.open(task.link, '_blank');
-                            handleTaskClick(item, task.id, task.reward, task.type);
-                        }, { once: true });
-                    } else { // User tasks
-                        item.innerHTML = `
-                            <div class="task-text"><i class="fa-solid fa-user-check"></i> ${task.title} (+${task.reward.toFixed(4)} USDT)</div>
-                            <i class="fa-solid fa-arrow-right"></i>`;
-                        item.addEventListener('click', () => {
-                             window.open(task.link, '_blank');
-                             handleTaskClick(item, task.id, task.reward, task.type);
-                        }, { once: true });
-                    }
-                    taskListEl.appendChild(item);
+                    const adminTasksQuery = getDocs(query(collection(db, "tasks"), orderBy("createdAt", "desc")));
+                    const userTasksQuery = getDocs(query(collection(db, "userTasks"), where("remainingQuantity", ">", 0), orderBy("createdAt", "desc")));
+                    
+                    Promise.all([adminTasksQuery, userTasksQuery]).then(([adminTasksSnap, userTasksSnap]) => {
+                        let allTasks = [];
+                        adminTasksSnap.forEach(doc => {
+                            if (!completedIds.has(doc.id)) {
+                                allTasks.push({ id: doc.id, ...doc.data(), type: 'admin' });
+                            }
+                        });
+                        userTasksSnap.forEach(doc => {
+                            if (!completedIds.has(doc.id) && doc.data().creatorId !== String(currentUser.id)) {
+                                allTasks.push({ id: doc.id, ...doc.data(), type: 'user', reward: 0.0005 });
+                            }
+                        });
+
+                        taskListEl.innerHTML = allTasks.length === 0 ? '<p style="color: var(--text-secondary);">No new tasks available.</p>' : '';
+                        allTasks.forEach(task => {
+                            const item = document.createElement('a');
+                            item.className = 'task-item';
+                            item.href = task.link;
+                            item.target = '_blank';
+                            item.innerHTML = `<div class="task-text"><i class="fa-solid fa-star"></i> ${task.title} (+${task.reward.toFixed(4)} USDT)</div><i class="fa-solid fa-arrow-right"></i>`;
+                            item.addEventListener('click', () => handleTaskClick(item, task.id, task.reward, task.type), { once: true });
+                            taskListEl.appendChild(item);
+                        });
+                    });
                 });
             }
-
+            
             async function handleTaskClick(item, taskId, reward, taskType) {
-                item.style.opacity = '0.5';
-                item.style.pointerEvents = 'none';
-                showRewardAnimation(item, reward); // Show VFX animation
+                // VFX for completion
+                item.classList.add('completed');
+                item.querySelector('i:last-child').className = 'fa-solid fa-circle-check';
                 
                 if (taskType === 'user') {
                     const taskRef = doc(db, "userTasks", taskId);
@@ -836,11 +856,11 @@
                 }
                 
                 await setDoc(doc(db, "users", String(currentUser.id), "completedTasks", taskId), { completedAt: serverTimestamp() });
-                await addEarnings(reward);
+                await addEarnings(reward); // Use the centralized earning function
                 tg.HapticFeedback.notificationOccurred('success');
             }
             
-            // Logic for "Add Task" modal
+            // Logic for the "Add Task" modal
             const createTaskModal = document.getElementById('createTaskModal');
             const taskStep1 = document.getElementById('task-step-1');
             const taskStep2 = document.getElementById('task-step-2');
@@ -884,8 +904,7 @@
                 try {
                     await runTransaction(db, async (transaction) => {
                         const userDoc = await transaction.get(userRef);
-                        const currentBalance = userDoc.data().balance;
-                        if (currentBalance < price) throw "Insufficient balance.";
+                        if (!userDoc.exists() || userDoc.data().balance < price) throw "Insufficient balance.";
 
                         transaction.update(userRef, { balance: increment(-price) });
                         
@@ -965,13 +984,7 @@
                 } catch (error) { console.error("In-video ad failed:", error); } 
                 finally { adCheckCounter++; if (ytPlayer?.playVideo) ytPlayer.playVideo(); }
             }
-            document.getElementById('closeVideoBtn').addEventListener('click', () => {
-                stopWatchTimeTracker();
-                if (ytPlayer?.destroy) ytPlayer.destroy();
-                document.getElementById('videoPlayerModal').classList.remove('active');
-                if (sessionWatchTime > 0) { updateWatchTimeInFirebase(sessionWatchTime); sessionWatchTime = 0; }
-            });
-
+            
             async function updateWatchTimeInFirebase(seconds) {
                 const rewardPer15Seconds = 0.00005;
                 const earned = (seconds / 15) * rewardPer15Seconds;
@@ -992,13 +1005,18 @@
                         const userDoc = await transaction.get(userRef);
                         const currentLootBalance = userDoc.data().lootBoxBalance || 0;
                         if (!userDoc.exists() || currentLootBalance < 0.05) { throw "Insufficient loot box balance."; }
-                        transaction.update(userRef, { balance: increment(currentLootBalance), lootBoxBalance: 0 });
+                        transaction.update(userRef, { 
+                            balance: increment(currentLootBalance), 
+                            totalEarned: increment(currentLootBalance), // Also count lootbox claims towards total earned for referrals
+                            lootBoxBalance: 0 
+                        });
                     });
+                    await checkAndProcessReferral(userRef); // Check for referral after claiming
                     tg.showAlert('Congratulations! Loot box reward has been added to your main balance.');
                 } catch (error) { tg.showAlert('Could not claim reward. Please try again.'); }
             });
 
-            // --- General Event Listeners ---
+            // --- GENERAL EVENT LISTENERS ---
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', (e) => {
                     document.querySelector('.nav-item.active')?.classList.remove('active');
@@ -1017,12 +1035,33 @@
             document.getElementById('watchGigaAdButton').addEventListener('click', handleGigaAdWatch);
             document.querySelector('.btn-copy').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('referralLink').textContent).then(() => tg.showAlert('Referral link copied!')); });
             document.querySelector('.btn-share').addEventListener('click', () => { tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(document.getElementById('referralLink').textContent)}`); });
-             document.querySelectorAll('.close-modal-btn').forEach(btn => {
+            
+            // History Modal Listeners (UPDATE 2)
+            document.getElementById('historyBtn').addEventListener('click', () => {
+                document.getElementById('historyModal').classList.add('active');
+                loadWithdrawalHistory(String(currentUser.id), 'modal-withdrawal-history');
+                loadReferralHistory(String(currentUser.id));
+            });
+
+            document.querySelectorAll('.close-modal-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const modalId = btn.dataset.modalId;
-                    if(modalId) document.getElementById(modalId).classList.remove('active');
+                    if (modalId) {
+                        document.getElementById(modalId).classList.remove('active');
+                    }
                 });
             });
+            
+            document.getElementById('closeVideoBtn').addEventListener('click', () => {
+                stopWatchTimeTracker();
+                if (ytPlayer?.destroy) ytPlayer.destroy();
+                document.getElementById('videoPlayerModal').classList.remove('active');
+                if (sessionWatchTime > 0) { 
+                    updateWatchTimeInFirebase(sessionWatchTime); 
+                    sessionWatchTime = 0; 
+                }
+            });
+
         }
 
         // --- 4. ADMIN PANEL LOGIC ---
@@ -1035,7 +1074,7 @@
             const today = new Date(); today.setHours(0,0,0,0);
             onSnapshot(query(collection(db, 'users'), where("lastLogin", ">=", Timestamp.fromDate(today))), snap => document.getElementById('daily-active-users').textContent = snap.size);
 
-            onSnapshot(query(collection(db, "withdrawals"), where("status", "==", "pending")), (snapshot) => {
+            onSnapshot(query(collection(db, "withdrawals"), where("status", "==", "pending"), orderBy("requestTimestamp", "desc")), (snapshot) => {
                 document.getElementById('pending-withdrawals').textContent = snapshot.size;
                 requestsTableBody.innerHTML = '';
                 snapshot.forEach((doc) => {
@@ -1046,7 +1085,7 @@
                         <td style="font-weight:bold; color:#d32f2f;">${req.amount.toFixed(4)} USDT</td>
                         <td>${req.method}</td>
                         <td>${req.accountNumber}</td>
-                        <td><b>${req.userReferralsAtRequest}</b></td>
+                        <td><b>${req.userReferralsAtRequest || 0}</b></td>
                         <td>${date}</td>
                         <td>
                             <button class="action-btn approve-btn" data-id="${doc.id}">Approve</button>
@@ -1064,7 +1103,7 @@
                 if (!isApprove) await updateDoc(doc(db, "users", userId), { balance: increment(parseFloat(amount)) });
             }
 
-            onSnapshot(collection(db, "tasks"), (snapshot) => {
+            onSnapshot(query(collection(db, "tasks"), orderBy("createdAt", "desc")), (snapshot) => {
                 tasksTableBody.innerHTML = '';
                 snapshot.forEach(doc => {
                     const task = doc.data();
