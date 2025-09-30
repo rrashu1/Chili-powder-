@@ -95,7 +95,7 @@
         .buy-task-box .task-count { font-size: 1.8rem; font-weight: 700; color: var(--primary-red); }
         .buy-task-box .task-price { font-size: 1rem; font-weight: 500; color: var(--accent-gold); }
         
-        /* --- Withdraw Page (UPDATE 2) --- */
+        /* --- Withdraw Page --- */
         .withdraw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         .withdraw-box { background: var(--bg-element); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; border: 2px solid var(--border-color); transition: all 0.3s ease; position: relative; overflow: hidden; }
         .withdraw-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, rgba(217, 4, 41, 0.3), transparent 30%); animation: rotate 4s linear infinite; }
@@ -230,7 +230,7 @@
                 </div>
             </div>
 
-            <!-- Page 2: Tasks (Update 1 Applied) -->
+            <!-- Page 2: Tasks (Update 3 Applied) -->
             <div id="tasksPage" class="page">
                  <h2 class="page-title">Tasks & Channels</h2>
                  <div class="content-card">
@@ -255,7 +255,7 @@
                 </div>
             </div>
 
-            <!-- Page 3: Ads -->
+            <!-- Page 3: Ads (Update 4 Applied) -->
             <div id="adsPage" class="page">
                 <h2 class="page-title">Earn From Ads</h2>
                 <div class="content-card">
@@ -288,7 +288,7 @@
                 </div>
             </div>
 
-            <!-- Page 4: Withdraw (UPDATE 2 Applied) -->
+            <!-- Page 4: Withdraw -->
             <div id="withdrawPage" class="page">
                 <h2 class="page-title">Withdraw Funds</h2>
                 <div class="content-card">
@@ -380,12 +380,12 @@
         <!-- Video Player Modal -->
         <div class="modal-overlay" id="videoPlayerModal">
             <div class="modal-content">
-                <button id="closeVideoBtn" class="close-modal-btn" data-modal-id="videoPlayerModal"><i class="fa-solid fa-times"></i></button>
+                <button id="closeVideoBtn" class="close-modal-btn"><i class="fa-solid fa-times"></i></button>
                 <div id="videoPlayerContainer"></div>
             </div>
         </div>
         
-        <!-- Create Task Modal -->
+        <!-- Create Task Modal (Update 3) -->
         <div class="modal-overlay" id="createTaskModal">
             <div class="modal-content">
                 <button id="closeCreateTaskModalBtn" class="close-modal-btn" data-modal-id="createTaskModal"><i class="fa-solid fa-times"></i></button>
@@ -496,7 +496,7 @@
 
 
     <script type="module">
-        // --- 1. FIREBASE INITIALIZATION ---
+        // --- 1. FIREBASE INITIALIZATION (UPDATED) ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
         import { getFirestore, doc, getDoc, setDoc, onSnapshot, updateDoc, increment, collection, addDoc, serverTimestamp, getDocs, query, where, Timestamp, deleteDoc, runTransaction, orderBy } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
@@ -549,7 +549,7 @@
             let adCheckCounter = 0; 
             const AD_INTERVAL_SECONDS = 300; // 5 minutes
 
-            // --- REFERRAL & EARNINGS LOGIC (UPDATE 3 APPLIED) ---
+            // --- REFERRAL LOGIC ---
             async function checkAndProcessReferral(userDocRef) {
                 const userSnap = await getDoc(userDocRef);
                 const uData = userSnap.data();
@@ -567,14 +567,6 @@
                         transaction.update(userDocRef, { 
                             referralStatus: 'completed' 
                         });
-                        // Add a transaction record for the referrer
-                        const referralBonusRef = doc(collection(db, "users", uData.referredBy, "transactions"));
-                        transaction.set(referralBonusRef, {
-                            type: 'referral_bonus',
-                            amount: 0.008,
-                            fromUser: uData.firstName,
-                            timestamp: serverTimestamp()
-                        });
                     });
                     console.log(`Referral reward processed for referrer: ${uData.referredBy}`);
                 }
@@ -585,7 +577,6 @@
                     balance: increment(amount),
                     totalEarned: increment(amount)
                 });
-                // Check for referral completion after earnings are added
                 await checkAndProcessReferral(userRef);
             }
 
@@ -600,7 +591,7 @@
                 } else {
                     const newUserData = {
                         userId: currentUser.id, firstName: currentUser.first_name, userName: currentUser.username || 'N/A',
-                        balance: 0,
+                        balance: 0, // UPDATE 1 & 2: Sign up bonus removed, start from 0
                         referrals: 0, 
                         totalEarned: 0,
                         referralStatus: 'none',
@@ -653,7 +644,7 @@
                 claimLootBtn.textContent = lootBalance >= 0.05 ? 'Claim Now!' : 'Claim';
             }
             
-            // --- Ad Handlers ---
+            // --- Ad Handlers (Update 4) ---
             async function handleMonetagAdWatch() {
                 const button = document.getElementById('watchMonetagAdButton');
                 if ((userData.monetagAdsWatchedToday || 0) >= 8) return tg.showAlert(`You have watched all Monetag ads for today.`);
@@ -672,7 +663,7 @@
                     await (typeof show_9858506 === 'function' ? show_9858506() : Promise.reject('Monetag SDK not loaded'));
                     if (countdown <= 0) {
                         await updateDoc(userRef, { monetagAdsWatchedToday: increment(1) });
-                        await addEarnings(0.0002);
+                        await addEarnings(0.0002); // UPDATE 4: Reward changed
                         tg.HapticFeedback.notificationOccurred('success');
                         tg.showAlert('Congratulations! 0.0002 USDT has been added.');
                     } else {
@@ -694,7 +685,7 @@
                 try {
                     await (typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.reject('GigaPub SDK not loaded'));
                     await updateDoc(userRef, { gigaAdsWatchedToday: increment(1) });
-                    await addEarnings(0.0002);
+                    await addEarnings(0.0002); // UPDATE 4: Reward changed
                     tg.HapticFeedback.notificationOccurred('success');
                     tg.showAlert('Congratulations! 0.0002 USDT has been added.');
                 } catch (error) { tg.showAlert('Ad could not be loaded. Please try again.');
@@ -703,11 +694,12 @@
                 }
             }
 
-            // --- HISTORY LOGIC (UPDATE 2) ---
+            // --- UPDATE 2: Refactored History & New Referral History ---
             async function loadWithdrawalHistory(userId, containerId) {
                 const historyListEl = document.getElementById(containerId);
                 const q = query(collection(db, "withdrawals"), where("userId", "==", userId), orderBy("requestTimestamp", "desc"));
                 
+                // Use onSnapshot to listen for real-time updates
                 onSnapshot(q, (snapshot) => {
                     historyListEl.innerHTML = snapshot.empty ? `<p style="color: var(--text-secondary); text-align: center;">No withdrawal history found.</p>` : '';
                     snapshot.forEach(doc => {
@@ -727,33 +719,34 @@
             async function loadReferralHistory(userId) {
                 const container = document.getElementById('modal-referral-history');
                 container.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading...</p>`;
-                const q = query(collection(db, "users"), where("referredBy", "==", userId), orderBy("joinDate", "desc"));
+                const q = query(collection(db, "users"), where("referredBy", "==", userId));
+                const querySnapshot = await getDocs(q);
                 
-                onSnapshot(q, (snapshot) => {
-                    if (snapshot.empty) {
-                        container.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">You have not referred anyone yet.</p>';
-                        return;
-                    }
-                    container.innerHTML = '';
-                    snapshot.forEach(doc => {
-                        const referredUser = doc.data();
-                        const joinDate = referredUser.joinDate?.toDate()?.toLocaleDateString('en-GB') || 'N/A';
-                        const status = referredUser.referralStatus === 'completed' ? 'Completed' : 'Pending';
-                        const statusClass = referredUser.referralStatus === 'completed' ? 'completed' : 'pending';
-                        const item = document.createElement('div');
-                        item.className = 'history-item';
-                        item.innerHTML = `
-                            <div class="history-item-info">
-                                <div class="amount">${referredUser.firstName}</div>
-                                <div class="details">Earned: ${(referredUser.totalEarned || 0).toFixed(4)} USDT</div>
-                            </div>
-                            <div class="history-item-status ${statusClass}">${status}</div>`;
-                        container.appendChild(item);
-                    });
+                if (querySnapshot.empty) {
+                    container.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">You have not referred anyone yet.</p>';
+                    return;
+                }
+
+                container.innerHTML = '';
+                querySnapshot.forEach(doc => {
+                    const referredUser = doc.data();
+                    const joinDate = referredUser.joinDate?.toDate()?.toLocaleDateString('en-GB') || 'N/A';
+                    const status = referredUser.referralStatus === 'completed' ? 'Completed' : 'Pending';
+                    const statusClass = referredUser.referralStatus; // 'completed' or 'pending'
+
+                    const item = document.createElement('div');
+                    item.className = 'history-item';
+                    item.innerHTML = `
+                        <div class="history-item-info">
+                            <div class="amount">${referredUser.firstName}</div>
+                            <div class="details">Joined: ${joinDate}</div>
+                        </div>
+                        <div class="history-item-status ${statusClass}">${status}</div>`;
+                    container.appendChild(item);
                 });
             }
 
-            // --- WITHDRAW LOGIC (UPDATE 2) ---
+
             document.querySelectorAll('.withdraw-box').forEach(box => {
                 box.addEventListener('click', () => {
                     const amount = parseFloat(box.dataset.amount);
@@ -780,70 +773,55 @@
 
                 if (!method || !accNum || isNaN(amount)) return tg.showAlert('Please select a method and enter your account details.');
 
-                const btn = document.getElementById('submitWithdrawalBtn');
-                btn.disabled = true;
-                btn.textContent = 'Submitting...';
-
-                try {
-                    await addDoc(collection(db, "withdrawals"), {
-                        userId: currentUser.id, userName: userData.firstName, amount,
-                        method, accountNumber: accNum, status: "pending", 
-                        requestTimestamp: serverTimestamp(), userReferralsAtRequest: userData.referrals
-                    });
-                    await updateDoc(userRef, { balance: increment(-amount) });
-                    tg.showAlert(`Withdrawal request for ${amount} USDT submitted successfully!`);
-                    document.getElementById('withdraw-form-container').style.display = 'none';
-                    document.getElementById('accountNumber').value = '';
-                    document.querySelector('.method-btn.selected')?.classList.remove('selected');
-                } catch (error) {
-                    tg.showAlert('Failed to submit request. Please try again.');
-                } finally {
-                    btn.disabled = false;
-                    btn.textContent = 'Submit Request';
-                }
+                await addDoc(collection(db, "withdrawals"), {
+                    userId: currentUser.id, userName: userData.firstName, amount,
+                    method, accountNumber: accNum, status: "pending", 
+                    requestTimestamp: serverTimestamp(), userReferralsAtRequest: userData.referrals
+                });
+                await updateDoc(userRef, { balance: increment(-amount) });
+                tg.showAlert(`Withdrawal request for ${amount} USDT submitted successfully!`);
+                document.getElementById('withdraw-form-container').style.display = 'none';
             });
 
-            // --- TASK LOGIC (UPDATE 1 APPLIED) ---
+            // --- Task Logic (Update 3) ---
             async function loadAndDisplayTasks() {
                 const taskListEl = document.getElementById('dynamic-task-list');
                 const completedRef = collection(db, "users", String(currentUser.id), "completedTasks");
-                
-                onSnapshot(completedRef, (completedSnap) => {
-                    const completedIds = new Set(completedSnap.docs.map(d => d.id));
-                    
-                    const adminTasksQuery = getDocs(query(collection(db, "tasks"), orderBy("createdAt", "desc")));
-                    const userTasksQuery = getDocs(query(collection(db, "userTasks"), where("remainingQuantity", ">", 0), orderBy("createdAt", "desc")));
-                    
-                    Promise.all([adminTasksQuery, userTasksQuery]).then(([adminTasksSnap, userTasksSnap]) => {
-                        let allTasks = [];
-                        adminTasksSnap.forEach(doc => {
-                            if (!completedIds.has(doc.id)) {
-                                allTasks.push({ id: doc.id, ...doc.data(), type: 'admin' });
-                            }
-                        });
-                        userTasksSnap.forEach(doc => {
-                            if (!completedIds.has(doc.id) && doc.data().creatorId !== String(currentUser.id)) {
-                                allTasks.push({ id: doc.id, ...doc.data(), type: 'user', reward: 0.0005 });
-                            }
-                        });
+                const completedSnap = await getDocs(completedRef);
+                const completedIds = new Set(completedSnap.docs.map(d => d.id));
 
-                        taskListEl.innerHTML = allTasks.length === 0 ? '<p style="color: var(--text-secondary);">No new tasks available.</p>' : '';
-                        allTasks.forEach(task => {
-                            const item = document.createElement('a');
-                            item.className = 'task-item';
-                            item.href = task.link;
-                            item.target = '_blank';
-                            item.innerHTML = `<div class="task-text"><i class="fa-solid fa-star"></i> ${task.title} (+${task.reward.toFixed(4)} USDT)</div><i class="fa-solid fa-arrow-right"></i>`;
-                            item.addEventListener('click', () => handleTaskClick(item, task.id, task.reward, task.type), { once: true });
-                            taskListEl.appendChild(item);
-                        });
-                    });
+                const adminTasksQuery = getDocs(collection(db, "tasks"));
+                const userTasksQuery = getDocs(query(collection(db, "userTasks"), where("remainingQuantity", ">", 0)));
+                
+                const [adminTasksSnap, userTasksSnap] = await Promise.all([adminTasksQuery, userTasksQuery]);
+                
+                let allTasks = [];
+                adminTasksSnap.forEach(doc => {
+                    if (!completedIds.has(doc.id)) {
+                        allTasks.push({ id: doc.id, ...doc.data(), type: 'admin' });
+                    }
+                });
+                userTasksSnap.forEach(doc => {
+                    if (!completedIds.has(doc.id) && doc.data().creatorId !== String(currentUser.id)) {
+                        allTasks.push({ id: doc.id, ...doc.data(), type: 'user', reward: 0.0005 });
+                    }
+                });
+
+                taskListEl.innerHTML = allTasks.length === 0 ? '<p style="color: var(--text-secondary);">No new tasks available.</p>' : '';
+                allTasks.forEach(task => {
+                    const item = document.createElement('a');
+                    item.className = 'task-item';
+                    item.href = task.link;
+                    item.target = '_blank';
+                    item.innerHTML = `<div class="task-text"><i class="fa-solid fa-star"></i> ${task.title} (+${task.reward.toFixed(4)} USDT)</div><i class="fa-solid fa-arrow-right"></i>`;
+                    item.addEventListener('click', () => handleTaskClick(item, task.id, task.reward, task.type), { once: true });
+                    taskListEl.appendChild(item);
                 });
             }
             
+            // UPDATE 1: Task click handler updated for VFX
             async function handleTaskClick(item, taskId, reward, taskType) {
-                // VFX for completion
-                item.classList.add('completed');
+                item.classList.add('completed'); // Add class for visual effect
                 item.querySelector('i:last-child').className = 'fa-solid fa-circle-check';
                 
                 if (taskType === 'user') {
@@ -856,11 +834,11 @@
                 }
                 
                 await setDoc(doc(db, "users", String(currentUser.id), "completedTasks", taskId), { completedAt: serverTimestamp() });
-                await addEarnings(reward); // Use the centralized earning function
+                await addEarnings(reward);
                 tg.HapticFeedback.notificationOccurred('success');
             }
             
-            // Logic for the "Add Task" modal
+            // Logic for the new "Add Task" modal
             const createTaskModal = document.getElementById('createTaskModal');
             const taskStep1 = document.getElementById('task-step-1');
             const taskStep2 = document.getElementById('task-step-2');
@@ -904,7 +882,8 @@
                 try {
                     await runTransaction(db, async (transaction) => {
                         const userDoc = await transaction.get(userRef);
-                        if (!userDoc.exists() || userDoc.data().balance < price) throw "Insufficient balance.";
+                        const currentBalance = userDoc.data().balance;
+                        if (currentBalance < price) throw "Insufficient balance.";
 
                         transaction.update(userRef, { balance: increment(-price) });
                         
@@ -984,7 +963,13 @@
                 } catch (error) { console.error("In-video ad failed:", error); } 
                 finally { adCheckCounter++; if (ytPlayer?.playVideo) ytPlayer.playVideo(); }
             }
-            
+            document.getElementById('closeVideoBtn').addEventListener('click', () => {
+                stopWatchTimeTracker();
+                if (ytPlayer?.destroy) ytPlayer.destroy();
+                document.getElementById('videoPlayerModal').classList.remove('active');
+                if (sessionWatchTime > 0) { updateWatchTimeInFirebase(sessionWatchTime); sessionWatchTime = 0; }
+            });
+
             async function updateWatchTimeInFirebase(seconds) {
                 const rewardPer15Seconds = 0.00005;
                 const earned = (seconds / 15) * rewardPer15Seconds;
@@ -1005,18 +990,13 @@
                         const userDoc = await transaction.get(userRef);
                         const currentLootBalance = userDoc.data().lootBoxBalance || 0;
                         if (!userDoc.exists() || currentLootBalance < 0.05) { throw "Insufficient loot box balance."; }
-                        transaction.update(userRef, { 
-                            balance: increment(currentLootBalance), 
-                            totalEarned: increment(currentLootBalance), // Also count lootbox claims towards total earned for referrals
-                            lootBoxBalance: 0 
-                        });
+                        transaction.update(userRef, { balance: increment(currentLootBalance), lootBoxBalance: 0 });
                     });
-                    await checkAndProcessReferral(userRef); // Check for referral after claiming
                     tg.showAlert('Congratulations! Loot box reward has been added to your main balance.');
                 } catch (error) { tg.showAlert('Could not claim reward. Please try again.'); }
             });
 
-            // --- GENERAL EVENT LISTENERS ---
+            // --- General Event Listeners ---
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', (e) => {
                     document.querySelector('.nav-item.active')?.classList.remove('active');
@@ -1036,7 +1016,7 @@
             document.querySelector('.btn-copy').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('referralLink').textContent).then(() => tg.showAlert('Referral link copied!')); });
             document.querySelector('.btn-share').addEventListener('click', () => { tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(document.getElementById('referralLink').textContent)}`); });
             
-            // History Modal Listeners (UPDATE 2)
+            // --- UPDATE 2: History Modal Listeners ---
             document.getElementById('historyBtn').addEventListener('click', () => {
                 document.getElementById('historyModal').classList.add('active');
                 loadWithdrawalHistory(String(currentUser.id), 'modal-withdrawal-history');
@@ -1051,16 +1031,6 @@
                     }
                 });
             });
-            
-            document.getElementById('closeVideoBtn').addEventListener('click', () => {
-                stopWatchTimeTracker();
-                if (ytPlayer?.destroy) ytPlayer.destroy();
-                document.getElementById('videoPlayerModal').classList.remove('active');
-                if (sessionWatchTime > 0) { 
-                    updateWatchTimeInFirebase(sessionWatchTime); 
-                    sessionWatchTime = 0; 
-                }
-            });
 
         }
 
@@ -1074,7 +1044,7 @@
             const today = new Date(); today.setHours(0,0,0,0);
             onSnapshot(query(collection(db, 'users'), where("lastLogin", ">=", Timestamp.fromDate(today))), snap => document.getElementById('daily-active-users').textContent = snap.size);
 
-            onSnapshot(query(collection(db, "withdrawals"), where("status", "==", "pending"), orderBy("requestTimestamp", "desc")), (snapshot) => {
+            onSnapshot(query(collection(db, "withdrawals"), where("status", "==", "pending")), (snapshot) => {
                 document.getElementById('pending-withdrawals').textContent = snapshot.size;
                 requestsTableBody.innerHTML = '';
                 snapshot.forEach((doc) => {
@@ -1085,7 +1055,7 @@
                         <td style="font-weight:bold; color:#d32f2f;">${req.amount.toFixed(4)} USDT</td>
                         <td>${req.method}</td>
                         <td>${req.accountNumber}</td>
-                        <td><b>${req.userReferralsAtRequest || 0}</b></td>
+                        <td><b>${req.userReferralsAtRequest}</b></td>
                         <td>${date}</td>
                         <td>
                             <button class="action-btn approve-btn" data-id="${doc.id}">Approve</button>
@@ -1103,7 +1073,7 @@
                 if (!isApprove) await updateDoc(doc(db, "users", userId), { balance: increment(parseFloat(amount)) });
             }
 
-            onSnapshot(query(collection(db, "tasks"), orderBy("createdAt", "desc")), (snapshot) => {
+            onSnapshot(collection(db, "tasks"), (snapshot) => {
                 tasksTableBody.innerHTML = '';
                 snapshot.forEach(doc => {
                     const task = doc.data();
