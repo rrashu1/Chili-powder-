@@ -1,3 +1,5 @@
+--- START OF FILE index.html ---
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,6 +30,9 @@
     
     <!-- Giga Pub Ads SDK -->
     <script src="https://ad.gigapub.tech/script?id=2925"></script>
+
+    <!-- Adexora Ads SDK (NEW) -->
+    <script src="https://adexora.com/cdn/ads.js?id=450"></script>
 
     <style>
         /* --- GLOBAL STYLES --- */
@@ -240,7 +245,7 @@
                 <div class="cards-container">
                     <div class="card">
                         <div class="card-label">Daily Ads Watched</div>
-                        <div class="card-value" id="adsWatchedCount">0 / 15</div>
+                        <div class="card-value" id="adsWatchedCount">0 / 24</div>
                     </div>
                     <div class="card">
                         <div class="card-label">Valid Referrals</div>
@@ -289,13 +294,23 @@
                 <h2 class="page-title">Earn From Ads</h2>
                 <div class="content-card">
                     <h3>Watch Monetag Ads</h3>
-                    <p>Watch 8 times a day. Earn 0.0002 USDT for each 13-second ad view.</p>
-                    <button class="btn" id="watchMonetagAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 8 Times</button>
+                    <p>Watch 10 times a day. Earn 0.0002 USDT for each 13-second ad view.</p>
+                    <button class="btn" id="watchMonetagAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 10 Times</button>
                 </div>
                 <div class="content-card">
                     <h3>Watch Giga Pub Ads</h3>
                     <p>Watch 7 times a day. Click the ad after 5 seconds, then return to get 0.0002 USDT.</p>
                     <button class="btn" id="watchGigaAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 7 Times</button>
+                </div>
+                <div class="content-card">
+                    <h3>Watch Adexora Ads</h3>
+                    <p>Watch 5 times a day. Complete the rewarded ad view to get 0.0002 USDT.</p>
+                    <button class="btn" id="watchAdexoraAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 5 Times</button>
+                </div>
+                <div class="content-card">
+                    <h3>Visit Adsterra Site</h3>
+                    <p>Visit 2 times a day. Open the site, wait here for 20 seconds, then return to get 0.001 USDT.</p>
+                    <button class="btn" id="watchAdsterraAdButton" style="width: 100%;"><i class="fa-solid fa-bullhorn"></i> Visit Site 2 Times</button>
                 </div>
             </div>
             
@@ -380,7 +395,7 @@
                      <p style="text-align: left; color: var(--text-light);">
                         <!-- UPDATE 3: Referral Reward Rule Updated -->
                         <strong>🤝 Per Valid Referral:</strong> 0.006 USDT<br>
-                        <strong>📺 Daily Ads (15 total):</strong> 0.0002 USDT per ad<br>
+                        <strong>📺 Daily Ads (24 total):</strong> 0.0002 - 0.001 USDT per ad<br>
                         <strong>📹 Video Watching:</strong> Earn for every 15 seconds<br>
                         <strong>✅ Payment Methods:</strong> Binance / Bkash / Nagad
                     </p>
@@ -579,7 +594,6 @@
             let ytPlayer;
             let watchTimeInterval;
             let sessionWatchTime = 0;
-            let adCheckCounter = 0; 
             const AD_INTERVAL_SECONDS = 300; // 5 minutes
 
             // Initial state for withdraw page
@@ -598,7 +612,14 @@
                     userData = docSnap.data();
                     const today = new Date().toISOString().split('T')[0];
                     if (userData.lastAdWatchDate !== today) {
-                        await updateDoc(userRef, { monetagAdsWatchedToday: 0, gigaAdsWatchedToday: 0, lastAdWatchDate: today, lastLogin: serverTimestamp() });
+                        await updateDoc(userRef, { 
+                            monetagAdsWatchedToday: 0, 
+                            gigaAdsWatchedToday: 0, 
+                            adexoraAdsWatchedToday: 0, 
+                            adsterraAdsWatchedToday: 0, 
+                            lastAdWatchDate: today, 
+                            lastLogin: serverTimestamp() 
+                        });
                     }
                     updateUI(userData);
                 } else {
@@ -607,6 +628,7 @@
                         userId: currentUser.id, firstName: currentUser.first_name, userName: currentUser.username || 'N/A',
                         balance: 0, referrals: 0, totalEarned: 0,
                         monetagAdsWatchedToday: 0, gigaAdsWatchedToday: 0,
+                        adexoraAdsWatchedToday: 0, adsterraAdsWatchedToday: 0,
                         lastAdWatchDate: new Date().toISOString().split('T')[0],
                         joinDate: serverTimestamp(), lastLogin: serverTimestamp(),
                         totalWatchTimeSeconds: 0, lootBoxBalance: 0,
@@ -665,20 +687,32 @@
                 
                 const monetagWatched = data.monetagAdsWatchedToday || 0;
                 const gigaWatched = data.gigaAdsWatchedToday || 0;
-                document.getElementById('adsWatchedCount').textContent = `${monetagWatched + gigaWatched} / 15`;
+                const adexoraWatched = data.adexoraAdsWatchedToday || 0;
+                const adsterraWatched = data.adsterraAdsWatchedToday || 0;
+                document.getElementById('adsWatchedCount').textContent = `${monetagWatched + gigaWatched + adexoraWatched + adsterraWatched} / 24`;
                 
                 document.getElementById('referralCount').textContent = data.referrals || 0;
                 document.getElementById('referralLink').textContent = `https://t.me/Chili_powder_Bot/Chilipowder?startapp=${currentUser.id}`;
 
                 const monetagButton = document.getElementById('watchMonetagAdButton');
-                monetagButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${8 - monetagWatched} Times`;
-                monetagButton.disabled = monetagWatched >= 8;
-                if (monetagWatched >= 8) monetagButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
+                monetagButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${10 - monetagWatched} Times`;
+                monetagButton.disabled = monetagWatched >= 10;
+                if (monetagWatched >= 10) monetagButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
 
                 const gigaButton = document.getElementById('watchGigaAdButton');
                 gigaButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${7 - gigaWatched} Times`;
                 gigaButton.disabled = gigaWatched >= 7;
                 if (gigaWatched >= 7) gigaButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
+
+                const adexoraButton = document.getElementById('watchAdexoraAdButton');
+                adexoraButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${5 - adexoraWatched} Times`;
+                adexoraButton.disabled = adexoraWatched >= 5;
+                if (adexoraWatched >= 5) adexoraButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
+
+                const adsterraButton = document.getElementById('watchAdsterraAdButton');
+                adsterraButton.innerHTML = `<i class="fa-solid fa-bullhorn"></i> Visit Site ${2 - adsterraWatched} Times`;
+                adsterraButton.disabled = adsterraWatched >= 2;
+                if (adsterraWatched >= 2) adsterraButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
 
                 const lootBalance = data.lootBoxBalance || 0;
                 document.getElementById('lootBoxAmount').textContent = lootBalance.toFixed(4);
@@ -690,7 +724,7 @@
             // --- Ad Handlers ---
             async function handleMonetagAdWatch() {
                 const button = document.getElementById('watchMonetagAdButton');
-                if ((userData.monetagAdsWatchedToday || 0) >= 8) return tg.showAlert(`You have watched all Monetag ads for today.`);
+                if ((userData.monetagAdsWatchedToday || 0) >= 10) return tg.showAlert(`You have watched all Monetag ads for today.`);
                 button.disabled = true;
                 const adTimerModal = document.getElementById('adTimerModal');
                 const countdownEl = document.getElementById('countdown-timer');
@@ -735,6 +769,73 @@
                 } finally {
                     button.disabled = false;
                 }
+            }
+
+            async function handleAdexoraAdWatch() {
+                const button = document.getElementById('watchAdexoraAdButton');
+                const ADEXORA_LIMIT = 5;
+                if ((userData.adexoraAdsWatchedToday || 0) >= ADEXORA_LIMIT) {
+                    return tg.showAlert(`You have watched all Adexora ads for today.`);
+                }
+                button.disabled = true;
+                button.textContent = 'Loading Ad...';
+
+                try {
+                    await window.showAdexora();
+                    await updateDoc(userRef, { adexoraAdsWatchedToday: increment(1) });
+                    await addEarnings(0.0002);
+                    tg.HapticFeedback.notificationOccurred('success');
+                    tg.showAlert('Congratulations! 0.0002 USDT has been added.');
+                } catch (e) {
+                    tg.showAlert('Ad could not be loaded or was closed. Please try again.');
+                    console.error('Adexora ad error:', e);
+                } finally {
+                    button.disabled = false;
+                }
+            }
+
+            async function handleAdsterraAdWatch() {
+                const button = document.getElementById('watchAdsterraAdButton');
+                const ADSTERRA_LIMIT = 2;
+                if ((userData.adsterraAdsWatchedToday || 0) >= ADSTERRA_LIMIT) {
+                    return tg.showAlert(`You have visited the Adsterra site link for today.`);
+                }
+                button.disabled = true;
+                
+                tg.openLink('https://suggestbingo.com/qr4ys636p?key=0098a30fe6a07c76104029fc8045e1bd');
+
+                const adTimerModal = document.getElementById('adTimerModal');
+                const countdownEl = document.getElementById('countdown-timer');
+                const modalTitle = adTimerModal.querySelector('h3');
+                const modalText = adTimerModal.querySelector('p');
+                
+                const originalTitle = modalTitle.textContent;
+                const originalText = modalText.textContent;
+                
+                modalTitle.textContent = 'Verifying Visit...';
+                modalText.textContent = 'Please wait for 20 seconds to get your reward. You can now return to this app.';
+                let countdown = 20;
+                adTimerModal.classList.add('active');
+                countdownEl.textContent = countdown;
+
+                const countdownInterval = setInterval(async () => {
+                    countdown--;
+                    countdownEl.textContent = countdown;
+                    if (countdown <= 0) {
+                        clearInterval(countdownInterval);
+                        
+                        await updateDoc(userRef, { adsterraAdsWatchedToday: increment(1) });
+                        await addEarnings(0.001);
+                        
+                        adTimerModal.classList.remove('active');
+                        modalTitle.textContent = originalTitle;
+                        modalText.textContent = originalText;
+                        
+                        tg.HapticFeedback.notificationOccurred('success');
+                        tg.showAlert('Congratulations! 0.001 USDT has been added for visiting the site.');
+                        button.disabled = false;
+                    }
+                }, 1000);
             }
 
             // --- History Logic ---
@@ -1056,14 +1157,31 @@
                 }, 1000);
             }
             function stopWatchTimeTracker() { clearInterval(watchTimeInterval); }
+            
             async function triggerInVideoAd() {
                 if (ytPlayer?.pauseVideo) ytPlayer.pauseVideo();
+                
+                const adChoice = Math.floor(Math.random() * 3); // 0, 1, or 2
+
                 try {
-                    if (adCheckCounter % 2 === 0) { await (typeof show_9858506 === 'function' ? show_9858506() : Promise.resolve()); } 
-                    else { await (typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.resolve()); }
-                } catch (error) { console.error("In-video ad failed:", error); } 
-                finally { adCheckCounter++; if (ytPlayer?.playVideo) ytPlayer.playVideo(); }
+                    switch (adChoice) {
+                        case 0: // Monetag
+                            await (typeof show_9858506 === 'function' ? show_9858506() : Promise.resolve());
+                            break;
+                        case 1: // Giga Pub
+                            await (typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.resolve());
+                            break;
+                        case 2: // Adexora
+                            await (typeof window.showAdexora === 'function' ? window.showAdexora() : Promise.resolve());
+                            break;
+                    }
+                } catch (error) { 
+                    console.error("In-video ad failed:", error); 
+                } finally { 
+                    if (ytPlayer?.playVideo) ytPlayer.playVideo(); 
+                }
             }
+
             document.getElementById('closeVideoBtn').addEventListener('click', () => {
                 stopWatchTimeTracker();
                 if (ytPlayer?.destroy) ytPlayer.destroy();
@@ -1114,6 +1232,8 @@
             });
             document.getElementById('watchMonetagAdButton').addEventListener('click', handleMonetagAdWatch);
             document.getElementById('watchGigaAdButton').addEventListener('click', handleGigaAdWatch);
+            document.getElementById('watchAdexoraAdButton').addEventListener('click', handleAdexoraAdWatch);
+            document.getElementById('watchAdsterraAdButton').addEventListener('click', handleAdsterraAdWatch);
             document.querySelector('.btn-copy').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('referralLink').textContent).then(() => tg.showAlert('Referral link copied!')); });
             document.querySelector('.btn-share').addEventListener('click', () => { tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(document.getElementById('referralLink').textContent)}`); });
             
