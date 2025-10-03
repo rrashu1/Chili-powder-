@@ -29,9 +29,6 @@
     <!-- Giga Pub Ads SDK -->
     <script src="https://ad.gigapub.tech/script?id=2925"></script>
 
-    <!-- Adexora Ads SDK -->
-    <script src="https://adexora.com/cdn/ads.js?id=450"></script>
-
     <style>
         /* --- GLOBAL STYLES --- */
         :root {
@@ -243,7 +240,7 @@
                 <div class="cards-container">
                     <div class="card">
                         <div class="card-label">Daily Ads Watched</div>
-                        <div class="card-value" id="adsWatchedCount">0 / 27</div>
+                        <div class="card-value" id="adsWatchedCount">0 / 15</div>
                     </div>
                     <div class="card">
                         <div class="card-label">Valid Referrals</div>
@@ -292,23 +289,13 @@
                 <h2 class="page-title">Earn From Ads</h2>
                 <div class="content-card">
                     <h3>Watch Monetag Ads</h3>
-                    <p>Watch 10 times a day. Earn 0.0005 USDT for each ad view.</p>
-                    <button class="btn" id="watchMonetagAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 10 Times</button>
+                    <p>Watch 8 times a day. Earn 0.0002 USDT for each 13-second ad view.</p>
+                    <button class="btn" id="watchMonetagAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 8 Times</button>
                 </div>
                 <div class="content-card">
                     <h3>Watch Giga Pub Ads</h3>
-                    <p>Watch 10 times a day. Click the ad, then return to get 0.0005 USDT.</p>
-                    <button class="btn" id="watchGigaAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 10 Times</button>
-                </div>
-                <div class="content-card">
-                    <h3>Watch Adexora Ads</h3>
-                    <p>Watch 5 times a day. Watch for 5 seconds to get 0.0003 USDT.</p>
-                    <button class="btn" id="watchAdexoraAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 5 Times</button>
-                </div>
-                 <div class="content-card">
-                    <h3>Visit Adsterra Link</h3>
-                    <p>Visit 2 times a day. Stay for 15 seconds, click an ad, then return to get 0.0006 USDT.</p>
-                    <button class="btn" id="visitAdsterraAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 2 Times</button>
+                    <p>Watch 7 times a day. Click the ad after 5 seconds, then return to get 0.0002 USDT.</p>
+                    <button class="btn" id="watchGigaAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 7 Times</button>
                 </div>
             </div>
             
@@ -393,7 +380,7 @@
                      <p style="text-align: left; color: var(--text-light);">
                         <!-- UPDATE 3: Referral Reward Rule Updated -->
                         <strong>🤝 Per Valid Referral:</strong> 0.006 USDT<br>
-                        <strong>📺 Daily Ads (27 total):</strong> Up to 0.0006 USDT per ad<br>
+                        <strong>📺 Daily Ads (15 total):</strong> 0.0002 USDT per ad<br>
                         <strong>📹 Video Watching:</strong> Earn for every 15 seconds<br>
                         <strong>✅ Payment Methods:</strong> Binance / Bkash / Nagad
                     </p>
@@ -414,9 +401,9 @@
         <!-- Ad Countdown Timer Modal -->
         <div class="modal-overlay" id="adTimerModal">
             <div class="modal-content">
-                <h3 id="adTimerTitle">Ad is running...</h3>
+                <h3>Ad is running...</h3>
                 <p>Please watch the ad for the full duration to receive your reward.</p>
-                <div id="countdown-timer">15</div>
+                <div id="countdown-timer">13</div>
                 <p style="color: var(--text-secondary); font-size: 0.9rem;">Do not close this window.</p>
             </div>
         </div>
@@ -611,14 +598,7 @@
                     userData = docSnap.data();
                     const today = new Date().toISOString().split('T')[0];
                     if (userData.lastAdWatchDate !== today) {
-                        await updateDoc(userRef, { 
-                            monetagAdsWatchedToday: 0, 
-                            gigaAdsWatchedToday: 0, 
-                            adexoraAdsWatchedToday: 0,
-                            adsterraAdsWatchedToday: 0,
-                            lastAdWatchDate: today, 
-                            lastLogin: serverTimestamp() 
-                        });
+                        await updateDoc(userRef, { monetagAdsWatchedToday: 0, gigaAdsWatchedToday: 0, lastAdWatchDate: today, lastLogin: serverTimestamp() });
                     }
                     updateUI(userData);
                 } else {
@@ -627,7 +607,6 @@
                         userId: currentUser.id, firstName: currentUser.first_name, userName: currentUser.username || 'N/A',
                         balance: 0, referrals: 0, totalEarned: 0,
                         monetagAdsWatchedToday: 0, gigaAdsWatchedToday: 0,
-                        adexoraAdsWatchedToday: 0, adsterraAdsWatchedToday: 0,
                         lastAdWatchDate: new Date().toISOString().split('T')[0],
                         joinDate: serverTimestamp(), lastLogin: serverTimestamp(),
                         totalWatchTimeSeconds: 0, lootBoxBalance: 0,
@@ -686,33 +665,20 @@
                 
                 const monetagWatched = data.monetagAdsWatchedToday || 0;
                 const gigaWatched = data.gigaAdsWatchedToday || 0;
-                const adexoraWatched = data.adexoraAdsWatchedToday || 0;
-                const adsterraWatched = data.adsterraAdsWatchedToday || 0;
-                document.getElementById('adsWatchedCount').textContent = `${monetagWatched + gigaWatched + adexoraWatched + adsterraWatched} / 27`;
+                document.getElementById('adsWatchedCount').textContent = `${monetagWatched + gigaWatched} / 15`;
                 
                 document.getElementById('referralCount').textContent = data.referrals || 0;
                 document.getElementById('referralLink').textContent = `https://t.me/Chili_powder_Bot/Chilipowder?startapp=${currentUser.id}`;
 
                 const monetagButton = document.getElementById('watchMonetagAdButton');
-                monetagButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${10 - monetagWatched} Times`;
-                monetagButton.disabled = monetagWatched >= 10;
-                if (monetagWatched >= 10) monetagButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
+                monetagButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${8 - monetagWatched} Times`;
+                monetagButton.disabled = monetagWatched >= 8;
+                if (monetagWatched >= 8) monetagButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
 
                 const gigaButton = document.getElementById('watchGigaAdButton');
-                gigaButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${10 - gigaWatched} Times`;
-                gigaButton.disabled = gigaWatched >= 10;
-                if (gigaWatched >= 10) gigaButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
-
-                const adexoraButton = document.getElementById('watchAdexoraAdButton');
-                adexoraButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${5 - adexoraWatched} Times`;
-                adexoraButton.disabled = adexoraWatched >= 5;
-                if (adexoraWatched >= 5) adexoraButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
-
-                const adsterraButton = document.getElementById('visitAdsterraAdButton');
-                adsterraButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${2 - adsterraWatched} Times`;
-                adsterraButton.disabled = adsterraWatched >= 2;
-                if (adsterraWatched >= 2) adsterraButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
-
+                gigaButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${7 - gigaWatched} Times`;
+                gigaButton.disabled = gigaWatched >= 7;
+                if (gigaWatched >= 7) gigaButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
 
                 const lootBalance = data.lootBoxBalance || 0;
                 document.getElementById('lootBoxAmount').textContent = lootBalance.toFixed(4);
@@ -724,14 +690,11 @@
             // --- Ad Handlers ---
             async function handleMonetagAdWatch() {
                 const button = document.getElementById('watchMonetagAdButton');
-                if ((userData.monetagAdsWatchedToday || 0) >= 10) return tg.showAlert(`You have watched all Monetag ads for today.`);
+                if ((userData.monetagAdsWatchedToday || 0) >= 8) return tg.showAlert(`You have watched all Monetag ads for today.`);
                 button.disabled = true;
-                
-                // Monetag doesn't need a manual timer, but for consistency we can show one
                 const adTimerModal = document.getElementById('adTimerModal');
                 const countdownEl = document.getElementById('countdown-timer');
-                document.getElementById('adTimerTitle').textContent = 'Ad is loading...';
-                let countdown = 13; // Keep a timer for UI feedback
+                let countdown = 13;
                 adTimerModal.classList.add('active');
                 countdownEl.textContent = countdown;
                 const countdownInterval = setInterval(() => {
@@ -739,15 +702,17 @@
                     countdownEl.textContent = countdown;
                     if (countdown <= 0) clearInterval(countdownInterval);
                 }, 1000);
-
                 try {
                     await (typeof show_9858506 === 'function' ? show_9858506() : Promise.reject('Monetag SDK not loaded'));
-                    // Reward is given on successful ad show
-                    await updateDoc(userRef, { monetagAdsWatchedToday: increment(1) });
-                    await addEarnings(0.0005);
-                    tg.HapticFeedback.notificationOccurred('success');
-                    tg.showAlert('Congratulations! 0.0005 USDT has been added.');
-
+                    if (countdown <= 0) {
+                        await updateDoc(userRef, { monetagAdsWatchedToday: increment(1) });
+                        await addEarnings(0.0002);
+                        tg.HapticFeedback.notificationOccurred('success');
+                        tg.showAlert('Congratulations! 0.0002 USDT has been added.');
+                    } else {
+                        tg.HapticFeedback.notificationOccurred('error');
+                        tg.showAlert('Ad closed too early! You must watch for 13 seconds.');
+                    }
                 } catch (error) { tg.showAlert('Ad could not be loaded. Please try again.');
                 } finally {
                     clearInterval(countdownInterval);
@@ -758,94 +723,18 @@
 
             async function handleGigaAdWatch() {
                 const button = document.getElementById('watchGigaAdButton');
-                if ((userData.gigaAdsWatchedToday || 0) >= 10) return tg.showAlert(`You have watched all Giga Pub ads for today.`);
+                if ((userData.gigaAdsWatchedToday || 0) >= 7) return tg.showAlert(`You have watched all Giga Pub ads for today.`);
                 button.disabled = true;
                 try {
                     await (typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.reject('GigaPub SDK not loaded'));
                     await updateDoc(userRef, { gigaAdsWatchedToday: increment(1) });
-                    await addEarnings(0.0005);
+                    await addEarnings(0.0002);
                     tg.HapticFeedback.notificationOccurred('success');
-                    tg.showAlert('Congratulations! 0.0005 USDT has been added.');
+                    tg.showAlert('Congratulations! 0.0002 USDT has been added.');
                 } catch (error) { tg.showAlert('Ad could not be loaded. Please try again.');
                 } finally {
                     button.disabled = false;
                 }
-            }
-
-            async function handleAdexoraAdWatch() {
-                const button = document.getElementById('watchAdexoraAdButton');
-                if ((userData.adexoraAdsWatchedToday || 0) >= 5) return tg.showAlert(`You have watched all Adexora ads for today.`);
-                button.disabled = true;
-                
-                const adTimerModal = document.getElementById('adTimerModal');
-                const countdownEl = document.getElementById('countdown-timer');
-                document.getElementById('adTimerTitle').textContent = 'Adexora Ad running...';
-                let countdown = 5;
-                adTimerModal.classList.add('active');
-                countdownEl.textContent = countdown;
-                const countdownInterval = setInterval(() => {
-                    countdown--;
-                    countdownEl.textContent = countdown;
-                    if (countdown <= 0) {
-                        clearInterval(countdownInterval);
-                        adTimerModal.classList.remove('active');
-                    }
-                }, 1000);
-
-                window.showAdexora()
-                    .then(async () => {
-                        // Success
-                        await updateDoc(userRef, { adexoraAdsWatchedToday: increment(1) });
-                        await addEarnings(0.0003);
-                        tg.HapticFeedback.notificationOccurred('success');
-                        tg.showAlert('Congratulations! 0.0003 USDT has been added.');
-                    })
-                    .catch(e => {
-                        // Error
-                        tg.showAlert('Ad could not be loaded. Please try again.');
-                    })
-                    .finally(() => {
-                        clearInterval(countdownInterval);
-                        adTimerModal.classList.remove('active');
-                        button.disabled = false;
-                    });
-            }
-            
-            async function handleAdsterraAdVisit() {
-                const button = document.getElementById('visitAdsterraAdButton');
-                if ((userData.adsterraAdsWatchedToday || 0) >= 2) return tg.showAlert('You have completed Adsterra visits for today.');
-                button.disabled = true;
-
-                // Open the link first
-                window.open('https://suggestbingo.com/qr4ys636p?key=0098a30fe6a07c76104029fc8045e1bd', '_blank');
-
-                const adTimerModal = document.getElementById('adTimerModal');
-                const countdownEl = document.getElementById('countdown-timer');
-                document.getElementById('adTimerTitle').textContent = 'Waiting for Visit...';
-                
-                let countdown = 15;
-                adTimerModal.classList.add('active');
-                countdownEl.textContent = countdown;
-
-                const countdownInterval = setInterval(async () => {
-                    countdown--;
-                    countdownEl.textContent = countdown;
-                    if (countdown <= 0) {
-                        clearInterval(countdownInterval);
-                        adTimerModal.classList.remove('active');
-                        
-                        try {
-                            await updateDoc(userRef, { adsterraAdsWatchedToday: increment(1) });
-                            await addEarnings(0.0006);
-                            tg.HapticFeedback.notificationOccurred('success');
-                            tg.showAlert('Congratulations! 0.0006 USDT has been added for your visit.');
-                        } catch (e) {
-                            tg.showAlert('Error processing reward. Please try again.');
-                        } finally {
-                           button.disabled = false;
-                        }
-                    }
-                }, 1000);
             }
 
             // --- History Logic ---
@@ -1225,8 +1114,6 @@
             });
             document.getElementById('watchMonetagAdButton').addEventListener('click', handleMonetagAdWatch);
             document.getElementById('watchGigaAdButton').addEventListener('click', handleGigaAdWatch);
-            document.getElementById('watchAdexoraAdButton').addEventListener('click', handleAdexoraAdWatch);
-            document.getElementById('visitAdsterraAdButton').addEventListener('click', handleAdsterraAdVisit);
             document.querySelector('.btn-copy').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('referralLink').textContent).then(() => tg.showAlert('Referral link copied!')); });
             document.querySelector('.btn-share').addEventListener('click', () => { tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(document.getElementById('referralLink').textContent)}`); });
             
