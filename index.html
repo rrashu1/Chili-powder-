@@ -31,7 +31,7 @@
     <!-- Giga Pub Ads SDK -->
     <script src="https://ad.gigapub.tech/script?id=2925"></script>
 
-    <!-- Adexora Ads SDK (NEW) -->
+    <!-- Adexora Ads SDK -->
     <script src="https://adexora.com/cdn/ads.js?id=450"></script>
 
     <style>
@@ -79,7 +79,6 @@
         .task-item .task-text { display: flex; align-items: center; gap: 10px; flex-grow: 1; }
         .task-item i { color: var(--accent-gold); }
         
-        /* UPDATE 1: Task Claim Styles */
         .task-item.is-viewed { cursor: default; opacity: 0.7; }
         .task-controls { display: flex; align-items: center; gap: 10px; }
         .task-timer { font-size: 1.2rem; font-weight: bold; color: var(--accent-gold); min-width: 40px; text-align: center; }
@@ -102,7 +101,6 @@
         .buy-task-box .task-count { font-size: 1.8rem; font-weight: 700; color: var(--primary-red); }
         .buy-task-box .task-price { font-size: 1rem; font-weight: 500; color: var(--accent-gold); }
         
-        /* --- Withdraw Page --- */
         .withdraw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         .withdraw-box { background: var(--bg-element); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; border: 2px solid var(--border-color); transition: all 0.3s ease; position: relative; overflow: hidden; }
         .withdraw-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, rgba(217, 4, 41, 0.3), transparent 30%); animation: rotate 4s linear infinite; animation-play-state: paused; }
@@ -121,7 +119,6 @@
         .withdraw-form input:focus, .modal-form input:focus { border-color: var(--primary-red); box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); }
         .info-box { padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; border: 1px dashed var(--accent-gold); }
         
-        /* --- Footer & Modals --- */
         footer { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background-color: var(--bg-element); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid var(--border-color); border-radius: 15px 15px 0 0; z-index: 100; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-secondary); text-decoration: none; font-size: 0.75rem; cursor: pointer; flex: 1; text-align: center; }
         .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
@@ -143,9 +140,8 @@
         .history-item-status.pending { color: #f0c419; background-color: rgba(255, 215, 0, 0.1); border: 1px solid #f0c419; }
         .history-item-status.completed { color: #28a745; background-color: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; }
         .history-item-status.rejected { color: #dc3545; background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; }
-        .history-list { max-height: 250px; overflow-y: auto; padding-right: 5px; } /* For scrollbar styling */
+        .history-list { max-height: 250px; overflow-y: auto; padding-right: 5px; } 
 
-        /* --- VIDEO SECTION STYLES --- */
         .loot-box-card { background-color: var(--bg-element); padding: 20px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
         .loot-box-info { text-align: left; display: flex; align-items: center; gap: 15px;}
         .loot-box-info .icon { font-size: 2.5rem; animation: pulse-lootbox 2s infinite ease-in-out; }
@@ -162,7 +158,6 @@
         #videoPlayerContainer iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         #closeVideoBtn { position: absolute; top: -15px; right: -15px; background: var(--error-color); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; }
 
-        /* --- ADMIN PANEL STYLES --- */
         #admin-panel-container { font-family: 'Roboto', sans-serif; display: none; background-color: #f9f9f9; color: #333; }
         #admin-panel-container .container { width: 100%; max-width: 1200px; padding: 20px; margin: auto; }
         #admin-panel-container header h1 { color: #d32f2f; }
@@ -180,16 +175,13 @@
         #admin-panel-container input, #admin-panel-container form button { padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
         #admin-panel-container form button { background-color: #d32f2f; color: white; cursor: pointer; }
 
-
-        /* --- VISUAL ENHANCEMENTS (VFX) --- */
         .card, .btn, .nav-item, .method-btn, .video-card { transition: all 0.3s ease; }
         .card:hover, .video-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(217, 4, 41, 0.1); border-color: var(--primary-red); }
         .btn:hover:not(:disabled) { transform: scale(1.03); filter: brightness(1.15); }
         .nav-item:hover { color: var(--primary-red); }
         
-        /* UPDATE 2: History Button VFX */
         .history-vfx-btn {
-            font-size: 1.4rem; /* Bigger icon */
+            font-size: 1.4rem; 
             margin-left: 15px;
             color: var(--accent-gold);
             cursor: pointer;
@@ -207,7 +199,6 @@
             50% { transform: scale(1.15); text-shadow: 0 0 16px rgba(255, 215, 0, 0.9); }
             100% { transform: scale(1); text-shadow: 0 0 8px rgba(255, 215, 0, 0.6); }
         }
-        /* UPDATE 1: Task Claim Animation */
         @keyframes checkmark-pop {
             0% { transform: scale(0.5); opacity: 0; }
             70% { transform: scale(1.2); opacity: 1; }
@@ -254,7 +245,6 @@
                 </div>
                 <div class="content-card">
                     <h3>Refer & Earn More!</h3>
-                    <!-- UPDATE 3: Referral Description Updated -->
                     <p>Earn 0.006 USDT for each valid referral who joins using your link.</p>
                     <div class="referral-link-box" id="referralLink">Loading...</div>
                     <div class="buttons-group" style="display:flex; gap:10px;">
@@ -361,7 +351,6 @@
                         <label for="accountNumber">Your Account (ID / Number)</label>
                         <input type="text" id="accountNumber" placeholder="e.g., Binance ID or 017...">
                     </div>
-                    <!-- UPDATE 2: Hiding the selected amount field -->
                     <div class="form-group" style="display: none;">
                         <label for="amount">Selected Amount (USDT)</label>
                         <input type="number" id="amount" placeholder="Select a plan above" readonly>
@@ -393,7 +382,6 @@
                  <div class="content-card">
                     <h3>Earning Rules</h3>
                      <p style="text-align: left; color: var(--text-light);">
-                        <!-- UPDATE 3: Referral Reward Rule Updated -->
                         <strong>🤝 Per Valid Referral:</strong> 0.006 USDT<br>
                         <strong>📺 Daily Ads (24 total):</strong> 0.0002 - 0.001 USDT per ad<br>
                         <strong>📹 Video Watching:</strong> Earn for every 15 seconds<br>
@@ -507,7 +495,6 @@
             </div>
             <div class="section">
                 <h2>Task Management (Admin)</h2>
-                <!-- UPDATE 1: Added Duration field to admin panel -->
                 <form id="create-task-form" style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
                     <input type="text" id="task-title" placeholder="Task Title" required style="flex: 2;">
                     <input type="url" id="task-link" placeholder="Task URL" required style="flex: 3;">
@@ -596,10 +583,8 @@
             let sessionWatchTime = 0;
             const AD_INTERVAL_SECONDS = 300; // 5 minutes
 
-            // Initial state for withdraw page
             document.getElementById('submitWithdrawalBtn').disabled = true;
 
-            // --- EARNINGS LOGIC ---
             async function addEarnings(amount) {
                 await updateDoc(userRef, {
                     balance: increment(amount),
@@ -623,7 +608,6 @@
                     }
                     updateUI(userData);
                 } else {
-                    // --- INSTANT REFERRAL LOGIC ---
                     const newUserData = {
                         userId: currentUser.id, firstName: currentUser.first_name, userName: currentUser.username || 'N/A',
                         balance: 0, referrals: 0, totalEarned: 0,
@@ -635,9 +619,8 @@
                     };
 
                     if (referrerId && referrerId !== String(currentUser.id)) {
-                        // This is a referred user, process reward instantly
                         newUserData.referredBy = referrerId;
-                        newUserData.referralStatus = 'completed'; // Mark as completed instantly
+                        newUserData.referralStatus = 'completed'; 
 
                         const referrerRef = doc(db, "users", referrerId);
                         
@@ -645,31 +628,26 @@
                              await runTransaction(db, async (transaction) => {
                                 const referrerDoc = await transaction.get(referrerRef);
                                 if (!referrerDoc.exists()) {
-                                    // Referrer doesn't exist, just create the new user without referral data
                                     newUserData.referredBy = null;
                                     newUserData.referralStatus = 'invalid_referrer';
                                     transaction.set(userRef, newUserData);
                                     return;
                                 }
-                                // 1. Update the referrer's document
                                 transaction.update(referrerRef, { 
                                     referrals: increment(1), 
                                     balance: increment(0.006) 
                                 });
-                                // 2. Create the new user's document
                                 transaction.set(userRef, newUserData);
                             });
                             console.log(`Instant referral reward processed for referrer: ${referrerId}`);
                         } catch (e) {
                             console.error("Referral transaction failed: ", e);
-                            // If transaction fails, create user without referral info
                             newUserData.referredBy = null;
                             newUserData.referralStatus = 'tx_failed';
                             await setDoc(userRef, newUserData);
                         }
 
                     } else {
-                        // This is a regular user, not referred
                         newUserData.referralStatus = 'none';
                         await setDoc(userRef, newUserData);
                     }
@@ -781,6 +759,7 @@
                 button.textContent = 'Loading Ad...';
 
                 try {
+                    if (typeof window.showAdexora !== 'function') throw new Error("Adexora SDK not available.");
                     await window.showAdexora();
                     await updateDoc(userRef, { adexoraAdsWatchedToday: increment(1) });
                     await addEarnings(0.0002);
@@ -839,7 +818,7 @@
             }
 
             // --- History Logic ---
-            async function loadWithdrawalHistory(userId, containerId) {
+            function loadWithdrawalHistory(userId, containerId) {
                 const historyListEl = document.getElementById(containerId);
                 const q = query(collection(db, "withdrawals"), where("userId", "==", userId), orderBy("requestTimestamp", "desc"));
                 
@@ -854,8 +833,8 @@
                         historyListEl.appendChild(item);
                     });
                 }, (error) => {
-                    console.error("Error loading withdrawal history:", error);
-                    historyListEl.innerHTML = `<p style="color: var(--error-color); text-align: center;">Could not load history.</p>`;
+                    console.error("Firestore History Error:", error);
+                    historyListEl.innerHTML = `<p style="color: var(--error-color); text-align: center;">Could not load history. Ensure Firestore index is created.</p>`;
                 });
             }
 
@@ -937,7 +916,6 @@
                     
                     tg.showAlert(`Withdrawal request for ${amount} USDT submitted successfully!`);
 
-                    // Reset form
                     document.getElementById('accountNumber').value = '';
                     document.getElementById('amount').value = '';
                     document.querySelectorAll('.method-btn.selected').forEach(b => b.classList.remove('selected'));
@@ -952,7 +930,6 @@
                 }
             });
 
-            // --- UPDATE 1: New Task Logic ---
             async function loadAndDisplayTasks() {
                 const taskListEl = document.getElementById('dynamic-task-list');
                 const completedRef = collection(db, "users", String(currentUser.id), "completedTasks");
@@ -992,7 +969,7 @@
                         window.open(task.link, '_blank');
                         item.classList.add('is-viewed');
                         
-                        let countdown = task.duration || 10; // Default 10 seconds if not set
+                        let countdown = task.duration || 10;
                         timerEl.textContent = `${countdown}s`;
                         
                         const timerInterval = setInterval(() => {
@@ -1161,17 +1138,17 @@
             async function triggerInVideoAd() {
                 if (ytPlayer?.pauseVideo) ytPlayer.pauseVideo();
                 
-                const adChoice = Math.floor(Math.random() * 3); // 0, 1, or 2
+                const adChoice = Math.floor(Math.random() * 3);
 
                 try {
                     switch (adChoice) {
-                        case 0: // Monetag
+                        case 0: 
                             await (typeof show_9858506 === 'function' ? show_9858506() : Promise.resolve());
                             break;
-                        case 1: // Giga Pub
+                        case 1: 
                             await (typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.resolve());
                             break;
-                        case 2: // Adexora
+                        case 2: 
                             await (typeof window.showAdexora === 'function' ? window.showAdexora() : Promise.resolve());
                             break;
                     }
@@ -1230,10 +1207,13 @@
                     btn.classList.add('selected');
                 });
             });
+
+            // CORRECTED: Event Listeners for Ad buttons
             document.getElementById('watchMonetagAdButton').addEventListener('click', handleMonetagAdWatch);
             document.getElementById('watchGigaAdButton').addEventListener('click', handleGigaAdWatch);
             document.getElementById('watchAdexoraAdButton').addEventListener('click', handleAdexoraAdWatch);
             document.getElementById('watchAdsterraAdButton').addEventListener('click', handleAdsterraAdWatch);
+            
             document.querySelector('.btn-copy').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('referralLink').textContent).then(() => tg.showAlert('Referral link copied!')); });
             document.querySelector('.btn-share').addEventListener('click', () => { tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(document.getElementById('referralLink').textContent)}`); });
             
@@ -1244,14 +1224,10 @@
             });
 
             document.querySelectorAll('.close-modal-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const modalId = btn.dataset.modalId;
-                    if (modalId) {
-                        document.getElementById(modalId).classList.remove('active');
-                    }
+                btn.addEventListener('click', (e) => {
+                    e.currentTarget.closest('.modal-overlay').classList.remove('active');
                 });
             });
-
         }
 
         // --- 4. ADMIN PANEL LOGIC ---
@@ -1275,7 +1251,7 @@
                         <td style="font-weight:bold; color:#d32f2f;">${req.amount.toFixed(4)} USDT</td>
                         <td>${req.method}</td>
                         <td>${req.accountNumber}</td>
-                        <td><b>${req.userReferralsAtRequest}</b></td>
+                        <td><b>${req.userReferralsAtRequest || 0}</b></td>
                         <td>${date}</td>
                         <td>
                             <button class="action-btn approve-btn" data-id="${doc.id}">Approve</button>
@@ -1308,7 +1284,6 @@
             document.getElementById('create-task-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const form = e.target;
-                // UPDATE 1: Saving duration with new task
                 await addDoc(collection(db, "tasks"), { 
                     title: form['task-title'].value, 
                     link: form['task-link'].value, 
