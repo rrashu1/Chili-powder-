@@ -907,11 +907,20 @@
                 submitBtn.textContent = 'Submitting...';
 
                 try {
+                    // ##### THIS IS THE FIX #####
+                    // We now save the userId as a STRING to match the query.
                     await addDoc(collection(db, "withdrawals"), {
-                        userId: currentUser.id, userName: userData.firstName, amount,
-                        method, accountNumber: accNum, status: "pending", 
-                        requestTimestamp: serverTimestamp(), userReferralsAtRequest: userData.referrals
+                        userId: String(currentUser.id), // <-- FIXED
+                        userName: userData.firstName, 
+                        amount,
+                        method, 
+                        accountNumber: accNum, 
+                        status: "pending", 
+                        requestTimestamp: serverTimestamp(), 
+                        userReferralsAtRequest: userData.referrals
                     });
+                    // ##### END OF FIX #####
+
                     await updateDoc(userRef, { balance: increment(-amount) });
                     
                     tg.showAlert(`Withdrawal request for ${amount} USDT submitted successfully!`);
@@ -1208,7 +1217,6 @@
                 });
             });
 
-            // CORRECTED: Event Listeners for Ad buttons
             document.getElementById('watchMonetagAdButton').addEventListener('click', handleMonetagAdWatch);
             document.getElementById('watchGigaAdButton').addEventListener('click', handleGigaAdWatch);
             document.getElementById('watchAdexoraAdButton').addEventListener('click', handleAdexoraAdWatch);
