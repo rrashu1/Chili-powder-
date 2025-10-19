@@ -90,7 +90,7 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            justify-content: space-between; /* Adjusted for Update 2 */
+            justify-content: space-between;
             gap: 10px;
             transition: all 0.3s ease;
         }
@@ -106,7 +106,10 @@
             display: flex; 
             align-items: center; 
             gap: 10px; 
-            margin-left: auto; /* Added for Update 2: Push to right */
+            /* UPDATE 2: Ensure button is always on the right */
+            margin-left: auto; 
+            min-width: 90px; /* Adjust as needed */
+            justify-content: flex-end;
         }
         .task-card-actions .btn { padding: 8px 20px; min-width: 90px; flex: initial; }
         .task-card-actions .task-timer { font-size: 1.2rem; font-weight: bold; color: var(--accent-gold); min-width: 40px; text-align: center; }
@@ -167,100 +170,6 @@
         .history-item-status.rejected { color: #dc3545; background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; }
         .history-list { max-height: 250px; overflow-y: auto; padding-right: 5px; } /* For scrollbar styling */
 
-        /* UPDATE 3: History Modal new design */
-        #historyModal .modal-content {
-            background-color: var(--bg-surface);
-            padding: 20px;
-            border-radius: 15px;
-            max-width: 380px;
-            text-align: left;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 0 20px rgba(0,0,0,0.4);
-            position: relative;
-        }
-        #historyModal .modal-content h3 {
-            color: var(--text-light);
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-        #historyModal .history-date {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-        #historyModal .history-entry {
-            background-color: var(--bg-element);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 8px;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--border-color);
-        }
-        #historyModal .history-entry-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-        #historyModal .history-entry-type {
-            font-weight: 500;
-            color: var(--text-light);
-            font-size: 0.95rem;
-        }
-        #historyModal .history-entry-amount {
-            font-weight: 700;
-            color: var(--success-color); /* For commissions/deposits */
-            font-size: 1rem;
-        }
-        #historyModal .history-entry-amount.withdrawal {
-            color: var(--primary-red); /* For withdrawals */
-        }
-        #historyModal .history-entry-details {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-        #historyModal .history-entry-status {
-            font-weight: bold;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            text-transform: capitalize;
-        }
-        #historyModal .history-entry-status.completed {
-            background-color: rgba(40, 167, 69, 0.1);
-            color: #28a745;
-        }
-        #historyModal .history-entry-status.pending {
-            background-color: rgba(255, 215, 0, 0.1);
-            color: #f0c419;
-        }
-        #historyModal .history-entry-status.rejected {
-            background-color: rgba(220, 53, 69, 0.1);
-            color: #dc3545;
-        }
-        #historyModal .history-close-btn-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-        #historyModal .history-close-btn {
-            background: var(--primary-red);
-            color: white;
-            padding: 10px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            border: none;
-            width: 100%;
-        }
-
-
         /* --- VIDEO SECTION STYLES --- */
         .loot-box-card { background-color: var(--bg-element); padding: 20px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
         .loot-box-info { text-align: left; display: flex; align-items: center; gap: 15px;}
@@ -311,6 +220,115 @@
             text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
             animation: pulse-gold 2s infinite;
         }
+
+        /* UPDATE 3: History Modal Styling */
+        #historyModal .modal-content {
+            max-width: 95%; /* Make it wider */
+            padding: 10px; /* Reduce padding slightly */
+            border: none; /* Remove border */
+            box-shadow: none; /* Remove box shadow */
+            background-color: transparent; /* Make background transparent */
+        }
+        #historyModal .modal-content h3 {
+            color: #f0f0f0; /* White color for history title */
+            font-size: 1.2rem; /* Slightly smaller title */
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        #historyModal .history-container-wrapper {
+            background-color: var(--bg-surface);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+        #historyModal .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 10px;
+        }
+        #historyModal .history-date {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            flex-grow: 1;
+            text-align: left;
+            padding-left: 5px;
+        }
+        #historyModal .history-item {
+            background-color: var(--bg-element);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            padding: 12px 15px;
+            display: flex;
+            flex-direction: column; /* Stack info vertically */
+            align-items: flex-start; /* Align text to start */
+            border: 1px solid var(--border-color);
+            transition: background-color 0.2s ease;
+        }
+        #historyModal .history-item:hover {
+            background-color: #383838;
+        }
+        #historyModal .history-item-top {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        #historyModal .history-item-details {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        #historyModal .history-item .amount {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--success-color); /* Green for received amounts */
+            margin-right: auto; /* Push commission text to right */
+        }
+        #historyModal .history-item .commission-text {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        #historyModal .history-item .details {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-align: left;
+        }
+        #historyModal .history-item .status {
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            text-transform: capitalize;
+            border: 1px solid transparent; /* default */
+        }
+        #historyModal .history-item .status.pending { 
+            color: #f0c419; background-color: rgba(255, 215, 0, 0.1); border-color: #f0c419; 
+        }
+        #historyModal .history-item .status.completed { 
+            color: #28a745; background-color: rgba(40, 167, 69, 0.1); border-color: #28a745; 
+        }
+        #historyModal .history-item .status.rejected { 
+            color: #dc3545; background-color: rgba(220, 53, 69, 0.1); border-color: #dc3545; 
+        }
+
+        /* Update for the 'Close' button in history modal */
+        #historyModal .close-history-btn {
+            background-color: var(--primary-red);
+            color: var(--text-light);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse-red { 0% { box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); } 50% { box-shadow: 0 0 15px rgba(217, 4, 41, 0.6); } 100% { box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); } }
@@ -576,42 +594,37 @@
             </div>
         </div>
 
-        <!-- History Modal -->
+        <!-- History Modal (UPDATE 3: Redesigned) -->
         <div class="modal-overlay" id="historyModal">
             <div class="modal-content">
                 <button class="close-modal-btn" data-modal-id="historyModal"><i class="fa-solid fa-times"></i></button>
-                <h3>Transaction History</h3>
-                <div id="modal-history-content">
-                    <!-- History entries will be dynamically loaded here, grouped by date -->
-                    <p style="color: var(--text-secondary); text-align: center;">Loading history...</p>
-                </div>
-                <div class="history-close-btn-container">
-                    <button class="history-close-btn" data-modal-id="historyModal">Close</button>
+                <h3>History</h3>
+                <div class="history-container-wrapper">
+                    <div id="modal-combined-history" class="history-list" style="max-height: 400px; overflow-y: auto;">
+                        <p style="color: var(--text-secondary); text-align: center;">Loading history...</p>
+                    </div>
+                    <button class="close-history-btn" data-modal-id="historyModal">Close</button>
                 </div>
             </div>
         </div>
 
-        <!-- UPDATE 3: Welcome Popup Modal -->
+        <!-- UPDATE 1: Welcome Popup Modal -->
         <div class="modal-overlay" id="welcomeModal">
             <div class="modal-content">
                 <button class="close-modal-btn" data-modal-id="welcomeModal"><i class="fa-solid fa-times"></i></button>
                 <h3 style="color: var(--accent-gold);">👋 Assalamualaikum dear users!</h3>
-                <p style="margin-bottom: 10px; color: var(--text-light); font-weight: 500;">
+                <p style="font-size: 1.1rem; color: var(--text-light); margin-bottom: 15px;">
                     Welcome to Chili Powder Mini App 💥
-                </p>
-                <p style="margin-bottom: 10px; color: var(--text-light); font-weight: 500;">
                     💯 100% real payment guaranteed!
+                    <br>💸 Your income may be a bit lower, but payment is always sure!
                 </p>
-                <p style="margin-bottom: 10px; color: var(--text-light); font-weight: 500;">
+                <p style="color: var(--text-secondary); margin-bottom: 20px;">
                     💬 For support, promo, or withdraw help — message the admin directly.
                 </p>
-                <p style="margin-bottom: 20px; color: var(--text-light); font-weight: 500;">
-                    💸 Your income may be a bit lower, but payment is always sure!
-                </p>
                 <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
-                    <a href="https://t.me/Chili_powder_Payment" target="_blank" class="btn" style="text-decoration: none; background: #34A853;"><i class="fa-brands fa-telegram"></i> Payment Channel</a>
-                    <a href="https://t.me/chili_powder_USDT" target="_blank" class="btn" style="text-decoration: none; background: #1DA1F2;"><i class="fa-brands fa-telegram"></i> Official Channel</a>
-                    <a href="https://t.me/newtube12_admin" target="_blank" class="btn" style="text-decoration: none; background: var(--primary-red);"><i class="fa-brands fa-telegram"></i> Admin Support</a>
+                    <a href="https://t.me/Chili_powder_Payment" target="_blank" class="btn" style="text-decoration: none;"><i class="fa-brands fa-telegram"></i> Payment Channel</a>
+                    <a href="https://t.me/chili_powder_USDT" target="_blank" class="btn" style="text-decoration: none;"><i class="fa-brands fa-telegram"></i> Official Channel</a>
+                    <a href="https://t.me/newtube12_admin" target="_blank" class="btn" style="text-decoration: none; background: #2AABEE;"><i class="fa-brands fa-telegram"></i> Admin Support</a>
                 </div>
             </div>
         </div>
@@ -677,7 +690,7 @@
         // --- 1. FIREBASE INITIALIZATION ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot, updateDoc, increment, collection, addDoc, serverTimestamp, getDocs, query, where, Timestamp, deleteDoc, runTransaction, orderBy } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, updateDoc, increment, collection, addDoc, serverTimestamp, getDocs, query, where, Timestamp, deleteDoc, runTransaction, orderBy } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCfjRTpRGg4l1yK6QmbeAfI54LD9ogXjW0",
@@ -711,7 +724,7 @@
             tg.ready();
             tg.expand();
             
-            // UPDATE 3: Show welcome popup on first session visit
+            // UPDATE 1: Show welcome popup on first session visit
             if (!sessionStorage.getItem('welcomeShown')) {
                 document.getElementById('welcomeModal').classList.add('active');
                 sessionStorage.setItem('welcomeShown', 'true');
@@ -802,9 +815,8 @@
                 }
             });
             
-            // Replaced old loadWithdrawalHistory with new combined function
-            // loadWithdrawalHistory(String(currentUser.id), 'withdrawal-history-list');
-            loadAndDisplayTasks();
+            // Re-calling loadAndDisplayTasks to ensure it runs after userData is loaded
+            loadAndDisplayTasks(); 
             loadAndDisplayVideos();
 
             function updateUI(data) {
@@ -929,94 +941,92 @@
                 button.disabled = false;
             }
 
-            // --- History Logic (Updated for visual match) ---
-            async function loadTransactionHistory(userId) {
-                const historyListEl = document.getElementById('modal-history-content');
+            // --- UPDATE 3: History Logic (Combined Referrals and Withdrawals) ---
+            async function loadCombinedHistory(userId, containerId) {
+                const historyListEl = document.getElementById(containerId);
                 historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading history...</p>`;
 
                 const qWithdrawals = query(collection(db, "withdrawals"), where("userId", "==", userId), orderBy("requestTimestamp", "desc"));
                 const qReferrals = query(collection(db, "users"), where("referredBy", "==", userId), orderBy("joinDate", "desc"));
 
-                const [withdrawalSnap, referralSnap] = await Promise.all([getDocs(qWithdrawals), getDocs(qReferrals)]);
+                const [withdrawalsSnap, referralsSnap] = await Promise.all([getDocs(qWithdrawals), getDocs(qReferrals)]);
 
-                let allTransactions = [];
+                let combinedHistory = [];
 
-                withdrawalSnap.forEach(doc => {
+                withdrawalsSnap.forEach(doc => {
                     const data = doc.data();
-                    allTransactions.push({
-                        date: data.requestTimestamp?.toDate(),
-                        type: 'withdrawal',
+                    combinedHistory.push({
+                        type: 'Withdrawal',
                         amount: data.amount,
                         method: data.method,
-                        accountNumber: data.accountNumber,
-                        status: data.status
+                        status: data.status,
+                        timestamp: data.requestTimestamp?.toDate()
                     });
                 });
 
-                referralSnap.forEach(doc => {
+                referralsSnap.forEach(doc => {
                     const data = doc.data();
-                    allTransactions.push({
-                        date: data.joinDate?.toDate(),
-                        type: 'referral',
-                        amount: 0.006, // Fixed reward for referral
-                        userName: data.firstName || data.userName,
-                        userId: data.userId,
-                        status: 'completed' // Referrals are only added to history if completed
+                    combinedHistory.push({
+                        type: 'Referral',
+                        userName: data.firstName,
+                        amount: 0.006, // Fixed referral bonus
+                        status: 'completed', // Assuming referral is complete once user data exists
+                        timestamp: data.joinDate?.toDate()
                     });
                 });
 
-                // Sort all transactions by date (most recent first)
-                allTransactions.sort((a, b) => b.date - a.date);
+                combinedHistory.sort((a, b) => b.timestamp - a.timestamp); // Sort by newest first
 
-                if (allTransactions.length === 0) {
-                    historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center; margin-top: 20px;">No transaction history found.</p>`;
+                if (combinedHistory.length === 0) {
+                    historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">No history found.</p>`;
                     return;
                 }
 
-                let groupedHistory = {};
-                allTransactions.forEach(tx => {
-                    const dateKey = tx.date ? tx.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A';
-                    if (!groupedHistory[dateKey]) {
-                        groupedHistory[dateKey] = [];
+                let currentDay = '';
+                historyListEl.innerHTML = ''; // Clear loading message
+
+                combinedHistory.forEach(item => {
+                    const itemDate = item.timestamp?.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) || 'N/A';
+                    const itemTime = item.timestamp?.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) || '';
+
+                    if (itemDate !== currentDay) {
+                        const dateHeader = document.createElement('div');
+                        dateHeader.className = 'history-header';
+                        dateHeader.innerHTML = `<span class="history-date">${itemDate}</span>`;
+                        historyListEl.appendChild(dateHeader);
+                        currentDay = itemDate;
                     }
-                    groupedHistory[dateKey].push(tx);
-                });
 
-                historyListEl.innerHTML = '';
-                for (const dateKey in groupedHistory) {
-                    const dateHeader = document.createElement('div');
-                    dateHeader.className = 'history-date';
-                    dateHeader.textContent = dateKey;
-                    historyListEl.appendChild(dateHeader);
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
 
-                    groupedHistory[dateKey].forEach(tx => {
-                        const item = document.createElement('div');
-                        item.className = 'history-entry';
-                        
-                        let typeText, amountColorClass, detailsText;
-                        if (tx.type === 'withdrawal') {
-                            typeText = 'Withdrawal';
-                            amountColorClass = 'withdrawal';
-                            detailsText = `${tx.method} - Acc: ${tx.accountNumber}`;
-                        } else { // referral
-                            typeText = 'Commission';
-                            amountColorClass = ''; // Default for commission/positive amounts
-                            detailsText = `Commission from user ${tx.userId}`;
-                        }
-
-                        item.innerHTML = `
-                            <div class="history-entry-top">
-                                <div class="history-entry-type">${typeText}</div>
-                                <div class="history-entry-amount ${amountColorClass}">${tx.type === 'withdrawal' ? '-' : '+'}${(tx.amount || 0).toFixed(4)} USDT</div>
+                    if (item.type === 'Withdrawal') {
+                        const statusClass = item.status;
+                        const statusText = item.status === 'completed' ? 'Received' : (item.status === 'pending' ? 'Pending' : 'Rejected');
+                        historyItem.innerHTML = `
+                            <div class="history-item-top">
+                                <span class="commission-text">Withdrawal ${item.method}</span>
+                                <span class="amount" style="color: ${item.status === 'completed' ? 'var(--success-color)' : 'var(--primary-red)'};">${item.amount.toFixed(4)} USDT</span>
                             </div>
-                            <div class="history-entry-details">
-                                <span>${detailsText}</span>
-                                <span class="history-entry-status ${tx.status}">${tx.status}</span>
+                            <div class="history-item-details">
+                                <span class="details">${itemTime}</span>
+                                <span class="status ${statusClass}">${statusText}</span>
                             </div>
                         `;
-                        historyListEl.appendChild(item);
-                    });
-                }
+                    } else if (item.type === 'Referral') {
+                        historyItem.innerHTML = `
+                            <div class="history-item-top">
+                                <span class="commission-text">Commission from user</span>
+                                <span class="amount">+${item.amount.toFixed(4)} USDT</span>
+                            </div>
+                            <div class="history-item-details">
+                                <span class="details">${item.userName} - ${itemTime}</span>
+                                <span class="status completed">Completed</span>
+                            </div>
+                        `;
+                    }
+                    historyListEl.appendChild(historyItem);
+                });
             }
 
 
@@ -1360,7 +1370,7 @@
             
             document.getElementById('historyBtn').addEventListener('click', () => {
                 document.getElementById('historyModal').classList.add('active');
-                loadTransactionHistory(String(currentUser.id)); // Updated to new combined history loader
+                loadCombinedHistory(String(currentUser.id), 'modal-combined-history'); // UPDATE 3
             });
 
             document.querySelectorAll('.close-modal-btn').forEach(btn => {
@@ -1371,13 +1381,10 @@
                     }
                 });
             });
-            document.querySelectorAll('.history-close-btn').forEach(btn => { // For the new history modal close button
-                btn.addEventListener('click', () => {
-                    const modalId = btn.dataset.modalId;
-                    if (modalId) {
-                        document.getElementById(modalId).classList.remove('active');
-                    }
-                });
+
+            // UPDATE 3: Close button for history modal
+            document.querySelector('#historyModal .close-history-btn').addEventListener('click', () => {
+                document.getElementById('historyModal').classList.remove('active');
             });
 
         }
