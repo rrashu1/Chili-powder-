@@ -1,3 +1,5 @@
+--- START OF FILE org.html ---
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,8 +88,9 @@
             margin-bottom: 12px;
             border: 1px solid var(--border-color);
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
-            justify-content: space-between;
+            justify-content: space-between; /* Adjusted for Update 2 */
             gap: 10px;
             transition: all 0.3s ease;
         }
@@ -99,8 +102,12 @@
         .task-card-info .title { font-weight: 600; font-size: 1.1rem; margin-bottom: 4px; color: var(--text-light); }
         .task-card-info .reward { font-size: 1rem; font-weight: 700; color: var(--accent-gold); }
         .task-card-info .reward i { margin-right: 5px; }
-        /* UPDATE 2: Task section button alignment */
-        .task-card-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .task-card-actions { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            margin-left: auto; /* Added for Update 2: Push to right */
+        }
         .task-card-actions .btn { padding: 8px 20px; min-width: 90px; flex: initial; }
         .task-card-actions .task-timer { font-size: 1.2rem; font-weight: bold; color: var(--accent-gold); min-width: 40px; text-align: center; }
         .task-card.completed {
@@ -160,34 +167,98 @@
         .history-item-status.rejected { color: #dc3545; background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; }
         .history-list { max-height: 250px; overflow-y: auto; padding-right: 5px; } /* For scrollbar styling */
 
-        /* UPDATE 3: New History List Item Styles (Mimics image) */
-        .history-date { font-size: 0.9rem; color: var(--text-secondary); margin: 15px 0 10px; text-align: left; }
-        .history-entry {
+        /* UPDATE 3: History Modal new design */
+        #historyModal .modal-content {
+            background-color: var(--bg-surface);
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 380px;
+            text-align: left;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+            position: relative;
+        }
+        #historyModal .modal-content h3 {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        #historyModal .history-date {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        #historyModal .history-entry {
             background-color: var(--bg-element);
-            padding: 12px 15px;
             border-radius: 8px;
+            padding: 12px;
             margin-bottom: 8px;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            border-left: 4px solid var(--border-color);
+            flex-direction: column;
+            border: 1px solid var(--border-color);
         }
-        .history-entry.completed { border-left-color: var(--success-color); }
-        .history-entry.pending { border-left-color: #f0c419; }
-        .history-entry.rejected { border-left-color: var(--error-color); }
-
-        .history-entry .left-info { text-align: left; flex-grow: 1; }
-        .history-entry .main-text { font-size: 1rem; font-weight: 500; color: var(--text-light); }
-        .history-entry .sub-text { font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; }
-
-        .history-entry .right-info { text-align: right; flex-shrink: 0; }
-        .history-entry .amount-value { font-size: 1.1rem; font-weight: 700; color: var(--success-color); } /* For earnings */
-        .history-entry .amount-value.withdrawal { color: var(--primary-red); } /* For withdrawals */
-        .history-entry .status-label { font-size: 0.75rem; font-weight: 600; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-top: 3px; }
-        .history-entry .status-label.completed { background-color: rgba(40, 167, 69, 0.2); color: var(--success-color); }
-        .history-entry .status-label.pending { background-color: rgba(255, 215, 0, 0.2); color: #f0c419; }
-        .history-entry .status-label.rejected { background-color: rgba(220, 53, 69, 0.2); color: var(--error-color); }
+        #historyModal .history-entry-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        #historyModal .history-entry-type {
+            font-weight: 500;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+        #historyModal .history-entry-amount {
+            font-weight: 700;
+            color: var(--success-color); /* For commissions/deposits */
+            font-size: 1rem;
+        }
+        #historyModal .history-entry-amount.withdrawal {
+            color: var(--primary-red); /* For withdrawals */
+        }
+        #historyModal .history-entry-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        #historyModal .history-entry-status {
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            text-transform: capitalize;
+        }
+        #historyModal .history-entry-status.completed {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+        #historyModal .history-entry-status.pending {
+            background-color: rgba(255, 215, 0, 0.1);
+            color: #f0c419;
+        }
+        #historyModal .history-entry-status.rejected {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+        #historyModal .history-close-btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        #historyModal .history-close-btn {
+            background: var(--primary-red);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            border: none;
+            width: 100%;
+        }
 
 
         /* --- VIDEO SECTION STYLES --- */
@@ -241,59 +312,6 @@
             animation: pulse-gold 2s infinite;
         }
 
-        /* Update 2: Support section channel button animation */
-        .animated-channel-btn {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--bg-element);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 5px solid transparent;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: var(--text-light);
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-        .animated-channel-btn:hover {
-            border-color: var(--accent-gold);
-            transform: translateY(-3px) scale(1.01);
-            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
-        }
-        .animated-channel-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent);
-            transition: left 0.5s ease;
-        }
-        .animated-channel-btn:hover::before {
-            left: 100%;
-        }
-        .animated-channel-btn .icon-text {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-grow: 1;
-            z-index: 1; /* Ensure text is above the overlay */
-        }
-        .animated-channel-btn i {
-            font-size: 1.2rem;
-            color: var(--primary-red);
-        }
-        .animated-channel-btn .arrow-icon {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            z-index: 1;
-        }
-
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse-red { 0% { box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); } 50% { box-shadow: 0 0 15px rgba(217, 4, 41, 0.6); } 100% { box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); } }
         @keyframes pulse-lootbox { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
@@ -331,7 +349,7 @@
                 <div class="name" id="userName">Loading...</div>
                 <div class="balance">
                     Balance: <span id="userBalance">0.00</span> USDT 💵 
-                    <i class="fa-solid fa-file-invoice history-vfx-btn" id="historyBtn"></i>
+                    <i class="fa-solid fa-history history-vfx-btn" id="historyBtn"></i>
                 </div>
             </div>
         </section>
@@ -467,10 +485,10 @@
                     <h3>Join Our Official Channels</h3>
                     <p>Stay updated with our latest news and payment proofs. (No reward for joining).</p>
                     <div class="task-list">
-                        <a href="https://t.me/newtube12" target="_blank" class="animated-channel-btn"><div class="icon-text"><i class="fa-brands fa-telegram"></i> NewTube Payment Channel</div><i class="fa-solid fa-arrow-right arrow-icon"></i></a>
-                        <a href="https://t.me/NewTube12_bot/newtubecash" target="_blank" class="animated-channel-btn"><div class="icon-text"><i class="fa-solid fa-robot"></i> NewTube Earning Bot</div><i class="fa-solid fa-arrow-right arrow-icon"></i></a>
-                        <a href="https://t.me/Chili_powder_Payment" target="_blank" class="animated-channel-btn"><div class="icon-text"><i class="fa-brands fa-telegram"></i> Chili Powder Payment Channel</div><i class="fa-solid fa-arrow-right arrow-icon"></i></a>
-                        <a href="https://t.me/chili_powder_USDT" target="_blank" class="animated-channel-btn"><div class="icon-text"><i class="fa-brands fa-telegram"></i> Chili Powder Official</div><i class="fa-solid fa-arrow-right arrow-icon"></i></a>
+                        <a href="https://t.me/newtube12" target="_blank" class="task-item"><div class="task-text"><i class="fa-brands fa-telegram"></i> NewTube Payment Channel</div><i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="https://t.me/NewTube12_bot/newtubecash" target="_blank" class="task-item"><div class="task-text"><i class="fa-solid fa-robot"></i> NewTube Earning Bot</div><i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="https://t.me/Chili_powder_Payment" target="_blank" class="task-item"><div class="task-text"><i class="fa-brands fa-telegram"></i> Chili Powder Payment Channel</div><i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="https://t.me/chili_powder_USDT" target="_blank" class="task-item"><div class="task-text"><i class="fa-brands fa-telegram"></i> Chili Powder Official</div><i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>
                  <div class="content-card">
@@ -560,22 +578,15 @@
 
         <!-- History Modal -->
         <div class="modal-overlay" id="historyModal">
-            <div class="modal-content" style="max-width: 95%; padding: 15px;"> <!-- Adjusted padding for fullscreen feel -->
+            <div class="modal-content">
                 <button class="close-modal-btn" data-modal-id="historyModal"><i class="fa-solid fa-times"></i></button>
-                <h3 style="margin-top: 20px;">Transaction History</h3>
-
-                <div class="history-section" style="margin-top: 15px;">
-                    <h4 style="color: var(--text-light); margin-bottom: 10px;">Withdrawals</h4>
-                    <div id="modal-withdrawal-history" class="history-list" style="max-height: 200px;">
-                        <p style="color: var(--text-secondary); text-align: center;">Loading withdrawals...</p>
-                    </div>
+                <h3>Transaction History</h3>
+                <div id="modal-history-content">
+                    <!-- History entries will be dynamically loaded here, grouped by date -->
+                    <p style="color: var(--text-secondary); text-align: center;">Loading history...</p>
                 </div>
-
-                <div class="history-section" style="margin-top: 20px;">
-                    <h4 style="color: var(--text-light); margin-bottom: 10px;">Referrals</h4>
-                    <div id="modal-referral-history" class="history-list" style="max-height: 200px;">
-                        <p style="color: var(--text-secondary); text-align: center;">Loading referrals...</p>
-                    </div>
+                <div class="history-close-btn-container">
+                    <button class="history-close-btn" data-modal-id="historyModal">Close</button>
                 </div>
             </div>
         </div>
@@ -584,17 +595,23 @@
         <div class="modal-overlay" id="welcomeModal">
             <div class="modal-content">
                 <button class="close-modal-btn" data-modal-id="welcomeModal"><i class="fa-solid fa-times"></i></button>
-                <h3 style="margin-bottom: 10px; color: var(--accent-gold); font-size: 1.4rem;">👋 Assalamualaikum dear users!</h3>
-                <p style="font-weight: 500; font-size: 1rem; color: var(--text-light);">
-                    Welcome to Chili Powder Mini App 💥<br>
-                    💯 100% real payment guaranteed!<br>
-                    💬 For support, promo, or withdraw help — message the admin directly.<br>
+                <h3 style="color: var(--accent-gold);">👋 Assalamualaikum dear users!</h3>
+                <p style="margin-bottom: 10px; color: var(--text-light); font-weight: 500;">
+                    Welcome to Chili Powder Mini App 💥
+                </p>
+                <p style="margin-bottom: 10px; color: var(--text-light); font-weight: 500;">
+                    💯 100% real payment guaranteed!
+                </p>
+                <p style="margin-bottom: 10px; color: var(--text-light); font-weight: 500;">
+                    💬 For support, promo, or withdraw help — message the admin directly.
+                </p>
+                <p style="margin-bottom: 20px; color: var(--text-light); font-weight: 500;">
                     💸 Your income may be a bit lower, but payment is always sure!
                 </p>
                 <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
-                    <a href="https://t.me/Chili_powder_Payment" target="_blank" class="btn" style="text-decoration: none;"><i class="fa-brands fa-telegram"></i> Payment Channel</a>
-                    <a href="https://t.me/chili_powder_USDT" target="_blank" class="btn" style="text-decoration: none; background: var(--bg-element); border: 1px solid var(--primary-red);"><i class="fa-brands fa-telegram"></i> Official Channel</a>
-                    <a href="https://t.me/newtube12_admin" target="_blank" class="btn" style="text-decoration: none; background: #2AABEE;"><i class="fa-solid fa-headset"></i> Admin Support</a>
+                    <a href="https://t.me/Chili_powder_Payment" target="_blank" class="btn" style="text-decoration: none; background: #34A853;"><i class="fa-brands fa-telegram"></i> Payment Channel</a>
+                    <a href="https://t.me/chili_powder_USDT" target="_blank" class="btn" style="text-decoration: none; background: #1DA1F2;"><i class="fa-brands fa-telegram"></i> Official Channel</a>
+                    <a href="https://t.me/newtube12_admin" target="_blank" class="btn" style="text-decoration: none; background: var(--primary-red);"><i class="fa-brands fa-telegram"></i> Admin Support</a>
                 </div>
             </div>
         </div>
@@ -660,7 +677,7 @@
         // --- 1. FIREBASE INITIALIZATION ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
-        import { getFirestore, doc, setDoc, onSnapshot, updateDoc, increment, collection, addDoc, serverTimestamp, getDocs, query, where, Timestamp, deleteDoc, runTransaction, orderBy } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot, updateDoc, increment, collection, addDoc, serverTimestamp, getDocs, query, where, Timestamp, deleteDoc, runTransaction, orderBy } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCfjRTpRGg4l1yK6QmbeAfI54LD9ogXjW0",
@@ -694,7 +711,7 @@
             tg.ready();
             tg.expand();
             
-            // UPDATE 1: Show welcome popup on first session visit
+            // UPDATE 3: Show welcome popup on first session visit
             if (!sessionStorage.getItem('welcomeShown')) {
                 document.getElementById('welcomeModal').classList.add('active');
                 sessionStorage.setItem('welcomeShown', 'true');
@@ -785,7 +802,8 @@
                 }
             });
             
-            // Initial loads for history and tasks
+            // Replaced old loadWithdrawalHistory with new combined function
+            // loadWithdrawalHistory(String(currentUser.id), 'withdrawal-history-list');
             loadAndDisplayTasks();
             loadAndDisplayVideos();
 
@@ -911,101 +929,96 @@
                 button.disabled = false;
             }
 
-            // --- History Logic (UPDATE 3) ---
-            async function loadWithdrawalHistoryModal(userId) {
-                const historyListEl = document.getElementById('modal-withdrawal-history');
-                historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading withdrawals...</p>`;
-                const q = query(collection(db, "withdrawals"), where("userId", "==", userId), orderBy("requestTimestamp", "desc"));
-                
-                onSnapshot(q, (snapshot) => {
-                    if (snapshot.empty) {
-                        historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">No withdrawal history found.</p>`;
-                        return;
-                    }
+            // --- History Logic (Updated for visual match) ---
+            async function loadTransactionHistory(userId) {
+                const historyListEl = document.getElementById('modal-history-content');
+                historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading history...</p>`;
 
-                    // Group by date
-                    const groupedHistory = {};
-                    snapshot.forEach(doc => {
-                        const data = doc.data();
-                        const dateKey = data.requestTimestamp?.toDate()?.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) || 'N/A';
-                        if (!groupedHistory[dateKey]) {
-                            groupedHistory[dateKey] = [];
-                        }
-                        groupedHistory[dateKey].push({ id: doc.id, ...data });
+                const qWithdrawals = query(collection(db, "withdrawals"), where("userId", "==", userId), orderBy("requestTimestamp", "desc"));
+                const qReferrals = query(collection(db, "users"), where("referredBy", "==", userId), orderBy("joinDate", "desc"));
+
+                const [withdrawalSnap, referralSnap] = await Promise.all([getDocs(qWithdrawals), getDocs(qReferrals)]);
+
+                let allTransactions = [];
+
+                withdrawalSnap.forEach(doc => {
+                    const data = doc.data();
+                    allTransactions.push({
+                        date: data.requestTimestamp?.toDate(),
+                        type: 'withdrawal',
+                        amount: data.amount,
+                        method: data.method,
+                        accountNumber: data.accountNumber,
+                        status: data.status
                     });
-
-                    let historyHtml = '';
-                    for (const date in groupedHistory) {
-                        historyHtml += `<div class="history-date">${date}</div>`;
-                        groupedHistory[date].forEach(item => {
-                            historyHtml += `
-                                <div class="history-entry ${item.status}">
-                                    <div class="left-info">
-                                        <div class="main-text">Withdrawal Request</div>
-                                        <div class="sub-text">${item.method} - Acc: ${item.accountNumber}</div>
-                                    </div>
-                                    <div class="right-info">
-                                        <div class="amount-value withdrawal">- ${item.amount.toFixed(4)} USDT</div>
-                                        <div class="status-label ${item.status}">${item.status}</div>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                    }
-                    historyListEl.innerHTML = historyHtml;
-                }, (error) => {
-                    console.error("Error loading withdrawal history:", error);
-                    historyListEl.innerHTML = `<p style="color: var(--error-color); text-align: center;">Could not load history.</p>`;
                 });
+
+                referralSnap.forEach(doc => {
+                    const data = doc.data();
+                    allTransactions.push({
+                        date: data.joinDate?.toDate(),
+                        type: 'referral',
+                        amount: 0.006, // Fixed reward for referral
+                        userName: data.firstName || data.userName,
+                        userId: data.userId,
+                        status: 'completed' // Referrals are only added to history if completed
+                    });
+                });
+
+                // Sort all transactions by date (most recent first)
+                allTransactions.sort((a, b) => b.date - a.date);
+
+                if (allTransactions.length === 0) {
+                    historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center; margin-top: 20px;">No transaction history found.</p>`;
+                    return;
+                }
+
+                let groupedHistory = {};
+                allTransactions.forEach(tx => {
+                    const dateKey = tx.date ? tx.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A';
+                    if (!groupedHistory[dateKey]) {
+                        groupedHistory[dateKey] = [];
+                    }
+                    groupedHistory[dateKey].push(tx);
+                });
+
+                historyListEl.innerHTML = '';
+                for (const dateKey in groupedHistory) {
+                    const dateHeader = document.createElement('div');
+                    dateHeader.className = 'history-date';
+                    dateHeader.textContent = dateKey;
+                    historyListEl.appendChild(dateHeader);
+
+                    groupedHistory[dateKey].forEach(tx => {
+                        const item = document.createElement('div');
+                        item.className = 'history-entry';
+                        
+                        let typeText, amountColorClass, detailsText;
+                        if (tx.type === 'withdrawal') {
+                            typeText = 'Withdrawal';
+                            amountColorClass = 'withdrawal';
+                            detailsText = `${tx.method} - Acc: ${tx.accountNumber}`;
+                        } else { // referral
+                            typeText = 'Commission';
+                            amountColorClass = ''; // Default for commission/positive amounts
+                            detailsText = `Commission from user ${tx.userId}`;
+                        }
+
+                        item.innerHTML = `
+                            <div class="history-entry-top">
+                                <div class="history-entry-type">${typeText}</div>
+                                <div class="history-entry-amount ${amountColorClass}">${tx.type === 'withdrawal' ? '-' : '+'}${(tx.amount || 0).toFixed(4)} USDT</div>
+                            </div>
+                            <div class="history-entry-details">
+                                <span>${detailsText}</span>
+                                <span class="history-entry-status ${tx.status}">${tx.status}</span>
+                            </div>
+                        `;
+                        historyListEl.appendChild(item);
+                    });
+                }
             }
 
-            async function loadReferralHistoryModal(userId) {
-                const container = document.getElementById('modal-referral-history');
-                container.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading referrals...</p>`;
-                const q = query(collection(db, "users"), where("referredBy", "==", userId), orderBy("joinDate", "desc"));
-                
-                onSnapshot(q, (querySnapshot) => {
-                    if (querySnapshot.empty) {
-                        container.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">You have not referred anyone yet.</p>';
-                        return;
-                    }
-
-                    const groupedHistory = {};
-                    querySnapshot.forEach(doc => {
-                        const referredUser = doc.data();
-                        const dateKey = referredUser.joinDate?.toDate()?.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) || 'N/A';
-                        if (!groupedHistory[dateKey]) {
-                            groupedHistory[dateKey] = [];
-                        }
-                        groupedHistory[dateKey].push({ id: doc.id, ...referredUser });
-                    });
-
-                    let historyHtml = '';
-                    for (const date in groupedHistory) {
-                        historyHtml += `<div class="history-date">${date}</div>`;
-                        groupedHistory[date].forEach(referredUser => {
-                            const status = referredUser.referralStatus === 'completed' ? 'Completed' : 'Pending';
-                            const statusClass = referredUser.referralStatus; // This would typically be 'completed' if the referrer was rewarded
-                            historyHtml += `
-                                <div class="history-entry completed"> <!-- Assume referral reward is completed for this display -->
-                                    <div class="left-info">
-                                        <div class="main-text">Commission from user</div>
-                                        <div class="sub-text">${referredUser.userId}</div>
-                                    </div>
-                                    <div class="right-info">
-                                        <div class="amount-value">+0.006 USDT</div>
-                                        <div class="status-label completed">Completed</div>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                    }
-                    container.innerHTML = historyHtml;
-                }, (error) => {
-                    console.error("Error loading referral history:", error);
-                    container.innerHTML = `<p style="color: var(--error-color); text-align: center;">Could not load history.</p>`;
-                });
-            }
 
             // --- Withdraw Logic ---
             document.querySelectorAll('.withdraw-box').forEach(box => {
@@ -1345,14 +1358,20 @@
             document.querySelector('.btn-copy').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('referralLink').textContent).then(() => tg.showAlert('Referral link copied!')); });
             document.querySelector('.btn-share').addEventListener('click', () => { tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(document.getElementById('referralLink').textContent)}`); });
             
-            // UPDATE 3: History button now loads both withdrawal and referral histories in the modal
             document.getElementById('historyBtn').addEventListener('click', () => {
                 document.getElementById('historyModal').classList.add('active');
-                loadWithdrawalHistoryModal(String(currentUser.id));
-                loadReferralHistoryModal(String(currentUser.id));
+                loadTransactionHistory(String(currentUser.id)); // Updated to new combined history loader
             });
 
             document.querySelectorAll('.close-modal-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const modalId = btn.dataset.modalId;
+                    if (modalId) {
+                        document.getElementById(modalId).classList.remove('active');
+                    }
+                });
+            });
+            document.querySelectorAll('.history-close-btn').forEach(btn => { // For the new history modal close button
                 btn.addEventListener('click', () => {
                     const modalId = btn.dataset.modalId;
                     if (modalId) {
