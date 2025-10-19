@@ -90,7 +90,7 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            justify-content: space-between;
+            justify-content: space-between; /* Adjusted for Update 2 */
             gap: 10px;
             transition: all 0.3s ease;
         }
@@ -106,10 +106,8 @@
             display: flex; 
             align-items: center; 
             gap: 10px; 
-            /* UPDATE 2: Ensure button is always on the right */
-            margin-left: auto; 
-            min-width: 90px; /* Adjust as needed */
-            justify-content: flex-end;
+            /* UPDATE 2: Ensure actions are always on the right */
+            margin-left: auto; /* Push to the right */
         }
         .task-card-actions .btn { padding: 8px 20px; min-width: 90px; flex: initial; }
         .task-card-actions .task-timer { font-size: 1.2rem; font-weight: bold; color: var(--accent-gold); min-width: 40px; text-align: center; }
@@ -158,17 +156,115 @@
         .modal-content p { color: var(--text-secondary); margin-bottom: 10px; line-height: 1.6; }
         .close-modal-btn { position: absolute; top: 10px; right: 10px; background: var(--border-color); color: var(--text-light); border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 1rem; cursor: pointer; }
         #countdown-timer { font-size: 3rem; font-weight: bold; color: var(--primary-red); margin: 15px 0; }
-        .history-section { margin-top: 30px; }
-        .history-section h3, .history-section h4 { color: var(--primary-red); margin-bottom: 15px; font-size: 1.3rem; text-align: left;}
-        .history-section h4 { font-size: 1.1rem; color: var(--accent-gold); }
-        .history-item { background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .history-item-info .amount { font-size: 1.1rem; font-weight: 600; color: var(--text-light); }
-        .history-item-info .details { font-size: 0.8rem; color: var(--text-secondary); }
-        .history-item-status { font-weight: bold; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; text-transform: capitalize; }
-        .history-item-status.pending { color: #f0c419; background-color: rgba(255, 215, 0, 0.1); border: 1px solid #f0c419; }
-        .history-item-status.completed { color: #28a745; background-color: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; }
-        .history-item-status.rejected { color: #dc3545; background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; }
-        .history-list { max-height: 250px; overflow-y: auto; padding-right: 5px; } /* For scrollbar styling */
+
+        /* UPDATE 3: History Modal Styles - Based on the provided image */
+        #historyModal .modal-content {
+            background-color: #f9f9f9; /* Lighter background like the image */
+            color: #333;
+            max-width: 90%;
+            padding: 0; /* Remove padding from modal content itself, use inner divs */
+            border-radius: 0; /* No border-radius on modal-content to match image */
+            box-shadow: none; /* No shadow to match image */
+            border: none;
+            overflow: hidden; /* For rounded corners of inner header/body */
+        }
+        #historyModal .history-header {
+            background-color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+        }
+        #historyModal .history-header .close-modal-btn {
+            position: static; /* Reset position for header */
+            background: none;
+            color: #555;
+            font-size: 1.5rem;
+            width: auto; height: auto;
+            border-radius: 0;
+            padding: 0 10px;
+        }
+        #historyModal .history-header .title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #333;
+        }
+        #historyModal .history-body {
+            padding: 15px;
+            background-color: #f9f9f9; /* Matches background of image */
+            max-height: 400px; /* Example max height */
+            overflow-y: auto;
+        }
+        #historyModal .history-date {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 10px;
+            text-align: left;
+            padding-left: 5px;
+        }
+        #historyModal .history-entry {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* Align text to top */
+            position: relative;
+        }
+        #historyModal .entry-details {
+            text-align: left;
+            flex-grow: 1;
+        }
+        #historyModal .entry-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 3px;
+        }
+        #historyModal .entry-subtitle {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        #historyModal .entry-amount {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #28a745; /* Green for positive */
+            text-align: right;
+            margin-bottom: 3px;
+        }
+        #historyModal .entry-amount.negative {
+            color: #dc3545; /* Red for negative */
+        }
+        #historyModal .entry-status {
+            font-size: 0.75rem;
+            color: #888;
+            text-align: right;
+            text-transform: capitalize;
+        }
+        #historyModal .modal-close-btn { /* Specific class for bottom close button */
+            margin-top: 20px;
+            padding: 12px 0;
+            width: 100%;
+            background-color: var(--primary-red);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .history-vfx-btn {
+            font-size: 1.4rem; /* Bigger icon */
+            margin-left: 15px;
+            color: var(--accent-gold);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+            animation: pulse-gold 2s infinite;
+        }
 
         /* --- VIDEO SECTION STYLES --- */
         .loot-box-card { background-color: var(--bg-element); padding: 20px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
@@ -220,115 +316,6 @@
             text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
             animation: pulse-gold 2s infinite;
         }
-
-        /* UPDATE 3: History Modal Styling */
-        #historyModal .modal-content {
-            max-width: 95%; /* Make it wider */
-            padding: 10px; /* Reduce padding slightly */
-            border: none; /* Remove border */
-            box-shadow: none; /* Remove box shadow */
-            background-color: transparent; /* Make background transparent */
-        }
-        #historyModal .modal-content h3 {
-            color: #f0f0f0; /* White color for history title */
-            font-size: 1.2rem; /* Slightly smaller title */
-            margin-bottom: 5px;
-            text-align: center;
-        }
-        #historyModal .history-container-wrapper {
-            background-color: var(--bg-surface);
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
-        }
-        #historyModal .history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 10px;
-        }
-        #historyModal .history-date {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            flex-grow: 1;
-            text-align: left;
-            padding-left: 5px;
-        }
-        #historyModal .history-item {
-            background-color: var(--bg-element);
-            border-radius: 8px;
-            margin-bottom: 8px;
-            padding: 12px 15px;
-            display: flex;
-            flex-direction: column; /* Stack info vertically */
-            align-items: flex-start; /* Align text to start */
-            border: 1px solid var(--border-color);
-            transition: background-color 0.2s ease;
-        }
-        #historyModal .history-item:hover {
-            background-color: #383838;
-        }
-        #historyModal .history-item-top {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            margin-bottom: 5px;
-        }
-        #historyModal .history-item-details {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-        }
-        #historyModal .history-item .amount {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--success-color); /* Green for received amounts */
-            margin-right: auto; /* Push commission text to right */
-        }
-        #historyModal .history-item .commission-text {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-        #historyModal .history-item .details {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            text-align: left;
-        }
-        #historyModal .history-item .status {
-            font-weight: bold;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            text-transform: capitalize;
-            border: 1px solid transparent; /* default */
-        }
-        #historyModal .history-item .status.pending { 
-            color: #f0c419; background-color: rgba(255, 215, 0, 0.1); border-color: #f0c419; 
-        }
-        #historyModal .history-item .status.completed { 
-            color: #28a745; background-color: rgba(40, 167, 69, 0.1); border-color: #28a745; 
-        }
-        #historyModal .history-item .status.rejected { 
-            color: #dc3545; background-color: rgba(220, 53, 69, 0.1); border-color: #dc3545; 
-        }
-
-        /* Update for the 'Close' button in history modal */
-        #historyModal .close-history-btn {
-            background-color: var(--primary-red);
-            color: var(--text-light);
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-        }
-
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse-red { 0% { box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); } 50% { box-shadow: 0 0 15px rgba(217, 4, 41, 0.6); } 100% { box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); } }
@@ -594,36 +581,37 @@
             </div>
         </div>
 
-        <!-- History Modal (UPDATE 3: Redesigned) -->
+        <!-- History Modal (UPDATE 3: Redesigned to match image) -->
         <div class="modal-overlay" id="historyModal">
             <div class="modal-content">
-                <button class="close-modal-btn" data-modal-id="historyModal"><i class="fa-solid fa-times"></i></button>
-                <h3>History</h3>
-                <div class="history-container-wrapper">
-                    <div id="modal-combined-history" class="history-list" style="max-height: 400px; overflow-y: auto;">
-                        <p style="color: var(--text-secondary); text-align: center;">Loading history...</p>
-                    </div>
-                    <button class="close-history-btn" data-modal-id="historyModal">Close</button>
+                <div class="history-header">
+                    <button class="close-modal-btn" data-modal-id="historyModal"><i class="fa-solid fa-times"></i></button>
+                    <div class="title">History</div>
+                    <!-- Empty div for spacing to match image layout -->
+                    <div></div> 
                 </div>
+                <div class="history-body" id="history-content-area">
+                    <!-- History entries will be dynamically loaded here -->
+                    <p style="color: #777; text-align: center;">Loading history...</p>
+                </div>
+                <button class="modal-close-btn" data-modal-id="historyModal">Close</button>
             </div>
         </div>
 
-        <!-- UPDATE 1: Welcome Popup Modal -->
+        <!-- UPDATE 3: Welcome Popup Modal -->
         <div class="modal-overlay" id="welcomeModal">
             <div class="modal-content">
                 <button class="close-modal-btn" data-modal-id="welcomeModal"><i class="fa-solid fa-times"></i></button>
-                <h3 style="color: var(--accent-gold);">👋 Assalamualaikum dear users!</h3>
-                <p style="font-size: 1.1rem; color: var(--text-light); margin-bottom: 15px;">
-                    Welcome to Chili Powder Mini App 💥
-                    💯 100% real payment guaranteed!
-                    <br>💸 Your income may be a bit lower, but payment is always sure!
-                </p>
-                <p style="color: var(--text-secondary); margin-bottom: 20px;">
-                    💬 For support, promo, or withdraw help — message the admin directly.
+                <h3 style="color: #333;">👋 Assalamualaikum dear users!</h3>
+                <p style="color: #555; margin-bottom: 10px; font-weight: 500;">
+                    Welcome to Chili Powder Mini App 💥 <br>
+                    💯 100% real payment guaranteed!<br>
+                    💬 For support, promo, or withdraw help — message the admin directly.<br>
+                    💸 Your income may be a bit lower, but payment is always sure!
                 </p>
                 <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
                     <a href="https://t.me/Chili_powder_Payment" target="_blank" class="btn" style="text-decoration: none;"><i class="fa-brands fa-telegram"></i> Payment Channel</a>
-                    <a href="https://t.me/chili_powder_USDT" target="_blank" class="btn" style="text-decoration: none;"><i class="fa-brands fa-telegram"></i> Official Channel</a>
+                    <a href="https://t.me/chili_powder_USDT" target="_blank" class="btn" style="text-decoration: none; background: var(--bg-element); border: 1px solid var(--primary-red);"><i class="fa-brands fa-telegram"></i> Official Channel</a>
                     <a href="https://t.me/newtube12_admin" target="_blank" class="btn" style="text-decoration: none; background: #2AABEE;"><i class="fa-brands fa-telegram"></i> Admin Support</a>
                 </div>
             </div>
@@ -800,6 +788,16 @@
                                     referrals: increment(1), 
                                     balance: increment(0.006) 
                                 });
+                                // রেফারেলের জন্য একটি কমিশন এন্ট্রি তৈরি করুন
+                                const commissionRef = doc(collection(db, "users", referrerId, "commissions"));
+                                transaction.set(commissionRef, {
+                                    type: "referral",
+                                    amount: 0.006,
+                                    fromUser: currentUser.id,
+                                    fromUserName: currentUser.first_name || currentUser.username || "N/A",
+                                    timestamp: serverTimestamp(),
+                                    status: "completed"
+                                });
                                 transaction.set(userRef, newUserData);
                             });
                         } catch (e) {
@@ -815,8 +813,8 @@
                 }
             });
             
-            // Re-calling loadAndDisplayTasks to ensure it runs after userData is loaded
-            loadAndDisplayTasks(); 
+            // loadWithdrawalHistory(String(currentUser.id), 'withdrawal-history-list'); // Old call
+            loadAndDisplayTasks();
             loadAndDisplayVideos();
 
             function updateUI(data) {
@@ -880,6 +878,14 @@
                         await updateDoc(userRef, { monetagAdsWatchedToday: increment(1) });
                         // UPDATE 2: Reward changed to 0.0005
                         await addEarnings(0.0005);
+                        // কমিশন এন্ট্রি যোগ করুন
+                        await addDoc(collection(db, "users", String(currentUser.id), "commissions"), {
+                            type: "ad_monetag",
+                            amount: 0.0005,
+                            fromSource: "Monetag Ad",
+                            timestamp: serverTimestamp(),
+                            status: "completed"
+                        });
                         tg.HapticFeedback.notificationOccurred('success');
                         tg.showAlert('Congratulations! 0.0005 USDT has been added.');
                     } else {
@@ -904,6 +910,14 @@
                     await updateDoc(userRef, { gigaAdsWatchedToday: increment(1) });
                     // UPDATE 2: Reward changed to 0.0004
                     await addEarnings(0.0004);
+                     // কমিশন এন্ট্রি যোগ করুন
+                    await addDoc(collection(db, "users", String(currentUser.id), "commissions"), {
+                        type: "ad_gigapub",
+                        amount: 0.0004,
+                        fromSource: "GigaPub Ad",
+                        timestamp: serverTimestamp(),
+                        status: "completed"
+                    });
                     tg.HapticFeedback.notificationOccurred('success');
                     tg.showAlert('Congratulations! 0.0004 USDT has been added.');
                 } catch (error) { tg.showAlert('Ad could not be loaded. Please try again.');
@@ -918,117 +932,118 @@
                 if ((userData.adextraAdsWatchedToday || 0) >= 10) return tg.showAlert(`You have watched all mixed ads for today.`);
                 button.disabled = true;
 
-                const adChoice = Math.random();
                 let success = false;
 
                 try {
-                    if (adChoice < 0.5) { // 50% for Monetag
-                        await (typeof show_9858506 === 'function' ? show_9858506() : Promise.reject('Monetag SDK not loaded'));
-                    } else { // 50% for Giga
-                        await (typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.reject('GigaPub SDK not loaded'));
-                    }
+                    await (typeof adextraDirectInterstitial === 'function' ? adextraDirectInterstitial() : Promise.reject('Adextra SDK not loaded'));
                     success = true;
                 } catch (error) {
                     tg.showAlert('Ad could not be loaded. Please try again.');
+                    console.error("Adextra Ad error:", error);
                 }
 
                 if (success) {
                     await updateDoc(userRef, { adextraAdsWatchedToday: increment(1) });
                     await addEarnings(0.0003);
+                     // কমিশন এন্ট্রি যোগ করুন
+                    await addDoc(collection(db, "users", String(currentUser.id), "commissions"), {
+                        type: "ad_adextra",
+                        amount: 0.0003,
+                        fromSource: "Adextra Ad",
+                        timestamp: serverTimestamp(),
+                        status: "completed"
+                    });
                     tg.HapticFeedback.notificationOccurred('success');
                     tg.showAlert('Congratulations! 0.0003 USDT has been added.');
                 }
                 button.disabled = false;
             }
 
-            // --- UPDATE 3: History Logic (Combined Referrals and Withdrawals) ---
-            async function loadCombinedHistory(userId, containerId) {
-                const historyListEl = document.getElementById(containerId);
-                historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading history...</p>`;
+            // --- History Logic (UPDATE 3: Redesigned and integrated) ---
+            async function loadCombinedHistory(userId) {
+                const historyContentArea = document.getElementById('history-content-area');
+                historyContentArea.innerHTML = `<p style="color: #777; text-align: center;">Loading history...</p>`;
 
-                const qWithdrawals = query(collection(db, "withdrawals"), where("userId", "==", userId), orderBy("requestTimestamp", "desc"));
-                const qReferrals = query(collection(db, "users"), where("referredBy", "==", userId), orderBy("joinDate", "desc"));
+                const withdrawalsQuery = query(collection(db, "withdrawals"), where("userId", "==", userId), orderBy("requestTimestamp", "desc"));
+                const commissionsQuery = query(collection(db, "users", userId, "commissions"), orderBy("timestamp", "desc"));
+                
+                const [withdrawalsSnap, commissionsSnap] = await Promise.all([getDocs(withdrawalsQuery), getDocs(commissionsQuery)]);
 
-                const [withdrawalsSnap, referralsSnap] = await Promise.all([getDocs(qWithdrawals), getDocs(qReferrals)]);
-
-                let combinedHistory = [];
+                let allEntries = [];
 
                 withdrawalsSnap.forEach(doc => {
                     const data = doc.data();
-                    combinedHistory.push({
-                        type: 'Withdrawal',
+                    allEntries.push({
+                        type: 'withdrawal',
                         amount: data.amount,
-                        method: data.method,
                         status: data.status,
+                        method: data.method,
                         timestamp: data.requestTimestamp?.toDate()
                     });
                 });
 
-                referralsSnap.forEach(doc => {
+                commissionsSnap.forEach(doc => {
                     const data = doc.data();
-                    combinedHistory.push({
-                        type: 'Referral',
-                        userName: data.firstName,
-                        amount: 0.006, // Fixed referral bonus
-                        status: 'completed', // Assuming referral is complete once user data exists
-                        timestamp: data.joinDate?.toDate()
+                    allEntries.push({
+                        type: 'commission',
+                        amount: data.amount,
+                        from: data.fromUser ? `user ${data.fromUser}` : data.fromSource,
+                        fromName: data.fromUserName, // For referral
+                        status: data.status,
+                        timestamp: data.timestamp?.toDate()
                     });
                 });
 
-                combinedHistory.sort((a, b) => b.timestamp - a.timestamp); // Sort by newest first
+                allEntries.sort((a, b) => b.timestamp - a.timestamp); // Sort by newest first
 
-                if (combinedHistory.length === 0) {
-                    historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">No history found.</p>`;
+                if (allEntries.length === 0) {
+                    historyContentArea.innerHTML = '<p style="color: #777; text-align: center;">No history found.</p>';
                     return;
                 }
 
-                let currentDay = '';
-                historyListEl.innerHTML = ''; // Clear loading message
+                historyContentArea.innerHTML = '';
+                let lastDate = '';
 
-                combinedHistory.forEach(item => {
-                    const itemDate = item.timestamp?.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) || 'N/A';
-                    const itemTime = item.timestamp?.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) || '';
+                allEntries.forEach(entry => {
+                    const entryDate = entry.timestamp ? entry.timestamp.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A';
 
-                    if (itemDate !== currentDay) {
-                        const dateHeader = document.createElement('div');
-                        dateHeader.className = 'history-header';
-                        dateHeader.innerHTML = `<span class="history-date">${itemDate}</span>`;
-                        historyListEl.appendChild(dateHeader);
-                        currentDay = itemDate;
+                    if (entryDate !== lastDate) {
+                        const dateDiv = document.createElement('div');
+                        dateDiv.className = 'history-date';
+                        dateDiv.textContent = entryDate;
+                        historyContentArea.appendChild(dateDiv);
+                        lastDate = entryDate;
                     }
 
-                    const historyItem = document.createElement('div');
-                    historyItem.className = 'history-item';
+                    const item = document.createElement('div');
+                    item.className = 'history-entry';
 
-                    if (item.type === 'Withdrawal') {
-                        const statusClass = item.status;
-                        const statusText = item.status === 'completed' ? 'Received' : (item.status === 'pending' ? 'Pending' : 'Rejected');
-                        historyItem.innerHTML = `
-                            <div class="history-item-top">
-                                <span class="commission-text">Withdrawal ${item.method}</span>
-                                <span class="amount" style="color: ${item.status === 'completed' ? 'var(--success-color)' : 'var(--primary-red)'};">${item.amount.toFixed(4)} USDT</span>
+                    if (entry.type === 'commission') {
+                        item.innerHTML = `
+                            <div class="entry-details">
+                                <div class="entry-title">Commission</div>
+                                <div class="entry-subtitle">Commission from ${entry.fromName || entry.from || 'N/A'}</div>
                             </div>
-                            <div class="history-item-details">
-                                <span class="details">${itemTime}</span>
-                                <span class="status ${statusClass}">${statusText}</span>
+                            <div class="entry-status-area">
+                                <div class="entry-amount">+${(entry.amount || 0).toFixed(4)} USDT</div>
+                                <div class="entry-status ${entry.status}">${entry.status}</div>
                             </div>
                         `;
-                    } else if (item.type === 'Referral') {
-                        historyItem.innerHTML = `
-                            <div class="history-item-top">
-                                <span class="commission-text">Commission from user</span>
-                                <span class="amount">+${item.amount.toFixed(4)} USDT</span>
+                    } else if (entry.type === 'withdrawal') {
+                        item.innerHTML = `
+                            <div class="entry-details">
+                                <div class="entry-title">Withdrawal</div>
+                                <div class="entry-subtitle">${entry.method}</div>
                             </div>
-                            <div class="history-item-details">
-                                <span class="details">${item.userName} - ${itemTime}</span>
-                                <span class="status completed">Completed</span>
+                            <div class="entry-status-area">
+                                <div class="entry-amount negative">-${(entry.amount || 0).toFixed(4)} USDT</div>
+                                <div class="entry-status ${entry.status}">${entry.status}</div>
                             </div>
                         `;
                     }
-                    historyListEl.appendChild(historyItem);
+                    historyContentArea.appendChild(item);
                 });
             }
-
 
             // --- Withdraw Logic ---
             document.querySelectorAll('.withdraw-box').forEach(box => {
@@ -1175,6 +1190,15 @@
                     
                     await setDoc(doc(db, "users", String(currentUser.id), "completedTasks", taskId), { completedAt: serverTimestamp() });
                     await addEarnings(reward);
+                    // কমিশন এন্ট্রি যোগ করুন
+                    await addDoc(collection(db, "users", String(currentUser.id), "commissions"), {
+                        type: "task_completion",
+                        amount: reward,
+                        fromSource: "Task Completion",
+                        taskId: taskId,
+                        timestamp: serverTimestamp(),
+                        status: "completed"
+                    });
                     
                     item.classList.add('completed');
                     item.innerHTML = `
@@ -1309,8 +1333,8 @@
             async function triggerInVideoAd() {
                 if (ytPlayer?.pauseVideo) ytPlayer.pauseVideo();
                 try {
-                    if (adCheckCounter % 2 === 0) { await (typeof show_9858506 === 'function' ? show_9858506() : Promise.resolve()); } 
-                    else { await (typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.resolve()); }
+                    // Using Adextra for in-video ads as per your existing implementation of mixed ads
+                    await (typeof adextraDirectInterstitial === 'function' ? adextraDirectInterstitial() : Promise.resolve());
                 } catch (error) { console.error("In-video ad failed:", error); } 
                 finally { adCheckCounter++; if (ytPlayer?.playVideo) ytPlayer.playVideo(); }
             }
@@ -1329,6 +1353,14 @@
                         totalWatchTimeSeconds: increment(seconds),
                         lootBoxBalance: increment(earned)
                     });
+                     // কমিশন এন্ট্রি যোগ করুন (লুট বক্স ব্যালেন্সে যোগ হওয়ার সময়)
+                    await addDoc(collection(db, "users", String(currentUser.id), "commissions"), {
+                        type: "video_watch",
+                        amount: earned, // এইটা সরাসরি ব্যালেন্সে যোগ না হয়ে লুটবক্সে যায়
+                        fromSource: "Video Watch (Loot Box)",
+                        timestamp: serverTimestamp(),
+                        status: "pending_claim" // লুট বক্স থেকে ক্লেইম না হওয়া পর্যন্ত
+                    });
                 } catch (error) { console.error("Failed to update watch time:", error); }
             }
             
@@ -1342,6 +1374,15 @@
                         const currentLootBalance = userDoc.data().lootBoxBalance || 0;
                         if (!userDoc.exists() || currentLootBalance < 0.05) { throw "Insufficient loot box balance."; }
                         transaction.update(userRef, { balance: increment(currentLootBalance), lootBoxBalance: 0 });
+                        
+                        // লুট বক্স ক্লেইম করার কমিশন এন্ট্রি
+                        await addDoc(collection(db, "users", String(currentUser.id), "commissions"), {
+                            type: "lootbox_claim",
+                            amount: currentLootBalance,
+                            fromSource: "Loot Box Claim",
+                            timestamp: serverTimestamp(),
+                            status: "completed"
+                        });
                     });
                     tg.showAlert('Congratulations! Loot box reward has been added to your main balance.');
                 } catch (error) { tg.showAlert('Could not claim reward. Please try again.'); }
@@ -1370,7 +1411,7 @@
             
             document.getElementById('historyBtn').addEventListener('click', () => {
                 document.getElementById('historyModal').classList.add('active');
-                loadCombinedHistory(String(currentUser.id), 'modal-combined-history'); // UPDATE 3
+                loadCombinedHistory(String(currentUser.id)); // New combined history call
             });
 
             document.querySelectorAll('.close-modal-btn').forEach(btn => {
@@ -1381,11 +1422,10 @@
                     }
                 });
             });
-
-            // UPDATE 3: Close button for history modal
-            document.querySelector('#historyModal .close-history-btn').addEventListener('click', () => {
+             document.querySelector('#historyModal .modal-close-btn').addEventListener('click', () => { // For the bottom close button
                 document.getElementById('historyModal').classList.remove('active');
             });
+
 
         }
 
@@ -1425,7 +1465,19 @@
                 const { id, userId, amount } = event.target.dataset;
                 const isApprove = event.target.classList.contains('approve-btn');
                 await updateDoc(doc(db, "withdrawals", id), { status: isApprove ? 'completed' : 'rejected' });
-                if (!isApprove) await updateDoc(doc(db, "users", userId), { balance: increment(parseFloat(amount)) });
+                // যদি রিজেক্ট করা হয়, তাহলে ব্যালেন্স ফেরত দিন
+                if (!isApprove) {
+                    await updateDoc(doc(db, "users", userId), { balance: increment(parseFloat(amount)) });
+                    // একটি নেতিবাচক কমিশন এন্ট্রি যোগ করুন ব্যবহারকারীর জন্য
+                    await addDoc(collection(db, "users", userId, "commissions"), {
+                        type: "withdrawal_rejected",
+                        amount: parseFloat(amount),
+                        fromSource: "Withdrawal Rejection",
+                        withdrawalId: id,
+                        timestamp: serverTimestamp(),
+                        status: "rejected"
+                    });
+                }
             }
 
             onSnapshot(collection(db, "tasks"), (snapshot) => {
