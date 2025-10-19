@@ -1,3 +1,5 @@
+--- START OF FILE org.html ---
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,8 +16,14 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
 
-    <!-- Adexium Ads SDK -->
+    <!-- Adexium Ads SDK (Setup Confirmed as Correct) -->
     <script type="text/javascript" src="https://cdn.tgads.space/assets/js/adexium-widget.min.js"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            const adexiumWidget = new AdexiumWidget({wid: '05daa7ac-1883-42ff-b06d-92d100eba96f', adFormat: 'interstitial'});
+            adexiumWidget.autoMode();
+        });
+    </script>
     
     <!-- Monetag Ads SDK -->
     <script src='//libtl.com/sdk.js' data-zone='9858506' data-sdk='show_9858506'></script>
@@ -23,7 +31,7 @@
     <!-- Giga Pub Ads SDK -->
     <script src="https://ad.gigapub.tech/script?id=2925"></script>
 
-    <!-- Adextra Ads SDK -->
+    <!-- UPDATE 2: Adextra Ads SDK -->
     <script async src="https://partner.adextra.io/jt/0a8fa1933dc4ece1a123e24a88fff67d875dceaf.js"></script>
 
 
@@ -68,29 +76,40 @@
         .referral-link-box { background-color: var(--bg-surface); border: 1px dashed var(--border-color); padding: 12px; border-radius: 8px; word-wrap: break-word; text-align: left; margin-bottom: 20px; font-size: 0.9rem; color: var(--text-light); }
         .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; color: var(--text-light); background: linear-gradient(45deg, var(--primary-red-darker), var(--primary-red)); }
         .btn:disabled { background: var(--border-color); color: var(--text-secondary); cursor: not-allowed; filter: none; transform: none; }
-        .task-list .task-item { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border-color); text-decoration: none; color: var(--text-light); border-left: 5px solid transparent; transition: all 0.3s ease; }
+        .task-list .task-item { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid transparent; transition: all 0.3s ease; }
         .task-item .task-text { display: flex; align-items: center; gap: 10px; flex-grow: 1; }
         .task-item i { color: var(--accent-gold); }
         
-        /* UPDATE 2: Task Card Layout Fix */
+        /* UPDATE 1: New Task Card Styles */
         .task-list .task-card {
-            background-color: var(--bg-element); padding: 15px; border-radius: 10px; margin-bottom: 12px;
-            border: 1px solid var(--border-color); display: flex; flex-wrap: nowrap; align-items: center;
-            justify-content: space-between; gap: 10px; transition: all 0.3s ease;
+            background-color: var(--bg-element);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            transition: all 0.3s ease;
         }
-        .task-card:hover { border-color: var(--primary-red); transform: translateY(-3px); }
-        .task-card-info { flex-grow: 1; min-width: 0; }
-        .task-card-info .title {
-            font-weight: 600; font-size: 1.1rem; margin-bottom: 4px; color: var(--text-light);
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        .task-card:hover {
+            border-color: var(--primary-red);
+            transform: translateY(-3px);
         }
+        .task-card-info { flex-grow: 1; }
+        .task-card-info .title { font-weight: 600; font-size: 1.1rem; margin-bottom: 4px; color: var(--text-light); }
         .task-card-info .reward { font-size: 1rem; font-weight: 700; color: var(--accent-gold); }
         .task-card-info .reward i { margin-right: 5px; }
+        /* UPDATE 2: Task section button alignment */
         .task-card-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
         .task-card-actions .btn { padding: 8px 20px; min-width: 90px; flex: initial; }
         .task-card-actions .task-timer { font-size: 1.2rem; font-weight: bold; color: var(--accent-gold); min-width: 40px; text-align: center; }
         .task-card.completed {
-            background-color: var(--bg-dark); border-left: 5px solid var(--success-color); opacity: 0.8; pointer-events: none;
+            background-color: var(--bg-dark);
+            border-left: 5px solid var(--success-color);
+            opacity: 0.8;
+            pointer-events: none;
         }
         .task-card.completed .title { color: var(--success-color); }
         
@@ -100,21 +119,21 @@
         .buy-task-box .task-count { font-size: 1.8rem; font-weight: 700; color: var(--primary-red); }
         .buy-task-box .task-price { font-size: 1rem; font-weight: 500; color: var(--accent-gold); }
         
-        /* UPDATE 5: Withdraw Page UI Refresh */
+        /* --- Withdraw Page --- */
         .withdraw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         .withdraw-box { background: var(--bg-element); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; border: 2px solid var(--border-color); transition: all 0.3s ease; position: relative; overflow: hidden; }
-        .withdraw-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, rgba(255, 215, 0, 0.3), transparent 30%); animation: rotate 4s linear infinite; animation-play-state: paused; }
-        .withdraw-box:hover { border-color: var(--accent-gold); box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
+        .withdraw-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, rgba(217, 4, 41, 0.3), transparent 30%); animation: rotate 4s linear infinite; animation-play-state: paused; }
+        .withdraw-box:hover { border-color: var(--primary-red); box-shadow: 0 0 15px rgba(217, 4, 41, 0.4); }
         .withdraw-box.selected { border-color: var(--accent-gold); box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
         .withdraw-box.selected::before, .withdraw-box:hover::before { animation-play-state: running; }
-        .withdraw-box .amount { font-size: 2.2rem; font-weight: 700; color: var(--accent-gold); margin-bottom: 5px; }
+        .withdraw-box .amount { font-size: 2.2rem; font-weight: 700; color: var(--primary-red); margin-bottom: 5px; }
         .withdraw-box .requirement { font-size: 0.8rem; color: var(--text-secondary); }
         .withdraw-box .requirement i { color: var(--accent-gold); }
         .withdraw-form .form-group { margin-bottom: 15px; text-align: left; }
         .withdraw-form label { display: block; margin-bottom: 5px; color: var(--text-secondary); }
         .withdraw-form .payment-methods { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
         .withdraw-form .method-btn { flex: 1; min-width: 80px; padding: 10px; border: 2px solid var(--border-color); background: var(--bg-element); color: var(--text-light); border-radius: 8px; cursor: pointer; }
-        .withdraw-form .method-btn.selected { border-color: var(--accent-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); animation: pulse-gold-shadow 1.5s infinite; }
+        .withdraw-form .method-btn.selected { border-color: var(--primary-red); box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); animation: pulse-red 1.5s infinite; }
         .withdraw-form input, .modal-form input { width: 100%; padding: 12px; background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-light); font-size: 1rem; margin-bottom: 10px; }
         .withdraw-form input:focus, .modal-form input:focus { border-color: var(--primary-red); box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); }
         .info-box { padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; border: 1px dashed var(--accent-gold); }
@@ -131,22 +150,47 @@
         .modal-content p { color: var(--text-secondary); margin-bottom: 10px; line-height: 1.6; }
         .close-modal-btn { position: absolute; top: 10px; right: 10px; background: var(--border-color); color: var(--text-light); border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 1rem; cursor: pointer; }
         #countdown-timer { font-size: 3rem; font-weight: bold; color: var(--primary-red); margin: 15px 0; }
-        
-        /* UPDATE 4: History Section Redesign */
         .history-section { margin-top: 30px; }
-        .history-section h3 { color: var(--primary-red); margin-bottom: 15px; font-size: 1.3rem; text-align: left;}
-        .history-section h4 { font-size: 1rem; color: var(--text-secondary); padding-bottom: 8px; margin: 15px 0 10px; border-bottom: 1px solid var(--border-color); font-weight: 500;}
-        .history-item { background-color: var(--bg-element); padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .history-item-info .title { font-size: 1.1rem; font-weight: 600; color: var(--text-light); margin-bottom: 4px; }
+        .history-section h3, .history-section h4 { color: var(--primary-red); margin-bottom: 15px; font-size: 1.3rem; text-align: left;}
+        .history-section h4 { font-size: 1.1rem; color: var(--accent-gold); }
+        .history-item { background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .history-item-info .amount { font-size: 1.1rem; font-weight: 600; color: var(--text-light); }
         .history-item-info .details { font-size: 0.8rem; color: var(--text-secondary); }
-        .history-item-right { text-align: right; }
-        .history-item-right .amount { font-size: 1.1rem; font-weight: bold; }
-        .history-item-right .currency { font-size: 0.8rem; display: block; margin-top: -2px; }
-        .history-item-status { font-weight: bold; padding: 0; font-size: 0.8rem; text-transform: capitalize; }
-        .history-item-status.pending { color: #f0c419; }
-        .history-item-status.completed { color: #28a745; }
-        .history-item-status.rejected { color: #dc3545; }
-        .history-list { max-height: 250px; overflow-y: auto; padding-right: 5px; }
+        .history-item-status { font-weight: bold; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; text-transform: capitalize; }
+        .history-item-status.pending { color: #f0c419; background-color: rgba(255, 215, 0, 0.1); border: 1px solid #f0c419; }
+        .history-item-status.completed { color: #28a745; background-color: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; }
+        .history-item-status.rejected { color: #dc3545; background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; }
+        .history-list { max-height: 250px; overflow-y: auto; padding-right: 5px; } /* For scrollbar styling */
+
+        /* UPDATE 3: New History List Item Styles (Mimics image) */
+        .history-date { font-size: 0.9rem; color: var(--text-secondary); margin: 15px 0 10px; text-align: left; }
+        .history-entry {
+            background-color: var(--bg-element);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            border-left: 4px solid var(--border-color);
+        }
+        .history-entry.completed { border-left-color: var(--success-color); }
+        .history-entry.pending { border-left-color: #f0c419; }
+        .history-entry.rejected { border-left-color: var(--error-color); }
+
+        .history-entry .left-info { text-align: left; flex-grow: 1; }
+        .history-entry .main-text { font-size: 1rem; font-weight: 500; color: var(--text-light); }
+        .history-entry .sub-text { font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; }
+
+        .history-entry .right-info { text-align: right; flex-shrink: 0; }
+        .history-entry .amount-value { font-size: 1.1rem; font-weight: 700; color: var(--success-color); } /* For earnings */
+        .history-entry .amount-value.withdrawal { color: var(--primary-red); } /* For withdrawals */
+        .history-entry .status-label { font-size: 0.75rem; font-weight: 600; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-top: 3px; }
+        .history-entry .status-label.completed { background-color: rgba(40, 167, 69, 0.2); color: var(--success-color); }
+        .history-entry .status-label.pending { background-color: rgba(255, 215, 0, 0.2); color: #f0c419; }
+        .history-entry .status-label.rejected { background-color: rgba(220, 53, 69, 0.2); color: var(--error-color); }
+
 
         /* --- VIDEO SECTION STYLES --- */
         .loot-box-card { background-color: var(--bg-element); padding: 20px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
@@ -190,23 +234,28 @@
         .btn:hover:not(:disabled) { transform: scale(1.03); filter: brightness(1.15); }
         .nav-item:hover { color: var(--primary-red); }
         .history-vfx-btn {
-            font-size: 1.4rem; margin-left: 15px; color: var(--accent-gold);
-            cursor: pointer; transition: all 0.3s ease; text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
-            animation: pulse-gold-text 2s infinite;
+            font-size: 1.4rem; /* Bigger icon */
+            margin-left: 15px;
+            color: var(--accent-gold);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+            animation: pulse-gold 2s infinite;
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); } 50% { box-shadow: 0 0 15px rgba(217, 4, 41, 0.6); } 100% { box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); } }
         @keyframes pulse-lootbox { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes pulse-gold-text {
+        @keyframes pulse-gold {
             0% { transform: scale(1); text-shadow: 0 0 8px rgba(255, 215, 0, 0.6); }
             50% { transform: scale(1.15); text-shadow: 0 0 16px rgba(255, 215, 0, 0.9); }
             100% { transform: scale(1); text-shadow: 0 0 8px rgba(255, 215, 0, 0.6); }
         }
-        @keyframes pulse-gold-shadow {
-            0% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
-            50% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
-            100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+        @keyframes checkmark-pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
@@ -243,7 +292,7 @@
                 <div class="cards-container">
                     <div class="card">
                         <div class="card-label">Daily Ads Watched</div>
-                        <div class="card-value" id="adsWatchedCount">0 / 25</div>
+                        <div class="card-value" id="adsWatchedCount">0 / 21</div>
                     </div>
                     <div class="card">
                         <div class="card-label">Valid Referrals</div>
@@ -281,18 +330,19 @@
                 <h2 class="page-title">Earn From Ads</h2>
                 <div class="content-card">
                     <h3>Watch Monetag Ads</h3>
-                    <p>Watch 5 times a day. Earn 0.0005 USDT for each 13-second ad view.</p>
-                    <button class="btn" id="watchMonetagAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 5 Times</button>
+                    <p>Watch 6 times a day. Earn 0.0005 USDT for each 13-second ad view.</p>
+                    <button class="btn" id="watchMonetagAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 6 Times</button>
                 </div>
                 <div class="content-card">
                     <h3>Watch Giga Pub Ads</h3>
-                    <p>Watch 5 times a day. Click the ad after 5 seconds, then return to get 0.0005 USDT.</p>
+                    <p>Watch 5 times a day. Click the ad after 5 seconds, then return to get 0.0004 USDT.</p>
                     <button class="btn" id="watchGigaAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 5 Times</button>
                 </div>
+                <!-- UPDATE 2: Adextra Ads Card -->
                 <div class="content-card">
-                    <h3>Watch Mix Ads</h3>
-                    <p>Watch 15 times a day. Random ads will be shown. Earn 0.0005 USDT for each view.</p>
-                    <button class="btn" id="watchMixedAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 15 Times</button>
+                    <h3>Watch Mixed Ads</h3>
+                    <p>Watch 10 times a day. Random ads will be shown. Earn 0.0003 USDT for each view.</p>
+                    <button class="btn" id="watchAdextraAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 10 Times</button>
                 </div>
             </div>
             
@@ -351,7 +401,7 @@
                 </div>
 
                 <div class="history-section">
-                    <h3>Transaction History</h3>
+                    <h3>Withdrawal History</h3>
                     <div id="withdrawal-history-list" class="history-list">
                         <p style="color: var(--text-secondary); text-align: center;">Loading history...</p>
                     </div>
@@ -361,6 +411,7 @@
              <!-- Page 5: Support -->
             <div id="supportPage" class="page">
                  <h2 class="page-title">Support</h2>
+                 <!-- UPDATE 4: Official Channels moved here -->
                  <div class="content-card">
                     <h3>Join Our Official Channels</h3>
                     <p>Stay updated with our latest news and payment proofs. (No reward for joining).</p>
@@ -385,7 +436,7 @@
                     <h3>Earning Rules</h3>
                      <p style="text-align: left; color: var(--text-light);">
                         <strong>🤝 Per Valid Referral:</strong> 0.006 USDT<br>
-                        <strong>📺 Daily Ads (25 total):</strong> Up to 0.0005 USDT per ad<br>
+                        <strong>📺 Daily Ads (21 total):</strong> Up to 0.0005 USDT per ad<br>
                         <strong>📹 Video Watching:</strong> Earn for every 15 seconds<br>
                         <strong>✅ Payment Methods:</strong> Binance / Bkash / Nagad
                     </p>
@@ -456,33 +507,43 @@
             </div>
         </div>
 
-        <!-- History Modal (UPDATE 4)-->
+        <!-- History Modal -->
         <div class="modal-overlay" id="historyModal">
-            <div class="modal-content">
+            <div class="modal-content" style="max-width: 95%; padding: 15px;"> <!-- Adjusted padding for fullscreen feel -->
                 <button class="close-modal-btn" data-modal-id="historyModal"><i class="fa-solid fa-times"></i></button>
-                <h3>Transaction History</h3>
-                <div class="history-section" style="margin-top: 15px; text-align: left;">
-                    <div id="modal-history-list" class="history-list" style="max-height: 400px; overflow-y: auto;">
-                        <p style="color: var(--text-secondary); text-align: center;">Loading...</p>
+                <h3 style="margin-top: 20px;">Transaction History</h3>
+
+                <div class="history-section" style="margin-top: 15px;">
+                    <h4 style="color: var(--text-light); margin-bottom: 10px;">Withdrawals</h4>
+                    <div id="modal-withdrawal-history" class="history-list" style="max-height: 200px;">
+                        <p style="color: var(--text-secondary); text-align: center;">Loading withdrawals...</p>
+                    </div>
+                </div>
+
+                <div class="history-section" style="margin-top: 20px;">
+                    <h4 style="color: var(--text-light); margin-bottom: 10px;">Referrals</h4>
+                    <div id="modal-referral-history" class="history-list" style="max-height: 200px;">
+                        <p style="color: var(--text-secondary); text-align: center;">Loading referrals...</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- UPDATE 1: Welcome Popup Modal Updated -->
+        <!-- UPDATE 3: Welcome Popup Modal -->
         <div class="modal-overlay" id="welcomeModal">
             <div class="modal-content">
                 <button class="close-modal-btn" data-modal-id="welcomeModal"><i class="fa-solid fa-times"></i></button>
-                <h3>Assalamualaikum, Dear User!</h3>
-                <p style="text-align: left; line-height: 1.6;">
-                    Welcome! This bot guarantees 100% payment. Although the earnings might seem small, you can be assured of receiving your withdrawals.
-                    <br><br>
-                    For any promotions, sponsorships, or withdrawal issues, please contact the admin directly for 24/7 support.
+                <h3 style="margin-bottom: 10px; color: var(--accent-gold); font-size: 1.4rem;">👋 Assalamualaikum dear users!</h3>
+                <p style="font-weight: 500; font-size: 1rem; color: var(--text-light);">
+                    Welcome to Chili Powder Mini App 💥<br>
+                    💯 100% real payment guaranteed!<br>
+                    💬 For support, promo, or withdraw help — message the admin directly.<br>
+                    💸 Your income may be a bit lower, but payment is always sure!
                 </p>
                 <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
                     <a href="https://t.me/Chili_powder_Payment" target="_blank" class="btn" style="text-decoration: none;"><i class="fa-brands fa-telegram"></i> Payment Channel</a>
                     <a href="https://t.me/chili_powder_USDT" target="_blank" class="btn" style="text-decoration: none; background: var(--bg-element); border: 1px solid var(--primary-red);"><i class="fa-brands fa-telegram"></i> Official Channel</a>
-                    <a href="https://t.me/newtube12_admin" target="_blank" class="btn" style="text-decoration: none; background: var(--accent-gold); color: var(--bg-dark);"><i class="fa-solid fa-headset"></i> Admin Support</a>
+                    <a href="https://t.me/newtube12_admin" target="_blank" class="btn" style="text-decoration: none; background: #2AABEE;"><i class="fa-solid fa-headset"></i> Admin Support</a>
                 </div>
             </div>
         </div>
@@ -491,7 +552,6 @@
 
     <!-- VIEW 2: ADMIN PANEL -->
     <div id="admin-panel-container">
-        <!-- Admin Panel HTML remains unchanged -->
         <div class="container">
             <header><h1>🌶️ Chili Powder Admin Panel</h1></header>
             <div class="dashboard-stats">
@@ -549,7 +609,7 @@
         // --- 1. FIREBASE INITIALIZATION ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot, updateDoc, increment, collection, addDoc, serverTimestamp, getDocs, query, where, Timestamp, deleteDoc, runTransaction, orderBy } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, updateDoc, increment, collection, addDoc, serverTimestamp, getDocs, query, where, Timestamp, deleteDoc, runTransaction, orderBy } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCfjRTpRGg4l1yK6QmbeAfI54LD9ogXjW0",
@@ -564,13 +624,6 @@
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
-        
-        // --- Adexium Widget Initialization (UPDATE 3) ---
-        let adexiumWidget;
-        document.addEventListener('DOMContentLoaded', () => {
-            adexiumWidget = new AdexiumWidget({wid: '05daa7ac-1883-42ff-b06d-92d100eba96f', adFormat: 'interstitial'});
-        });
-
 
         // --- 2. VIEW ROUTER ---
         document.addEventListener('DOMContentLoaded', () => {
@@ -590,6 +643,7 @@
             tg.ready();
             tg.expand();
             
+            // UPDATE 1: Show welcome popup on first session visit
             if (!sessionStorage.getItem('welcomeShown')) {
                 document.getElementById('welcomeModal').classList.add('active');
                 sessionStorage.setItem('welcomeShown', 'true');
@@ -608,10 +662,13 @@
             let ytPlayer;
             let watchTimeInterval;
             let sessionWatchTime = 0;
-            const AD_INTERVAL_SECONDS = 300; 
+            let adCheckCounter = 0; 
+            const AD_INTERVAL_SECONDS = 300; // 5 minutes
 
+            // Initial state for withdraw page
             document.getElementById('submitWithdrawalBtn').disabled = true;
 
+            // --- EARNINGS LOGIC ---
             async function addEarnings(amount) {
                 await updateDoc(userRef, {
                     balance: increment(amount),
@@ -624,10 +681,11 @@
                     userData = docSnap.data();
                     const today = new Date().toISOString().split('T')[0];
                     if (userData.lastAdWatchDate !== today) {
+                        // UPDATE 2: Add adextraAdsWatchedToday to the daily reset
                         await updateDoc(userRef, { 
                             monetagAdsWatchedToday: 0, 
                             gigaAdsWatchedToday: 0, 
-                            mixedAdsWatchedToday: 0, 
+                            adextraAdsWatchedToday: 0, 
                             lastAdWatchDate: today, 
                             lastLogin: serverTimestamp() 
                         });
@@ -637,7 +695,7 @@
                     const newUserData = {
                         userId: currentUser.id, firstName: currentUser.first_name, userName: currentUser.username || 'N/A',
                         balance: 0, referrals: 0, totalEarned: 0,
-                        monetagAdsWatchedToday: 0, gigaAdsWatchedToday: 0, mixedAdsWatchedToday: 0,
+                        monetagAdsWatchedToday: 0, gigaAdsWatchedToday: 0, adextraAdsWatchedToday: 0, // UPDATE 2
                         lastAdWatchDate: new Date().toISOString().split('T')[0],
                         joinDate: serverTimestamp(), lastLogin: serverTimestamp(),
                         totalWatchTimeSeconds: 0, lootBoxBalance: 0,
@@ -676,7 +734,7 @@
                 }
             });
             
-            renderCombinedHistory(String(currentUser.id), 'withdrawal-history-list');
+            // Initial loads for history and tasks
             loadAndDisplayTasks();
             loadAndDisplayVideos();
 
@@ -685,28 +743,32 @@
                 document.getElementById('userAvatar').textContent = data.firstName.charAt(0).toUpperCase();
                 document.getElementById('userBalance').textContent = (data.balance || 0).toFixed(4);
                 
+                // UPDATE 2: Update watched counts from all 3 sources
                 const monetagWatched = data.monetagAdsWatchedToday || 0;
                 const gigaWatched = data.gigaAdsWatchedToday || 0;
-                const mixedWatched = data.mixedAdsWatchedToday || 0;
-                document.getElementById('adsWatchedCount').textContent = `${monetagWatched + gigaWatched + mixedWatched} / 25`;
+                const adextraWatched = data.adextraAdsWatchedToday || 0;
+                document.getElementById('adsWatchedCount').textContent = `${monetagWatched + gigaWatched + adextraWatched} / 21`;
                 
                 document.getElementById('referralCount').textContent = data.referrals || 0;
                 document.getElementById('referralLink').textContent = `https://t.me/Chili_powder_Bot/Chilipowder?startapp=${currentUser.id}`;
 
+                // UPDATE 2: Update Monetag button UI
                 const monetagButton = document.getElementById('watchMonetagAdButton');
-                monetagButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${5 - monetagWatched} Times`;
-                monetagButton.disabled = monetagWatched >= 5;
-                if (monetagWatched >= 5) monetagButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
+                monetagButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${6 - monetagWatched} Times`;
+                monetagButton.disabled = monetagWatched >= 6;
+                if (monetagWatched >= 6) monetagButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
 
+                // UPDATE 2: Update Giga button UI
                 const gigaButton = document.getElementById('watchGigaAdButton');
                 gigaButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${5 - gigaWatched} Times`;
                 gigaButton.disabled = gigaWatched >= 5;
                 if (gigaWatched >= 5) gigaButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
 
-                const mixedAdButton = document.getElementById('watchMixedAdButton');
-                mixedAdButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${15 - mixedWatched} Times`;
-                mixedAdButton.disabled = mixedWatched >= 15;
-                if (mixedWatched >= 15) mixedAdButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
+                // UPDATE 2: Update Adextra button UI
+                const adextraButton = document.getElementById('watchAdextraAdButton');
+                adextraButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${10 - adextraWatched} Times`;
+                adextraButton.disabled = adextraWatched >= 10;
+                if (adextraWatched >= 10) adextraButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
 
                 const lootBalance = data.lootBoxBalance || 0;
                 document.getElementById('lootBoxAmount').textContent = lootBalance.toFixed(4);
@@ -715,10 +777,11 @@
                 claimLootBtn.textContent = lootBalance >= 0.05 ? 'Claim Now!' : 'Claim';
             }
             
-            // --- Ad Handlers (UPDATE 3) ---
+            // --- Ad Handlers ---
             async function handleMonetagAdWatch() {
                 const button = document.getElementById('watchMonetagAdButton');
-                if ((userData.monetagAdsWatchedToday || 0) >= 5) return tg.showAlert(`You have watched all Monetag ads for today.`);
+                // UPDATE 2: Limit changed to 6
+                if ((userData.monetagAdsWatchedToday || 0) >= 6) return tg.showAlert(`You have watched all Monetag ads for today.`);
                 button.disabled = true;
                 const adTimerModal = document.getElementById('adTimerModal');
                 const countdownEl = document.getElementById('countdown-timer');
@@ -734,6 +797,7 @@
                     await (typeof show_9858506 === 'function' ? show_9858506() : Promise.reject('Monetag SDK not loaded'));
                     if (countdown <= 0) {
                         await updateDoc(userRef, { monetagAdsWatchedToday: increment(1) });
+                        // UPDATE 2: Reward changed to 0.0005
                         await addEarnings(0.0005);
                         tg.HapticFeedback.notificationOccurred('success');
                         tg.showAlert('Congratulations! 0.0005 USDT has been added.');
@@ -751,37 +815,36 @@
 
             async function handleGigaAdWatch() {
                 const button = document.getElementById('watchGigaAdButton');
+                // UPDATE 2: Limit changed to 5
                 if ((userData.gigaAdsWatchedToday || 0) >= 5) return tg.showAlert(`You have watched all Giga Pub ads for today.`);
                 button.disabled = true;
                 try {
                     await (typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.reject('GigaPub SDK not loaded'));
                     await updateDoc(userRef, { gigaAdsWatchedToday: increment(1) });
-                    await addEarnings(0.0005);
+                    // UPDATE 2: Reward changed to 0.0004
+                    await addEarnings(0.0004);
                     tg.HapticFeedback.notificationOccurred('success');
-                    tg.showAlert('Congratulations! 0.0005 USDT has been added.');
+                    tg.showAlert('Congratulations! 0.0004 USDT has been added.');
                 } catch (error) { tg.showAlert('Ad could not be loaded. Please try again.');
                 } finally {
                     button.disabled = false;
                 }
             }
-            
-            async function handleMixedAdWatch() {
-                const button = document.getElementById('watchMixedAdButton');
-                if ((userData.mixedAdsWatchedToday || 0) >= 15) return tg.showAlert(`You have watched all mixed ads for today.`);
+
+            // UPDATE 2: New handler for Adextra/Mixed ads
+            async function handleAdextraAdWatch() {
+                const button = document.getElementById('watchAdextraAdButton');
+                if ((userData.adextraAdsWatchedToday || 0) >= 10) return tg.showAlert(`You have watched all mixed ads for today.`);
                 button.disabled = true;
 
                 const adChoice = Math.random();
                 let success = false;
 
                 try {
-                    if (adChoice < 0.33) {
+                    if (adChoice < 0.5) { // 50% for Monetag
                         await (typeof show_9858506 === 'function' ? show_9858506() : Promise.reject('Monetag SDK not loaded'));
-                    } else if (adChoice < 0.67) {
+                    } else { // 50% for Giga
                         await (typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.reject('GigaPub SDK not loaded'));
-                    } else {
-                         if (adexiumWidget && typeof adexiumWidget.show === 'function') {
-                            adexiumWidget.show();
-                         } else { throw 'Adexium SDK not ready'; }
                     }
                     success = true;
                 } catch (error) {
@@ -789,84 +852,108 @@
                 }
 
                 if (success) {
-                    await updateDoc(userRef, { mixedAdsWatchedToday: increment(1) });
-                    await addEarnings(0.0005);
+                    await updateDoc(userRef, { adextraAdsWatchedToday: increment(1) });
+                    await addEarnings(0.0003);
                     tg.HapticFeedback.notificationOccurred('success');
-                    tg.showAlert('Congratulations! 0.0005 USDT has been added.');
+                    tg.showAlert('Congratulations! 0.0003 USDT has been added.');
                 }
                 button.disabled = false;
             }
 
-            // --- History Logic (UPDATE 4) ---
-            async function renderCombinedHistory(userId, containerId) {
-                const container = document.getElementById(containerId);
-                if (!container) return;
-                container.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading history...</p>`;
-
-                try {
-                    const withdrawalsQuery = query(collection(db, "withdrawals"), where("userId", "==", userId));
-                    const referralsQuery = query(collection(db, "users"), where("referredBy", "==", userId));
-
-                    const [withdrawalsSnap, referralsSnap] = await Promise.all([getDocs(withdrawalsQuery), getDocs(referralsQuery)]);
-
-                    const withdrawalItems = withdrawalsSnap.docs.map(doc => {
-                        const data = doc.data();
-                        return { timestamp: data.requestTimestamp, type: 'withdrawal', title: `Withdrawal`, details: `via ${data.method}`, amount: -data.amount, status: data.status };
-                    });
-
-                    const referralItems = referralsSnap.docs.map(doc => {
-                        const data = doc.data();
-                        return { timestamp: data.joinDate, type: 'referral', title: 'Commission', details: `From user ${data.userId}`, amount: 0.006, status: 'completed' };
-                    });
-                    
-                    const allItems = [...withdrawalItems, ...referralItems].filter(item => item.timestamp);
-                    allItems.sort((a, b) => b.timestamp.toMillis() - a.timestamp.toMillis());
-
-                    if (allItems.length === 0) {
-                        container.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">No history found.</p>`;
+            // --- History Logic (UPDATE 3) ---
+            async function loadWithdrawalHistoryModal(userId) {
+                const historyListEl = document.getElementById('modal-withdrawal-history');
+                historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading withdrawals...</p>`;
+                const q = query(collection(db, "withdrawals"), where("userId", "==", userId), orderBy("requestTimestamp", "desc"));
+                
+                onSnapshot(q, (snapshot) => {
+                    if (snapshot.empty) {
+                        historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">No withdrawal history found.</p>`;
                         return;
                     }
 
-                    container.innerHTML = '';
-                    let lastDate = '';
-
-                    allItems.forEach(item => {
-                        const itemDate = item.timestamp.toDate();
-                        const dateStr = itemDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-
-                        if (dateStr !== lastDate) {
-                            const dateHeader = document.createElement('h4');
-                            dateHeader.textContent = dateStr;
-                            container.appendChild(dateHeader);
-                            lastDate = dateStr;
+                    // Group by date
+                    const groupedHistory = {};
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        const dateKey = data.requestTimestamp?.toDate()?.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) || 'N/A';
+                        if (!groupedHistory[dateKey]) {
+                            groupedHistory[dateKey] = [];
                         }
-                        
-                        const itemEl = document.createElement('div');
-                        itemEl.className = 'history-item';
-                        
-                        const amountSign = item.amount > 0 ? '+' : '';
-                        const amountColor = item.amount > 0 ? 'var(--success-color)' : 'var(--text-light)';
-
-                        itemEl.innerHTML = `
-                            <div class="history-item-info">
-                                <div class="title">${item.title}</div>
-                                <div class="details">${item.details}</div>
-                            </div>
-                            <div class="history-item-right">
-                                <span class="amount" style="color: ${amountColor};">
-                                    ${amountSign} $${Math.abs(item.amount).toFixed(4)}
-                                </span>
-                                <span class="currency" style="color: ${amountColor};">USDT</span>
-                                <span class="history-item-status ${item.status}">${item.status}</span>
-                            </div>
-                        `;
-                        container.appendChild(itemEl);
+                        groupedHistory[dateKey].push({ id: doc.id, ...data });
                     });
 
-                } catch (error) {
-                    console.error("Error loading combined history:", error);
+                    let historyHtml = '';
+                    for (const date in groupedHistory) {
+                        historyHtml += `<div class="history-date">${date}</div>`;
+                        groupedHistory[date].forEach(item => {
+                            historyHtml += `
+                                <div class="history-entry ${item.status}">
+                                    <div class="left-info">
+                                        <div class="main-text">Withdrawal Request</div>
+                                        <div class="sub-text">${item.method} - Acc: ${item.accountNumber}</div>
+                                    </div>
+                                    <div class="right-info">
+                                        <div class="amount-value withdrawal">- ${item.amount.toFixed(4)} USDT</div>
+                                        <div class="status-label ${item.status}">${item.status}</div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                    historyListEl.innerHTML = historyHtml;
+                }, (error) => {
+                    console.error("Error loading withdrawal history:", error);
+                    historyListEl.innerHTML = `<p style="color: var(--error-color); text-align: center;">Could not load history.</p>`;
+                });
+            }
+
+            async function loadReferralHistoryModal(userId) {
+                const container = document.getElementById('modal-referral-history');
+                container.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading referrals...</p>`;
+                const q = query(collection(db, "users"), where("referredBy", "==", userId), orderBy("joinDate", "desc"));
+                
+                onSnapshot(q, (querySnapshot) => {
+                    if (querySnapshot.empty) {
+                        container.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">You have not referred anyone yet.</p>';
+                        return;
+                    }
+
+                    const groupedHistory = {};
+                    querySnapshot.forEach(doc => {
+                        const referredUser = doc.data();
+                        const dateKey = referredUser.joinDate?.toDate()?.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) || 'N/A';
+                        if (!groupedHistory[dateKey]) {
+                            groupedHistory[dateKey] = [];
+                        }
+                        groupedHistory[dateKey].push({ id: doc.id, ...referredUser });
+                    });
+
+                    let historyHtml = '';
+                    for (const date in groupedHistory) {
+                        historyHtml += `<div class="history-date">${date}</div>`;
+                        groupedHistory[date].forEach(referredUser => {
+                            const status = referredUser.referralStatus === 'completed' ? 'Completed' : 'Pending';
+                            const statusClass = referredUser.referralStatus; // This would typically be 'completed' if the referrer was rewarded
+                            historyHtml += `
+                                <div class="history-entry completed"> <!-- Assume referral reward is completed for this display -->
+                                    <div class="left-info">
+                                        <div class="main-text">Commission from user</div>
+                                        <div class="sub-text">${referredUser.userId}</div>
+                                    </div>
+                                    <div class="right-info">
+                                        <div class="amount-value">+0.006 USDT</div>
+                                        <div class="status-label completed">Completed</div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                    container.innerHTML = historyHtml;
+                }, (error) => {
+                    console.error("Error loading referral history:", error);
                     container.innerHTML = `<p style="color: var(--error-color); text-align: center;">Could not load history.</p>`;
-                }
+                });
             }
 
             // --- Withdraw Logic ---
@@ -930,7 +1017,7 @@
                 }
             });
 
-            // --- Task Logic (Unchanged) ---
+            // --- UPDATE 1: Rewritten Task Logic ---
             async function loadAndDisplayTasks() {
                 const taskListEl = document.getElementById('dynamic-task-list');
                 const completedRef = collection(db, "users", String(currentUser.id), "completedTasks");
@@ -1016,7 +1103,12 @@
                     await addEarnings(reward);
                     
                     item.classList.add('completed');
-                    item.innerHTML = `<div class="task-card-info"><div class="title"><i class="fa-solid fa-check-circle"></i> Task Completed!</div><div class="reward">+${(reward || 0).toFixed(4)} USDT Added</div></div>`;
+                    item.innerHTML = `
+                        <div class="task-card-info">
+                            <div class="title"><i class="fa-solid fa-check-circle"></i> Task Completed!</div>
+                            <div class="reward">+${(reward || 0).toFixed(4)} USDT Added</div>
+                        </div>
+                    `;
                     tg.HapticFeedback.notificationOccurred('success');
                 } catch (error) {
                     console.error("Task claim error:", error);
@@ -1025,23 +1117,161 @@
                 }
             }
             
-            const createTaskModal = document.getElementById('createTaskModal'), taskStep1 = document.getElementById('task-step-1'), taskStep2 = document.getElementById('task-step-2'); let selectedPackage = {};
-            document.getElementById('showCreateTaskModalBtn').addEventListener('click', () => { taskStep1.style.display = 'block'; taskStep2.style.display = 'none'; createTaskModal.classList.add('active'); });
-            document.getElementById('backToPackagesBtn').addEventListener('click', () => { taskStep1.style.display = 'block'; taskStep2.style.display = 'none'; });
-            document.querySelectorAll('#task-step-1 .buy-task-box').forEach(box => { box.addEventListener('click', () => { selectedPackage = { qty: parseInt(box.dataset.qty), price: parseFloat(box.dataset.price) }; document.getElementById('selected-package-info').textContent = `Package: ${selectedPackage.qty} Tasks for ${selectedPackage.price} USDT`; taskStep1.style.display = 'none'; taskStep2.style.display = 'block'; }); });
-            document.getElementById('user-create-task-form').addEventListener('submit', async (e) => { e.preventDefault(); const form = e.target, title = form['user-task-title'].value, link = form['user-task-link'].value, price = selectedPackage.price; if ((userData.balance || 0) < price) return tg.showAlert(`Insufficient balance. You need ${price} USDT to buy this package.`); const submitBtn = form.querySelector('button[type="submit"]'); submitBtn.disabled = true; submitBtn.textContent = 'Processing...'; try { await runTransaction(db, async (transaction) => { const userDoc = await transaction.get(userRef); const currentBalance = userDoc.data().balance; if (currentBalance < price) throw "Insufficient balance."; transaction.update(userRef, { balance: increment(-price) }); const newTaskRef = doc(collection(db, "userTasks")); transaction.set(newTaskRef, { creatorId: String(currentUser.id), title, link, totalQuantity: selectedPackage.qty, remainingQuantity: selectedPackage.qty, createdAt: serverTimestamp() }); }); tg.showAlert('Task created successfully!'); createTaskModal.classList.remove('active'); form.reset(); } catch (error) { tg.showAlert(`Error: ${error.message || error}`); } finally { submitBtn.disabled = false; submitBtn.textContent = 'Confirm & Pay'; } });
+            const createTaskModal = document.getElementById('createTaskModal');
+            const taskStep1 = document.getElementById('task-step-1');
+            const taskStep2 = document.getElementById('task-step-2');
+            let selectedPackage = {};
 
-            // --- Video Logic (Unchanged) ---
-            async function loadAndDisplayVideos() { const videosRef = collection(db, "videos"), videoListContainer = document.getElementById('video-list-container'); onSnapshot(query(videosRef, orderBy("createdAt", "desc")), (snapshot) => { videoListContainer.innerHTML = snapshot.empty ? '<p style="color: var(--text-secondary); text-align: center;">No videos available.</p>' : ''; snapshot.forEach(doc => { const video = doc.data(), videoId = getYouTubeID(video.ytUrl); if (!videoId) return; const videoCard = document.createElement('div'); videoCard.className = 'video-card'; videoCard.dataset.videoId = videoId; videoCard.innerHTML = `<img src="${video.thumbUrl}" alt="${video.title}"><p>${video.title}</p>`; videoCard.addEventListener('click', () => openVideoPlayer(videoId)); videoListContainer.appendChild(videoCard); }); }); }
-            function getYouTubeID(url) { const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/; const match = url.match(regExp); return (match && match[2].length === 11) ? match[2] : null; }
-            function openVideoPlayer(videoId) { document.getElementById('videoPlayerModal').classList.add('active'); document.getElementById('videoPlayerContainer').innerHTML = '<div id="player"></div>'; ytPlayer = new YT.Player('player', { height: '100%', width: '100%', videoId, playerVars: { 'playsinline': 1, 'controls': 1, 'autoplay': 1 }, events: { 'onStateChange': onPlayerStateChange } }); }
-            function onPlayerStateChange(event) { if (event.data == YT.PlayerState.PLAYING) startWatchTimeTracker(); else stopWatchTimeTracker(); }
-            function startWatchTimeTracker() { if (watchTimeInterval) clearInterval(watchTimeInterval); watchTimeInterval = setInterval(() => { sessionWatchTime++; if (sessionWatchTime > 0 && sessionWatchTime % AD_INTERVAL_SECONDS === 0) triggerInVideoAd(); }, 1000); }
+            document.getElementById('showCreateTaskModalBtn').addEventListener('click', () => {
+                taskStep1.style.display = 'block';
+                taskStep2.style.display = 'none';
+                createTaskModal.classList.add('active');
+            });
+
+            document.getElementById('backToPackagesBtn').addEventListener('click', () => {
+                taskStep1.style.display = 'block';
+                taskStep2.style.display = 'none';
+            });
+            
+            document.querySelectorAll('#task-step-1 .buy-task-box').forEach(box => {
+                box.addEventListener('click', () => {
+                    selectedPackage = { qty: parseInt(box.dataset.qty), price: parseFloat(box.dataset.price) };
+                    document.getElementById('selected-package-info').textContent = `Package: ${selectedPackage.qty} Tasks for ${selectedPackage.price} USDT`;
+                    taskStep1.style.display = 'none';
+                    taskStep2.style.display = 'block';
+                });
+            });
+
+            document.getElementById('user-create-task-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const form = e.target;
+                const title = form['user-task-title'].value;
+                const link = form['user-task-link'].value;
+                const price = selectedPackage.price;
+
+                if ((userData.balance || 0) < price) {
+                    return tg.showAlert(`Insufficient balance. You need ${price} USDT to buy this package.`);
+                }
+                
+                const submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Processing...';
+
+                try {
+                    await runTransaction(db, async (transaction) => {
+                        const userDoc = await transaction.get(userRef);
+                        const currentBalance = userDoc.data().balance;
+                        if (currentBalance < price) throw "Insufficient balance.";
+
+                        transaction.update(userRef, { balance: increment(-price) });
+                        
+                        const newTaskRef = doc(collection(db, "userTasks"));
+                        transaction.set(newTaskRef, {
+                            creatorId: String(currentUser.id),
+                            title: title, link: link,
+                            totalQuantity: selectedPackage.qty,
+                            remainingQuantity: selectedPackage.qty,
+                            createdAt: serverTimestamp()
+                        });
+                    });
+                    tg.showAlert('Task created successfully! It is now live for other users.');
+                    createTaskModal.classList.remove('active');
+                    form.reset();
+                } catch (error) {
+                    tg.showAlert(`Error: ${error.message || error}`);
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Confirm & Pay';
+                }
+            });
+
+            // --- VIDEO AND IN-VIDEO AD LOGIC ---
+            async function loadAndDisplayVideos() {
+                const videosRef = collection(db, "videos");
+                const videoListContainer = document.getElementById('video-list-container');
+                onSnapshot(query(videosRef, orderBy("createdAt", "desc")), (snapshot) => {
+                    videoListContainer.innerHTML = snapshot.empty ? '<p style="color: var(--text-secondary); text-align: center;">No videos available.</p>' : '';
+                    snapshot.forEach(doc => {
+                        const video = doc.data();
+                        const videoId = getYouTubeID(video.ytUrl);
+                        if (!videoId) return;
+                        const videoCard = document.createElement('div');
+                        videoCard.className = 'video-card';
+                        videoCard.dataset.videoId = videoId;
+                        videoCard.innerHTML = `<img src="${video.thumbUrl}" alt="${video.title}"><p>${video.title}</p>`;
+                        videoCard.addEventListener('click', () => openVideoPlayer(videoId));
+                        videoListContainer.appendChild(videoCard);
+                    });
+                });
+            }
+
+            function getYouTubeID(url) {
+                const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+                const match = url.match(regExp);
+                return (match && match[2].length === 11) ? match[2] : null;
+            }
+
+            function openVideoPlayer(videoId) {
+                document.getElementById('videoPlayerModal').classList.add('active');
+                document.getElementById('videoPlayerContainer').innerHTML = '<div id="player"></div>';
+                ytPlayer = new YT.Player('player', {
+                    height: '100%', width: '100%', videoId: videoId,
+                    playerVars: { 'playsinline': 1, 'controls': 1, 'autoplay': 1 },
+                    events: { 'onStateChange': onPlayerStateChange }
+                });
+            }
+            function onPlayerStateChange(event) {
+                if (event.data == YT.PlayerState.PLAYING) startWatchTimeTracker();
+                else stopWatchTimeTracker();
+            }
+            function startWatchTimeTracker() {
+                if (watchTimeInterval) clearInterval(watchTimeInterval);
+                watchTimeInterval = setInterval(() => {
+                    sessionWatchTime++;
+                    if (sessionWatchTime > 0 && sessionWatchTime % AD_INTERVAL_SECONDS === 0) triggerInVideoAd();
+                }, 1000);
+            }
             function stopWatchTimeTracker() { clearInterval(watchTimeInterval); }
-            async function triggerInVideoAd() { if (ytPlayer?.pauseVideo) ytPlayer.pauseVideo(); try { if (Math.random() < 0.5) { await (typeof show_9858506 === 'function' ? show_9858506() : Promise.resolve()); } else { await (typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.resolve()); } } catch (error) { console.error("In-video ad failed:", error); } finally { if (ytPlayer?.playVideo) ytPlayer.playVideo(); } }
-            document.getElementById('closeVideoBtn').addEventListener('click', () => { stopWatchTimeTracker(); if (ytPlayer?.destroy) ytPlayer.destroy(); document.getElementById('videoPlayerModal').classList.remove('active'); if (sessionWatchTime > 0) { updateWatchTimeInFirebase(sessionWatchTime); sessionWatchTime = 0; } });
-            async function updateWatchTimeInFirebase(seconds) { const rewardPer15Seconds = 0.00005, earned = (seconds / 15) * rewardPer15Seconds; try { await updateDoc(userRef, { totalWatchTimeSeconds: increment(seconds), lootBoxBalance: increment(earned) }); } catch (error) { console.error("Failed to update watch time:", error); } }
-            document.getElementById('claimLootBoxBtn').addEventListener('click', async () => { const btn = document.getElementById('claimLootBoxBtn'); btn.disabled = true; btn.textContent = 'Claiming...'; try { await runTransaction(db, async (transaction) => { const userDoc = await transaction.get(userRef); const currentLootBalance = userDoc.data().lootBoxBalance || 0; if (!userDoc.exists() || currentLootBalance < 0.05) { throw "Insufficient loot box balance."; } transaction.update(userRef, { balance: increment(currentLootBalance), lootBoxBalance: 0 }); }); tg.showAlert('Congratulations! Loot box reward has been added to your main balance.'); } catch (error) { tg.showAlert('Could not claim reward. Please try again.'); } });
+            async function triggerInVideoAd() {
+                if (ytPlayer?.pauseVideo) ytPlayer.pauseVideo();
+                try {
+                    if (adCheckCounter % 2 === 0) { await (typeof show_9858506 === 'function' ? show_9858506() : Promise.resolve()); } 
+                    else { await (typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.resolve()); }
+                } catch (error) { console.error("In-video ad failed:", error); } 
+                finally { adCheckCounter++; if (ytPlayer?.playVideo) ytPlayer.playVideo(); }
+            }
+            document.getElementById('closeVideoBtn').addEventListener('click', () => {
+                stopWatchTimeTracker();
+                if (ytPlayer?.destroy) ytPlayer.destroy();
+                document.getElementById('videoPlayerModal').classList.remove('active');
+                if (sessionWatchTime > 0) { updateWatchTimeInFirebase(sessionWatchTime); sessionWatchTime = 0; }
+            });
+
+            async function updateWatchTimeInFirebase(seconds) {
+                const rewardPer15Seconds = 0.00005;
+                const earned = (seconds / 15) * rewardPer15Seconds;
+                try {
+                    await updateDoc(userRef, {
+                        totalWatchTimeSeconds: increment(seconds),
+                        lootBoxBalance: increment(earned)
+                    });
+                } catch (error) { console.error("Failed to update watch time:", error); }
+            }
+            
+            document.getElementById('claimLootBoxBtn').addEventListener('click', async () => {
+                const btn = document.getElementById('claimLootBoxBtn');
+                btn.disabled = true;
+                btn.textContent = 'Claiming...';
+                try {
+                    await runTransaction(db, async (transaction) => {
+                        const userDoc = await transaction.get(userRef);
+                        const currentLootBalance = userDoc.data().lootBoxBalance || 0;
+                        if (!userDoc.exists() || currentLootBalance < 0.05) { throw "Insufficient loot box balance."; }
+                        transaction.update(userRef, { balance: increment(currentLootBalance), lootBoxBalance: 0 });
+                    });
+                    tg.showAlert('Congratulations! Loot box reward has been added to your main balance.');
+                } catch (error) { tg.showAlert('Could not claim reward. Please try again.'); }
+            });
 
             // --- General Event Listeners ---
             document.querySelectorAll('.nav-item').forEach(item => {
@@ -1060,13 +1290,15 @@
             });
             document.getElementById('watchMonetagAdButton').addEventListener('click', handleMonetagAdWatch);
             document.getElementById('watchGigaAdButton').addEventListener('click', handleGigaAdWatch);
-            document.getElementById('watchMixedAdButton').addEventListener('click', handleMixedAdWatch);
+            document.getElementById('watchAdextraAdButton').addEventListener('click', handleAdextraAdWatch); // UPDATE 2
             document.querySelector('.btn-copy').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('referralLink').textContent).then(() => tg.showAlert('Referral link copied!')); });
             document.querySelector('.btn-share').addEventListener('click', () => { tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(document.getElementById('referralLink').textContent)}`); });
             
+            // UPDATE 3: History button now loads both withdrawal and referral histories in the modal
             document.getElementById('historyBtn').addEventListener('click', () => {
                 document.getElementById('historyModal').classList.add('active');
-                renderCombinedHistory(String(currentUser.id), 'modal-history-list');
+                loadWithdrawalHistoryModal(String(currentUser.id));
+                loadReferralHistoryModal(String(currentUser.id));
             });
 
             document.querySelectorAll('.close-modal-btn').forEach(btn => {
