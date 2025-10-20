@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,7 +74,7 @@
         .referral-link-box { background-color: var(--bg-surface); border: 1px dashed var(--border-color); padding: 12px; border-radius: 8px; word-wrap: break-word; text-align: left; margin-bottom: 20px; font-size: 0.9rem; color: var(--text-light); }
         .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; color: var(--text-light); background: linear-gradient(45deg, var(--primary-red-darker), var(--primary-red)); }
         .btn:disabled { background: var(--border-color); color: var(--text-secondary); cursor: not-allowed; filter: none; transform: none; }
-        .task-list .task-item { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid transparent; transition: all 0.3s ease; }
+        .task-list .task-item { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border-color); text-decoration: none; color: var(--text-light); border-left: 5px solid transparent; transition: all 0.3s ease; }
         .task-item .task-text { display: flex; align-items: center; gap: 10px; flex-grow: 1; }
         .task-item i { color: var(--accent-gold); }
         
@@ -90,7 +88,7 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            justify-content: space-between; /* UPDATE 2: This helps align items */
+            justify-content: space-between;
             gap: 10px;
             transition: all 0.3s ease;
         }
@@ -102,12 +100,7 @@
         .task-card-info .title { font-weight: 600; font-size: 1.1rem; margin-bottom: 4px; color: var(--text-light); }
         .task-card-info .reward { font-size: 1rem; font-weight: 700; color: var(--accent-gold); }
         .task-card-info .reward i { margin-right: 5px; }
-        .task-card-actions { 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            margin-left: auto; /* UPDATE 2: Push actions to the right */
-        }
+        .task-card-actions { display: flex; align-items: center; gap: 10px; }
         .task-card-actions .btn { padding: 8px 20px; min-width: 90px; flex: initial; }
         .task-card-actions .task-timer { font-size: 1.2rem; font-weight: bold; color: var(--accent-gold); min-width: 40px; text-align: center; }
         .task-card.completed {
@@ -166,95 +159,6 @@
         .history-item-status.completed { color: #28a745; background-color: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; }
         .history-item-status.rejected { color: #dc3545; background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; }
         .history-list { max-height: 250px; overflow-y: auto; padding-right: 5px; } /* For scrollbar styling */
-
-        /* UPDATE 3: History Modal Design - Specific Styles */
-        #historyModal .modal-content {
-            padding: 15px; /* Adjust padding for the new design */
-        }
-        #historyModal h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-light); /* Changed to light text for header */
-            background-color: var(--bg-element);
-            padding: 10px;
-            margin: -15px -15px 15px -15px; /* Extend background */
-            border-radius: 15px 15px 0 0;
-            text-align: center;
-        }
-        #historyModal .history-list {
-            max-height: 180px; /* Adjust for more history sections */
-            margin-top: 10px;
-            padding-bottom: 10px;
-        }
-        #historyModal .history-item {
-            background-color: var(--bg-dark); /* Darker background for items */
-            border-radius: 5px; /* Sharper corners */
-            margin-bottom: 8px; /* Less spacing */
-            padding: 10px 15px;
-            border-left: none; /* Remove left border */
-            border: 1px solid var(--border-color); /* Add full border */
-            position: relative;
-            align-items: flex-start; /* Align items to top */
-            flex-direction: column; /* Stack info and status */
-        }
-        #historyModal .history-item:last-child { margin-bottom: 0; }
-
-        #historyModal .history-item-info {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px; /* Space between amount/details and status */
-        }
-        #historyModal .history-item-info .amount {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary-red); /* Highlight amount */
-        }
-        #historyModal .history-item-info .amount i {
-            color: var(--success-color); /* Green for plus icon */
-            margin-right: 5px;
-        }
-        #historyModal .history-item-info .amount.minus i {
-            color: var(--error-color); /* Red for minus icon */
-        }
-        #historyModal .history-item-info .details {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            text-align: right;
-        }
-        #historyModal .history-item-status {
-            position: absolute; /* Position status tag */
-            bottom: 10px;
-            right: 15px;
-            padding: 3px 8px;
-            font-size: 0.75rem;
-            border-radius: 3px;
-        }
-        #historyModal .history-item-status.completed i {
-            margin-right: 4px;
-            animation: checkmark-pop 0.3s ease-out forwards;
-        }
-        #historyModal .history-section h4 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--accent-gold);
-            margin-bottom: 10px;
-            text-align: left;
-        }
-        #historyModal .modal-close-btn-container {
-            padding: 15px 0 0; /* Space for close button */
-            border-top: 1px solid var(--border-color);
-            margin: 15px -15px -15px -15px; /* Extend background */
-            border-radius: 0 0 15px 15px;
-            background-color: var(--bg-element);
-        }
-        #historyModal .modal-close-btn-container .btn {
-            width: calc(100% - 30px);
-            margin: 0 15px;
-            background: var(--primary-red);
-        }
-
 
         /* --- VIDEO SECTION STYLES --- */
         .loot-box-card { background-color: var(--bg-element); padding: 20px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
@@ -502,7 +406,7 @@
                         <strong>馃 Per Valid Referral:</strong> 0.006 USDT<br>
                         <strong>馃摵 Daily Ads (21 total):</strong> Up to 0.0005 USDT per ad<br>
                         <strong>馃摴 Video Watching:</strong> Earn for every 15 seconds<br>
-                        <strong>鉁� Payment Methods:</strong> Binance / Bkash / Nagad
+                        <strong>鉁� Payment Methods:</strong> Binance / Bkash / Nagad
                     </p>
                     <p style="color: var(--error-color); font-weight: bold;">鈿狅笍 Do NOT use a VPN while working.</p>
                  </div>
@@ -574,12 +478,19 @@
         <!-- History Modal -->
         <div class="modal-overlay" id="historyModal">
             <div class="modal-content">
-                <h3>History</h3>
-                <div class="history-list">
-                    <p style="color: var(--text-secondary); text-align: center;">Loading history...</p>
+                <button class="close-modal-btn" data-modal-id="historyModal"><i class="fa-solid fa-times"></i></button>
+                <h3>Transaction History</h3>
+                <div class="history-section" style="margin-top: 15px; text-align: left;">
+                    <h4>Withdrawals</h4>
+                    <div id="modal-withdrawal-history" class="history-list" style="max-height: 150px; overflow-y: auto;">
+                        <p style="color: var(--text-secondary); text-align: center;">Loading...</p>
+                    </div>
                 </div>
-                <div class="modal-close-btn-container">
-                    <button class="btn close-modal-btn" data-modal-id="historyModal">Close</button>
+                <div class="history-section" style="margin-top: 20px; text-align: left;">
+                    <h4>Referrals</h4>
+                    <div id="modal-referral-history" class="history-list" style="max-height: 150px; overflow-y: auto;">
+                        <p style="color: var(--text-secondary); text-align: center;">Loading...</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -588,15 +499,11 @@
         <div class="modal-overlay" id="welcomeModal">
             <div class="modal-content">
                 <button class="close-modal-btn" data-modal-id="welcomeModal"><i class="fa-solid fa-times"></i></button>
-                <h3>馃憢 Assalamualaikum dear users!</h3>
-                <p>Welcome to Chili Powder Mini App 馃挜</p>
-                <p style="color: var(--accent-gold); font-weight: bold;">馃挴 100% real payment guaranteed!</p>
-                <p>馃挰 For support, promo, or withdraw help 鈥� message the admin directly.</p>
-                <p style="color: var(--text-secondary);">馃捀 Your income may be a bit lower, but payment is always sure!</p>
+                <h3>Welcome to Chili Powder!</h3>
+                <p>Please join our official channels to stay updated with news and payment proofs.</p>
                 <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
                     <a href="https://t.me/Chili_powder_Payment" target="_blank" class="btn" style="text-decoration: none;"><i class="fa-brands fa-telegram"></i> Payment Channel</a>
                     <a href="https://t.me/chili_powder_USDT" target="_blank" class="btn" style="text-decoration: none; background: var(--bg-element); border: 1px solid var(--primary-red);"><i class="fa-brands fa-telegram"></i> Official Channel</a>
-                    <a href="https://t.me/newtube12_admin" target="_blank" class="btn" style="text-decoration: none; background: #2AABEE;"><i class="fa-brands fa-telegram"></i> Admin Support</a>
                 </div>
             </div>
         </div>
@@ -606,7 +513,7 @@
     <!-- VIEW 2: ADMIN PANEL -->
     <div id="admin-panel-container">
         <div class="container">
-            <header><h1>馃尪锔� Chili Powder Admin Panel</h1></header>
+            <header><h1>馃尪锔� Chili Powder Admin Panel</h1></header>
             <div class="dashboard-stats">
                 <div class="stat-card"><h3>Total Users</h3><p id="total-users">0</p></div>
                 <div class="stat-card"><h3>Daily Active Users</h3><p id="daily-active-users">0</p></div>
@@ -662,7 +569,7 @@
         // --- 1. FIREBASE INITIALIZATION ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
-        import { getFirestore, doc, setDoc, onSnapshot, updateDoc, increment, collection, addDoc, serverTimestamp, getDocs, query, where, Timestamp, deleteDoc, runTransaction, orderBy } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot, updateDoc, increment, collection, addDoc, serverTimestamp, getDocs, query, where, Timestamp, deleteDoc, runTransaction, orderBy } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCfjRTpRGg4l1yK6QmbeAfI54LD9ogXjW0",
@@ -772,14 +679,6 @@
                                     referrals: increment(1), 
                                     balance: increment(0.006) 
                                 });
-                                // Also log referral earnings for history
-                                const referrerHistoryRef = collection(db, "users", referrerId, "earningsHistory");
-                                transaction.add(referrerHistoryRef, {
-                                    type: 'referral',
-                                    amount: 0.006,
-                                    fromUser: currentUser.id,
-                                    timestamp: serverTimestamp()
-                                });
                                 transaction.set(userRef, newUserData);
                             });
                         } catch (e) {
@@ -860,12 +759,6 @@
                         await updateDoc(userRef, { monetagAdsWatchedToday: increment(1) });
                         // UPDATE 2: Reward changed to 0.0005
                         await addEarnings(0.0005);
-                        // Log ad earnings
-                        await addDoc(collection(db, "users", String(currentUser.id), "earningsHistory"), {
-                            type: 'ad_monetag',
-                            amount: 0.0005,
-                            timestamp: serverTimestamp()
-                        });
                         tg.HapticFeedback.notificationOccurred('success');
                         tg.showAlert('Congratulations! 0.0005 USDT has been added.');
                     } else {
@@ -890,12 +783,6 @@
                     await updateDoc(userRef, { gigaAdsWatchedToday: increment(1) });
                     // UPDATE 2: Reward changed to 0.0004
                     await addEarnings(0.0004);
-                    // Log ad earnings
-                    await addDoc(collection(db, "users", String(currentUser.id), "earningsHistory"), {
-                        type: 'ad_giga',
-                        amount: 0.0004,
-                        timestamp: serverTimestamp()
-                    });
                     tg.HapticFeedback.notificationOccurred('success');
                     tg.showAlert('Congratulations! 0.0004 USDT has been added.');
                 } catch (error) { tg.showAlert('Ad could not be loaded. Please try again.');
@@ -927,12 +814,6 @@
                 if (success) {
                     await updateDoc(userRef, { adextraAdsWatchedToday: increment(1) });
                     await addEarnings(0.0003);
-                    // Log ad earnings
-                    await addDoc(collection(db, "users", String(currentUser.id), "earningsHistory"), {
-                        type: 'ad_extra',
-                        amount: 0.0003,
-                        timestamp: serverTimestamp()
-                    });
                     tg.HapticFeedback.notificationOccurred('success');
                     tg.showAlert('Congratulations! 0.0003 USDT has been added.');
                 }
@@ -951,17 +832,7 @@
                         const date = data.requestTimestamp?.toDate()?.toLocaleDateString('en-GB') || 'N/A';
                         const item = document.createElement('div');
                         item.className = 'history-item';
-                        // UPDATE 3: Modified history item structure for withdrawal history
-                        item.innerHTML = `
-                            <div class="history-item-info">
-                                <div class="amount ${data.status === 'rejected' ? 'minus' : ''}">${data.status === 'completed' ? '<i class="fa-solid fa-plus"></i>' : (data.status === 'pending' ? '' : '<i class="fa-solid fa-minus"></i>')}${data.amount} USDT</div>
-                                <div class="details">${data.method} Withdrawal - ${date}</div>
-                            </div>
-                            <div class="history-item-status ${data.status}">
-                                ${data.status === 'completed' ? '<i class="fa-solid fa-check-circle"></i>' : ''}
-                                ${data.status}
-                            </div>
-                        `;
+                        item.innerHTML = `<div class="history-item-info"><div class="amount">${data.amount} USDT</div><div class="details">${data.method} - ${date}</div></div><div class="history-item-status ${data.status}">${data.status}</div>`;
                         historyListEl.appendChild(item);
                     });
                 }, (error) => {
@@ -970,110 +841,35 @@
                 });
             }
 
-            // UPDATE 3: New function for loading comprehensive history for the modal
-            async function loadComprehensiveHistory(userId) {
-                const historyListEl = document.querySelector('#historyModal .history-list');
-                historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading...</p>`;
-
-                const historyData = [];
-
-                // Load Referral Earnings History
-                const referralEarningsQ = query(collection(db, "users", userId, "earningsHistory"), where("type", "==", "referral"), orderBy("timestamp", "desc"));
-                const referralEarningsSnap = await getDocs(referralEarningsQ);
-                referralEarningsSnap.forEach(doc => {
-                    const data = doc.data();
-                    historyData.push({
-                        date: data.timestamp?.toDate(),
-                        type: 'referral_earn',
-                        amount: data.amount,
-                        details: `Commission from user ${data.fromUser}`,
-                        status: 'completed'
-                    });
-                });
+            async function loadReferralHistory(userId) {
+                const container = document.getElementById('modal-referral-history');
+                container.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading...</p>`;
+                const q = query(collection(db, "users"), where("referredBy", "==", userId));
+                const querySnapshot = await getDocs(q);
                 
-                // Load Ad Earnings History (optional, if you want to show individual ad views)
-                const adEarningsQ = query(collection(db, "users", userId, "earningsHistory"), where("type", "in", ["ad_monetag", "ad_giga", "ad_extra"]), orderBy("timestamp", "desc"));
-                const adEarningsSnap = await getDocs(adEarningsQ);
-                adEarningsSnap.forEach(doc => {
-                    const data = doc.data();
-                    historyData.push({
-                        date: data.timestamp?.toDate(),
-                        type: 'ad_earn',
-                        amount: data.amount,
-                        details: `Ad view (${data.type.replace('ad_', '')})`,
-                        status: 'completed'
-                    });
-                });
-
-                // Load Withdrawal History
-                const withdrawalsQ = query(collection(db, "withdrawals"), where("userId", "==", userId), orderBy("requestTimestamp", "desc"));
-                const withdrawalsSnap = await getDocs(withdrawalsQ);
-                withdrawalsSnap.forEach(doc => {
-                    const data = doc.data();
-                    historyData.push({
-                        date: data.requestTimestamp?.toDate(),
-                        type: 'withdrawal',
-                        amount: data.amount,
-                        details: `${data.method} Withdrawal`,
-                        status: data.status
-                    });
-                });
-
-                historyData.sort((a, b) => b.date - a.date); // Sort by date, newest first
-
-                if (historyData.length === 0) {
-                    historyListEl.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">No transaction history found.</p>';
+                if (querySnapshot.empty) {
+                    container.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">You have not referred anyone yet.</p>';
                     return;
                 }
 
-                historyListEl.innerHTML = ''; // Clear loading message
-
-                let currentDate = '';
-
-                historyData.forEach(entry => {
-                    const entryDate = entry.date?.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) || 'N/A';
-                    if (entryDate !== currentDate) {
-                        const dateHeader = document.createElement('h4');
-                        dateHeader.textContent = entryDate;
-                        dateHeader.style.cssText = 'font-size: 1rem; color: var(--text-secondary); margin: 15px 0 8px 0; text-align: left;';
-                        historyListEl.appendChild(dateHeader);
-                        currentDate = entryDate;
-                    }
+                container.innerHTML = '';
+                querySnapshot.forEach(doc => {
+                    const referredUser = doc.data();
+                    const joinDate = referredUser.joinDate?.toDate()?.toLocaleDateString('en-GB') || 'N/A';
+                    const status = referredUser.referralStatus === 'completed' ? 'Completed' : 'Pending';
+                    const statusClass = referredUser.referralStatus;
 
                     const item = document.createElement('div');
                     item.className = 'history-item';
-
-                    let amountPrefix = '';
-                    let amountClass = '';
-                    if (entry.status === 'completed' && entry.type !== 'withdrawal') {
-                        amountPrefix = '<i class="fa-solid fa-plus"></i>';
-                        amountClass = 'plus';
-                    } else if (entry.status === 'completed' && entry.type === 'withdrawal') {
-                        amountPrefix = '<i class="fa-solid fa-minus"></i>';
-                        amountClass = 'minus';
-                    } else if (entry.status === 'pending' && entry.type === 'withdrawal') {
-                        amountPrefix = ''; // No plus/minus for pending
-                    } else if (entry.status === 'rejected' && entry.type === 'withdrawal') {
-                        amountPrefix = '<i class="fa-solid fa-minus"></i>';
-                        amountClass = 'minus'; // For rejected withdrawal
-                    }
-
                     item.innerHTML = `
                         <div class="history-item-info">
-                            <div class="amount ${amountClass}">
-                                ${amountPrefix} ${entry.amount.toFixed(4)} USDT
-                            </div>
-                            <div class="details">${entry.details}</div>
+                            <div class="amount">${referredUser.firstName}</div>
+                            <div class="details">Joined: ${joinDate}</div>
                         </div>
-                        <div class="history-item-status ${entry.status}">
-                            ${entry.status === 'completed' ? '<i class="fa-solid fa-check-circle"></i> ' : ''}
-                            ${entry.status}
-                        </div>
-                    `;
-                    historyListEl.appendChild(item);
+                        <div class="history-item-status ${statusClass}">${status}</div>`;
+                    container.appendChild(item);
                 });
             }
-
 
             // --- Withdraw Logic ---
             document.querySelectorAll('.withdraw-box').forEach(box => {
@@ -1220,13 +1016,6 @@
                     
                     await setDoc(doc(db, "users", String(currentUser.id), "completedTasks", taskId), { completedAt: serverTimestamp() });
                     await addEarnings(reward);
-                    // Log task earnings
-                    await addDoc(collection(db, "users", String(currentUser.id), "earningsHistory"), {
-                        type: 'task_completion',
-                        amount: reward,
-                        taskId: taskId,
-                        timestamp: serverTimestamp()
-                    });
                     
                     item.classList.add('completed');
                     item.innerHTML = `
@@ -1381,13 +1170,6 @@
                         totalWatchTimeSeconds: increment(seconds),
                         lootBoxBalance: increment(earned)
                     });
-                    // Log loot box earnings
-                    await addDoc(collection(db, "users", String(currentUser.id), "earningsHistory"), {
-                        type: 'video_watch',
-                        amount: earned,
-                        seconds: seconds,
-                        timestamp: serverTimestamp()
-                    });
                 } catch (error) { console.error("Failed to update watch time:", error); }
             }
             
@@ -1401,12 +1183,6 @@
                         const currentLootBalance = userDoc.data().lootBoxBalance || 0;
                         if (!userDoc.exists() || currentLootBalance < 0.05) { throw "Insufficient loot box balance."; }
                         transaction.update(userRef, { balance: increment(currentLootBalance), lootBoxBalance: 0 });
-                        // Log loot box claim as an earning
-                        transaction.add(collection(db, "users", String(currentUser.id), "earningsHistory"), {
-                            type: 'lootbox_claim',
-                            amount: currentLootBalance,
-                            timestamp: serverTimestamp()
-                        });
                     });
                     tg.showAlert('Congratulations! Loot box reward has been added to your main balance.');
                 } catch (error) { tg.showAlert('Could not claim reward. Please try again.'); }
@@ -1435,7 +1211,8 @@
             
             document.getElementById('historyBtn').addEventListener('click', () => {
                 document.getElementById('historyModal').classList.add('active');
-                loadComprehensiveHistory(String(currentUser.id)); // Load comprehensive history for the modal
+                loadWithdrawalHistory(String(currentUser.id), 'modal-withdrawal-history');
+                loadReferralHistory(String(currentUser.id));
             });
 
             document.querySelectorAll('.close-modal-btn').forEach(btn => {
