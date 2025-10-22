@@ -74,7 +74,7 @@
         .referral-link-box { background-color: var(--bg-surface); border: 1px dashed var(--border-color); padding: 12px; border-radius: 8px; word-wrap: break-word; text-align: left; margin-bottom: 20px; font-size: 0.9rem; color: var(--text-light); }
         .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; color: var(--text-light); background: linear-gradient(45deg, var(--primary-red-darker), var(--primary-red)); }
         .btn:disabled { background: var(--border-color); color: var(--text-secondary); cursor: not-allowed; filter: none; transform: none; }
-        .task-list .task-item { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border-color); text-decoration: none; color: var(--text-light); border-left: 5px solid transparent; transition: all 0.3s ease; }
+        .task-list .task-item { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid transparent; transition: all 0.3s ease; }
         .task-item .task-text { display: flex; align-items: center; gap: 10px; flex-grow: 1; }
         .task-item i { color: var(--accent-gold); }
         
@@ -100,7 +100,13 @@
         .task-card-info .title { font-weight: 600; font-size: 1.1rem; margin-bottom: 4px; color: var(--text-light); }
         .task-card-info .reward { font-size: 1rem; font-weight: 700; color: var(--accent-gold); }
         .task-card-info .reward i { margin-right: 5px; }
-        .task-card-actions { display: flex; align-items: center; gap: 10px; }
+        .task-card-actions { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            /* Update 2: Ensure buttons are always to the right */
+            margin-left: auto;
+        }
         .task-card-actions .btn { padding: 8px 20px; min-width: 90px; flex: initial; }
         .task-card-actions .task-timer { font-size: 1.2rem; font-weight: bold; color: var(--accent-gold); min-width: 40px; text-align: center; }
         .task-card.completed {
@@ -298,18 +304,18 @@
                 <h2 class="page-title">Earn From Ads</h2>
                 <div class="content-card">
                     <h3>Watch Monetag Ads</h3>
-                    <p>Watch 6 times a day. Earn 0.0005 USDT for each 13-second ad view.</p>
+                    <p>Watch 6 times a day. Earn 0.0006 USDT for each 13-second ad view.</p>
                     <button class="btn" id="watchMonetagAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 6 Times</button>
                 </div>
                 <div class="content-card">
                     <h3>Watch Giga Pub Ads</h3>
-                    <p>Watch 5 times a day. Click the ad after 5 seconds, then return to get 0.0004 USDT.</p>
+                    <p>Watch 5 times a day. Click the ad after 5 seconds, then return to get 0.0006 USDT.</p>
                     <button class="btn" id="watchGigaAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 5 Times</button>
                 </div>
                 <!-- UPDATE 2: Adextra Ads Card -->
                 <div class="content-card">
                     <h3>Watch Mixed Ads</h3>
-                    <p>Watch 10 times a day. Random ads will be shown. Earn 0.0003 USDT for each view.</p>
+                    <p>Watch 10 times a day. Random ads will be shown. Earn 0.0006 USDT for each view.</p>
                     <button class="btn" id="watchAdextraAdButton" style="width: 100%;"><i class="fa-solid fa-play"></i> Claim Reward 10 Times</button>
                 </div>
             </div>
@@ -404,7 +410,7 @@
                     <h3>Earning Rules</h3>
                      <p style="text-align: left; color: var(--text-light);">
                         <strong>🤝 Per Valid Referral:</strong> 0.006 USDT<br>
-                        <strong>📺 Daily Ads (21 total):</strong> Up to 0.0005 USDT per ad<br>
+                        <strong>📺 Daily Ads (21 total):</strong> Up to 0.0006 USDT per ad<br>
                         <strong>📹 Video Watching:</strong> Earn for every 15 seconds<br>
                         <strong>✅ Payment Methods:</strong> Binance / Bkash / Nagad
                     </p>
@@ -499,11 +505,12 @@
         <div class="modal-overlay" id="welcomeModal">
             <div class="modal-content">
                 <button class="close-modal-btn" data-modal-id="welcomeModal"><i class="fa-solid fa-times"></i></button>
-                <h3>Welcome to Chili Powder!</h3>
-                <p>Please join our official channels to stay updated with news and payment proofs.</p>
+                <h3>👋 Assalamualaikum dear users!</h3>
+                <p>Welcome to Chili Powder Mini App 💥<br>💯 100% real payment guaranteed!<br>💬 For support, promo, or withdraw help — message the admin directly.<br>💸 Your income may be a bit lower, but payment is always sure!</p>
                 <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
                     <a href="https://t.me/Chili_powder_Payment" target="_blank" class="btn" style="text-decoration: none;"><i class="fa-brands fa-telegram"></i> Payment Channel</a>
                     <a href="https://t.me/chili_powder_USDT" target="_blank" class="btn" style="text-decoration: none; background: var(--bg-element); border: 1px solid var(--primary-red);"><i class="fa-brands fa-telegram"></i> Official Channel</a>
+                    <a href="https://t.me/admin12_admin" target="_blank" class="btn" style="text-decoration: none; background: var(--primary-red);"><i class="fa-brands fa-telegram"></i> Admin Support</a>
                 </div>
             </div>
         </div>
@@ -757,10 +764,10 @@
                     await (typeof show_9858506 === 'function' ? show_9858506() : Promise.reject('Monetag SDK not loaded'));
                     if (countdown <= 0) {
                         await updateDoc(userRef, { monetagAdsWatchedToday: increment(1) });
-                        // UPDATE 2: Reward changed to 0.0005
-                        await addEarnings(0.0005);
+                        // UPDATE 3: Reward changed to 0.0006
+                        await addEarnings(0.0006);
                         tg.HapticFeedback.notificationOccurred('success');
-                        tg.showAlert('Congratulations! 0.0005 USDT has been added.');
+                        tg.showAlert('Congratulations! 0.0006 USDT has been added.');
                     } else {
                         tg.HapticFeedback.notificationOccurred('error');
                         tg.showAlert('Ad closed too early! You must watch for 13 seconds.');
@@ -781,10 +788,10 @@
                 try {
                     await (typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.reject('GigaPub SDK not loaded'));
                     await updateDoc(userRef, { gigaAdsWatchedToday: increment(1) });
-                    // UPDATE 2: Reward changed to 0.0004
-                    await addEarnings(0.0004);
+                    // UPDATE 3: Reward changed to 0.0006
+                    await addEarnings(0.0006);
                     tg.HapticFeedback.notificationOccurred('success');
-                    tg.showAlert('Congratulations! 0.0004 USDT has been added.');
+                    tg.showAlert('Congratulations! 0.0006 USDT has been added.');
                 } catch (error) { tg.showAlert('Ad could not be loaded. Please try again.');
                 } finally {
                     button.disabled = false;
@@ -813,9 +820,10 @@
 
                 if (success) {
                     await updateDoc(userRef, { adextraAdsWatchedToday: increment(1) });
-                    await addEarnings(0.0003);
+                    // UPDATE 3: Reward changed to 0.0006
+                    await addEarnings(0.0006);
                     tg.HapticFeedback.notificationOccurred('success');
-                    tg.showAlert('Congratulations! 0.0003 USDT has been added.');
+                    tg.showAlert('Congratulations! 0.0006 USDT has been added.');
                 }
                 button.disabled = false;
             }
@@ -893,6 +901,13 @@
                     box.classList.add('selected');
                     document.getElementById('amount').value = amount;
                     document.getElementById('submitWithdrawalBtn').disabled = false;
+                });
+            });
+
+            document.querySelectorAll('.method-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
                 });
             });
 
@@ -1197,12 +1212,7 @@
                     document.getElementById(item.dataset.page).classList.add('active');
                 });
             });
-            document.querySelectorAll('.method-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('selected'));
-                    btn.classList.add('selected');
-                });
-            });
+            
             document.getElementById('watchMonetagAdButton').addEventListener('click', handleMonetagAdWatch);
             document.getElementById('watchGigaAdButton').addEventListener('click', handleGigaAdWatch);
             document.getElementById('watchAdextraAdButton').addEventListener('click', handleAdextraAdWatch); // UPDATE 2
