@@ -1,3 +1,5 @@
+--- START OF FILE index.html ---
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -157,13 +159,48 @@
         .history-section { margin-top: 30px; }
         .history-section h3, .history-section h4 { color: var(--primary-red); margin-bottom: 15px; font-size: 1.3rem; text-align: left;}
         .history-section h4 { font-size: 1.1rem; color: var(--accent-gold); }
-        .history-item { background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .history-item-info .amount { font-size: 1.1rem; font-weight: 600; color: var(--text-light); }
-        .history-item-info .details { font-size: 0.8rem; color: var(--text-secondary); }
-        .history-item-status { font-weight: bold; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; text-transform: capitalize; }
-        .history-item-status.pending { color: #f0c419; background-color: rgba(255, 215, 0, 0.1); border: 1px solid #f0c419; }
-        .history-item-status.completed { color: #28a745; background-color: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; }
-        .history-item-status.rejected { color: #dc3545; background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; }
+        /* --- UPDATE 2: History Item Styles based on screenshot --- */
+        .history-item { 
+            background-color: var(--bg-element); 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-bottom: 10px; 
+            border: 1px solid var(--border-color); /* Added border */
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .history-item-info { text-align: left; }
+        .history-item-info .amount { 
+            font-size: 1.1rem; 
+            font-weight: 600; 
+            color: var(--text-light); 
+            display: flex; /* Allow inline elements */
+            align-items: center;
+        }
+        .history-item-info .amount .usdt-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-left: 5px;
+            font-weight: normal;
+        }
+        .history-item-info .details { 
+            font-size: 0.9rem; /* Slightly larger */
+            color: var(--text-secondary); 
+        }
+        .history-item-status { 
+            font-weight: bold; 
+            padding: 5px 10px; 
+            border-radius: 5px; 
+            font-size: 0.8rem; 
+            text-transform: capitalize; 
+            white-space: nowrap; /* Prevent wrapping */
+        }
+        /* Color adjustments based on screenshot */
+        .history-item-status.pending { color: #f0c419; background-color: rgba(255, 215, 0, 0.1); border: none; }
+        .history-item-status.completed { color: #28a745; background-color: transparent; border: none; } /* No background/border for completed */
+        .history-item-status.rejected { color: #dc3545; background-color: rgba(220, 53, 69, 0.1); border: none; }
+
         .history-list { max-height: 250px; overflow-y: auto; padding-right: 5px; } /* For scrollbar styling */
 
         /* --- VIDEO SECTION STYLES --- */
@@ -254,7 +291,7 @@
                 <div class="name" id="userName">Loading...</div>
                 <div class="balance">
                     Balance: <span id="userBalance">0.00</span> USDT 💵 
-                    <i class="fa-solid fa-history history-vfx-btn" id="historyBtn"></i>
+                    <i class="fa-solid fa-note-sticky history-vfx-btn" id="historyBtn"></i>
                 </div>
             </div>
         </section>
@@ -275,7 +312,7 @@
                 </div>
                 <div class="content-card">
                     <h3>Refer & Earn More!</h3>
-                    <p>Earn 0.006 USDT for each valid referral who joins using your link.</p>
+                    <p>Earn 0.007 USDT for each valid referral who joins and completes the required channels using your link.</p>
                     <div class="referral-link-box" id="referralLink">Loading...</div>
                     <div class="buttons-group" style="display:flex; gap:10px;">
                         <button class="btn btn-copy">Copy Link</button>
@@ -409,7 +446,7 @@
                  <div class="content-card">
                     <h3>Earning Rules</h3>
                      <p style="text-align: left; color: var(--text-light);">
-                        <strong>🤝 Per Valid Referral:</strong> 0.006 USDT<br>
+                        <strong>🤝 Per Valid Referral:</strong> 0.007 USDT (after channel verification)<br>
                         <strong>📺 Daily Ads (21 total):</strong> Up to 0.0006 USDT per ad<br>
                         <strong>📹 Video Watching:</strong> Earn for every 15 seconds<br>
                         <strong>✅ Payment Methods:</strong> Binance / Bkash / Nagad
@@ -481,22 +518,13 @@
             </div>
         </div>
 
-        <!-- History Modal -->
+        <!-- History Modal (Updated to match screenshot) -->
         <div class="modal-overlay" id="historyModal">
-            <div class="modal-content">
+            <div class="modal-content" style="max-width: 300px; padding: 15px;">
                 <button class="close-modal-btn" data-modal-id="historyModal"><i class="fa-solid fa-times"></i></button>
-                <h3>Transaction History</h3>
-                <div class="history-section" style="margin-top: 15px; text-align: left;">
-                    <h4>Withdrawals</h4>
-                    <div id="modal-withdrawal-history" class="history-list" style="max-height: 150px; overflow-y: auto;">
-                        <p style="color: var(--text-secondary); text-align: center;">Loading...</p>
-                    </div>
-                </div>
-                <div class="history-section" style="margin-top: 20px; text-align: left;">
-                    <h4>Referrals</h4>
-                    <div id="modal-referral-history" class="history-list" style="max-height: 150px; overflow-y: auto;">
-                        <p style="color: var(--text-secondary); text-align: center;">Loading...</p>
-                    </div>
+                <h3 style="margin-top: 0;">Transaction History</h3>
+                <div id="history-content-list" style="margin-top: 15px; max-height: 400px; overflow-y: auto;">
+                    <p style="color: var(--text-secondary); text-align: center;">Loading history...</p>
                 </div>
             </div>
         </div>
@@ -654,7 +682,10 @@
                             gigaAdsWatchedToday: 0, 
                             adextraAdsWatchedToday: 0, 
                             lastAdWatchDate: today, 
-                            lastLogin: serverTimestamp() 
+                            lastLogin: serverTimestamp(),
+                            // Reset referral channel join status for the day (if needed, otherwise remove)
+                            joinedPaymentChannel: false,
+                            joinedOfficialChannel: false
                         });
                     }
                     updateUI(userData);
@@ -666,34 +697,18 @@
                         lastAdWatchDate: new Date().toISOString().split('T')[0],
                         joinDate: serverTimestamp(), lastLogin: serverTimestamp(),
                         totalWatchTimeSeconds: 0, lootBoxBalance: 0,
+                        joinedPaymentChannel: false, // For new users
+                        joinedOfficialChannel: false // For new users
                     };
 
                     if (referrerId && referrerId !== String(currentUser.id)) {
                         newUserData.referredBy = referrerId;
-                        newUserData.referralStatus = 'completed';
+                        newUserData.referralStatus = 'pending_channels'; // New status for pending channel joins
 
-                        const referrerRef = doc(db, "users", referrerId);
-                        try {
-                             await runTransaction(db, async (transaction) => {
-                                const referrerDoc = await transaction.get(referrerRef);
-                                if (!referrerDoc.exists()) {
-                                    newUserData.referredBy = null;
-                                    newUserData.referralStatus = 'invalid_referrer';
-                                    transaction.set(userRef, newUserData);
-                                    return;
-                                }
-                                transaction.update(referrerRef, { 
-                                    referrals: increment(1), 
-                                    balance: increment(0.006) 
-                                });
-                                transaction.set(userRef, newUserData);
-                            });
-                        } catch (e) {
-                            console.error("Referral transaction failed: ", e);
-                            newUserData.referredBy = null;
-                            newUserData.referralStatus = 'tx_failed';
-                            await setDoc(userRef, newUserData);
-                        }
+                        // We will set newUserData for the referred user.
+                        // Referrer reward will be given upon channel verification
+                        await setDoc(userRef, newUserData);
+
                     } else {
                         newUserData.referralStatus = 'none';
                         await setDoc(userRef, newUserData);
@@ -701,7 +716,7 @@
                 }
             });
             
-            loadWithdrawalHistory(String(currentUser.id), 'withdrawal-history-list');
+            loadUserHistory(String(currentUser.id), 'history-content-list'); // Unified history loading
             loadAndDisplayTasks();
             loadAndDisplayVideos();
 
@@ -828,54 +843,77 @@
                 button.disabled = false;
             }
 
-            // --- History Logic ---
-            async function loadWithdrawalHistory(userId, containerId) {
+            // --- History Logic (Unified) ---
+            async function loadUserHistory(userId, containerId) {
                 const historyListEl = document.getElementById(containerId);
-                const q = query(collection(db, "withdrawals"), where("userId", "==", userId), orderBy("requestTimestamp", "desc"));
-                
-                onSnapshot(q, (snapshot) => {
-                    historyListEl.innerHTML = snapshot.empty ? `<p style="color: var(--text-secondary); text-align: center;">No withdrawal history found.</p>` : '';
-                    snapshot.forEach(doc => {
-                        const data = doc.data();
-                        const date = data.requestTimestamp?.toDate()?.toLocaleDateString('en-GB') || 'N/A';
-                        const item = document.createElement('div');
-                        item.className = 'history-item';
-                        item.innerHTML = `<div class="history-item-info"><div class="amount">${data.amount} USDT</div><div class="details">${data.method} - ${date}</div></div><div class="history-item-status ${data.status}">${data.status}</div>`;
-                        historyListEl.appendChild(item);
-                    });
-                }, (error) => {
-                    console.error("Error loading withdrawal history:", error);
-                    historyListEl.innerHTML = `<p style="color: var(--error-color); text-align: center;">Could not load history.</p>`;
-                });
-            }
+                historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading history...</p>`;
 
-            async function loadReferralHistory(userId) {
-                const container = document.getElementById('modal-referral-history');
-                container.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading...</p>`;
-                const q = query(collection(db, "users"), where("referredBy", "==", userId));
-                const querySnapshot = await getDocs(q);
+                const withdrawalQ = query(collection(db, "withdrawals"), where("userId", "==", userId), orderBy("requestTimestamp", "desc"));
+                const referralQ = query(collection(db, "referralCommissions"), where("referredBy", "==", userId), orderBy("timestamp", "desc"));
                 
-                if (querySnapshot.empty) {
-                    container.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">You have not referred anyone yet.</p>';
+                const [withdrawalSnap, referralSnap] = await Promise.all([getDocs(withdrawalQ), getDocs(referralQ)]);
+                
+                let allHistoryItems = [];
+
+                withdrawalSnap.forEach(doc => {
+                    const data = doc.data();
+                    const date = data.requestTimestamp?.toDate()?.toLocaleDateString('en-GB') || 'N/A';
+                    allHistoryItems.push({
+                        type: 'Withdrawal',
+                        id: doc.id,
+                        amount: data.amount,
+                        details: `via ${data.method}`,
+                        status: data.status,
+                        timestamp: data.requestTimestamp
+                    });
+                });
+
+                referralSnap.forEach(doc => {
+                    const data = doc.data();
+                    const date = data.timestamp?.toDate()?.toLocaleDateString('en-GB') || 'N/A';
+                    allHistoryItems.push({
+                        type: 'Commission',
+                        id: doc.id,
+                        amount: data.amount,
+                        details: `From user ${data.referredUserId}`,
+                        status: 'completed', // Commission is always completed once recorded
+                        timestamp: data.timestamp
+                    });
+                });
+
+                allHistoryItems.sort((a, b) => b.timestamp - a.timestamp); // Sort by newest first
+
+                if (allHistoryItems.length === 0) {
+                    historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">No transaction history found.</p>`;
                     return;
                 }
 
-                container.innerHTML = '';
-                querySnapshot.forEach(doc => {
-                    const referredUser = doc.data();
-                    const joinDate = referredUser.joinDate?.toDate()?.toLocaleDateString('en-GB') || 'N/A';
-                    const status = referredUser.referralStatus === 'completed' ? 'Completed' : 'Pending';
-                    const statusClass = referredUser.referralStatus;
+                historyListEl.innerHTML = '';
+                allHistoryItems.forEach(item => {
+                    const el = document.createElement('div');
+                    el.className = 'history-item';
 
-                    const item = document.createElement('div');
-                    item.className = 'history-item';
-                    item.innerHTML = `
+                    let amountHtml = '';
+                    let statusClass = item.status;
+                    let statusText = item.status;
+
+                    if (item.type === 'Withdrawal') {
+                         amountHtml = `<div class="amount">$${item.amount.toFixed(4)} <span class="usdt-label">USDT</span></div>`;
+                    } else if (item.type === 'Commission') {
+                        amountHtml = `<div class="amount">+${item.amount.toFixed(4)} <span class="usdt-label">USDT</span></div>`;
+                        statusText = 'Completed'; // Always completed for commission
+                        statusClass = 'completed';
+                    }
+
+                    el.innerHTML = `
                         <div class="history-item-info">
-                            <div class="amount">${referredUser.firstName}</div>
-                            <div class="details">Joined: ${joinDate}</div>
+                            <div class="details">${item.type}</div>
+                            ${amountHtml}
+                            <div class="details">${item.details}</div>
                         </div>
-                        <div class="history-item-status ${statusClass}">${status}</div>`;
-                    container.appendChild(item);
+                        <div class="history-item-status ${statusClass}">${statusText}</div>
+                    `;
+                    historyListEl.appendChild(el);
                 });
             }
 
@@ -1203,6 +1241,81 @@
                 } catch (error) { tg.showAlert('Could not claim reward. Please try again.'); }
             });
 
+            // --- Referral Channel Join Logic ---
+            async function checkAndRewardReferral(referredUserId, referrerId) {
+                if (!referredUserId || !referrerId || referredUserId === referrerId) return;
+
+                const referredUserRef = doc(db, "users", referredUserId);
+                const referrerUserRef = doc(db, "users", referrerId);
+
+                const referredDoc = await getDoc(referredUserRef);
+                const referrerDoc = await getDoc(referrerUserRef);
+
+                if (!referredDoc.exists() || !referrerDoc.exists()) {
+                    console.warn("Referred or referrer user not found for channel check.");
+                    return;
+                }
+
+                const referredUserData = referredDoc.data();
+                if (referredUserData.referralStatus !== 'pending_channels') return; // Only process if pending
+
+                // Check if the referred user has joined both channels
+                if (referredUserData.joinedPaymentChannel && referredUserData.joinedOfficialChannel) {
+                    await runTransaction(db, async (transaction) => {
+                        const currentReferrerDoc = await transaction.get(referrerUserRef);
+                        const currentReferredDoc = await transaction.get(referredUserRef);
+
+                        if (!currentReferrerDoc.exists() || !currentReferredDoc.exists()) {
+                            throw "User docs not found during referral reward transaction.";
+                        }
+                        
+                        // Increment referrer's referral count and balance
+                        transaction.update(referrerUserRef, { 
+                            referrals: increment(1), 
+                            balance: increment(0.007) 
+                        });
+
+                        // Update the referred user's status to completed
+                        transaction.update(referredUserRef, {
+                            referralStatus: 'completed'
+                        });
+
+                        // Record the commission transaction
+                        const commissionRef = doc(collection(db, "referralCommissions"));
+                        transaction.set(commissionRef, {
+                            referredBy: referrerId,
+                            referredUserId: referredUserId,
+                            amount: 0.007,
+                            timestamp: serverTimestamp()
+                        });
+                    });
+                    console.log(`Referral reward of 0.007 USDT given to ${referrerId} for ${referredUserId}.`);
+                    tg.showAlert(`Congratulations! A referral reward has been added for ${referredUserData.firstName}.`);
+                }
+            }
+
+            // Function to handle channel clicks and update user data
+            async function handleChannelJoin(channelType, channelLink) {
+                window.open(channelLink, '_blank'); // Open channel link
+                
+                let updateData = {};
+                if (channelType === 'payment') {
+                    updateData.joinedPaymentChannel = true;
+                } else if (channelType === 'official') {
+                    updateData.joinedOfficialChannel = true;
+                }
+
+                if (Object.keys(updateData).length > 0) {
+                    await updateDoc(userRef, updateData);
+                    console.log(`User ${currentUser.id} marked as joined ${channelType} channel.`);
+                    // After updating, check if referrer needs reward
+                    if (userData.referredBy) {
+                        checkAndRewardReferral(String(currentUser.id), userData.referredBy);
+                    }
+                }
+            }
+
+
             // --- General Event Listeners ---
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', (e) => {
@@ -1221,8 +1334,7 @@
             
             document.getElementById('historyBtn').addEventListener('click', () => {
                 document.getElementById('historyModal').classList.add('active');
-                loadWithdrawalHistory(String(currentUser.id), 'modal-withdrawal-history');
-                loadReferralHistory(String(currentUser.id));
+                loadUserHistory(String(currentUser.id), 'history-content-list'); // Unified history loading
             });
 
             document.querySelectorAll('.close-modal-btn').forEach(btn => {
@@ -1233,6 +1345,17 @@
                     }
                 });
             });
+
+            // Event listeners for the specific Telegram channels in the support section
+            document.querySelector('.task-list a[href="https://t.me/Chili_powder_Payment"]').addEventListener('click', (e) => {
+                e.preventDefault();
+                handleChannelJoin('payment', e.currentTarget.href);
+            });
+            document.querySelector('.task-list a[href="https://t.me/chili_powder_USDT"]').addEventListener('click', (e) => {
+                e.preventDefault();
+                handleChannelJoin('official', e.currentTarget.href);
+            });
+
 
         }
 
