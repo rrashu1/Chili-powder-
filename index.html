@@ -1,5 +1,3 @@
---- START OF FILE index.html ---
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,13 +34,19 @@
 
 
     <style>
-        /* --- GLOBAL STYLES --- */
+        /* --- GLOBAL STYLES (THEME UPDATE) --- */
         :root {
-            --bg-dark: #121212; --bg-surface: #1e1e1e; --bg-element: #2a2a2a;
-            --primary-red: #D90429; --primary-red-darker: #a1031f;
+            --bg-dark: #0a0a10; /* Dark background */
+            --bg-surface: #10101a; /* Slightly lighter surface */
+            --bg-element: #1a1a2a; /* Element background */
+            --primary-blue: #007BFF; /* Electric Blue */
+            --primary-blue-darker: #0056b3; /* Darker Electric Blue */
             --accent-gold: #FFD700;
-            --text-light: #f0f0f0; --text-secondary: #aaa;
-            --border-color: #444; --success-color: #28a745; --error-color: #dc3545;
+            --text-light: #ffffff; /* White text */
+            --text-secondary: #aaa;
+            --border-color: #333; /* Darker border */
+            --success-color: #28a745;
+            --error-color: #dc3545;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: var(--bg-dark); color: var(--text-light); }
@@ -56,25 +60,25 @@
             padding-bottom: 80px;
         }
         #user-app-container header { display: flex; justify-content: space-between; align-items: center; padding: 15px; background-color: var(--bg-element); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
-        .header-title { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.3rem; background: linear-gradient(45deg, var(--primary-red-darker), var(--primary-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 5px rgba(217, 4, 41, 0.4); }
+        .header-title { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.3rem; background: linear-gradient(45deg, var(--primary-blue-darker), var(--primary-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 5px rgba(0, 123, 255, 0.4); }
         .profile { display: flex; align-items: center; padding: 20px 15px; }
-        .avatar { width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary-red), var(--primary-red-darker)); color: var(--text-light); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; font-weight: bold; margin-right: 15px; border: 2px solid var(--primary-red); }
+        .avatar { width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-darker)); color: var(--text-light); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; font-weight: bold; margin-right: 15px; border: 2px solid var(--primary-blue); }
         .user-info .name { font-weight: 600; font-size: 1.2rem; }
         .user-info .name i { color: var(--accent-gold); font-size: 1rem; margin-left: 5px; }
         .user-info .balance { color: var(--text-secondary); font-size: 1rem; display: flex; align-items: center; }
         main { padding: 0 15px; }
         .page { display: none; }
         .page.active { display: block; animation: fadeIn 0.5s ease-in-out; }
-        .page-title { font-size: 1.5rem; font-weight: 600; padding: 20px 0 10px 0; color: var(--primary-red); }
+        .page-title { font-size: 1.5rem; font-weight: 600; padding: 20px 0 10px 0; color: var(--primary-blue); }
         .cards-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .card { background-color: var(--bg-element); padding: 20px; border-radius: 10px; border: 1px solid var(--border-color); text-align: center; }
         .card .card-label { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 8px; }
-        .card .card-value { font-size: 2rem; font-weight: 700; color: var(--primary-red); }
+        .card .card-value { font-size: 2rem; font-weight: 700; color: var(--primary-blue); }
         .content-card { background-color: var(--bg-element); padding: 20px; border-radius: 10px; border: 1px solid var(--border-color); text-align: center; margin-bottom: 20px; }
-        .content-card h3 { font-size: 1.3rem; margin-bottom: 10px; color: var(--primary-red); }
+        .content-card h3 { font-size: 1.3rem; margin-bottom: 10px; color: var(--primary-blue); }
         .content-card p { color: var(--text-secondary); margin-bottom: 20px; }
         .referral-link-box { background-color: var(--bg-surface); border: 1px dashed var(--border-color); padding: 12px; border-radius: 8px; word-wrap: break-word; text-align: left; margin-bottom: 20px; font-size: 0.9rem; color: var(--text-light); }
-        .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; color: var(--text-light); background: linear-gradient(45deg, var(--primary-red-darker), var(--primary-red)); }
+        .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; color: var(--text-light); background: linear-gradient(45deg, var(--primary-blue-darker), var(--primary-blue)); }
         .btn:disabled { background: var(--border-color); color: var(--text-secondary); cursor: not-allowed; filter: none; transform: none; }
         .task-list .task-item { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid transparent; transition: all 0.3s ease; }
         .task-item .task-text { display: flex; align-items: center; gap: 10px; flex-grow: 1; }
@@ -95,7 +99,7 @@
             transition: all 0.3s ease;
         }
         .task-card:hover {
-            border-color: var(--primary-red);
+            border-color: var(--primary-blue);
             transform: translateY(-3px);
         }
         .task-card-info { flex-grow: 1; }
@@ -121,43 +125,43 @@
         
         .buy-tasks-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
         .buy-task-box { background: linear-gradient(145deg, #333, #1a1a1a); border: 1px solid var(--border-color); padding: 15px; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.3s ease; }
-        .buy-task-box:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(217, 4, 41, 0.2); border-color: var(--primary-red); }
-        .buy-task-box .task-count { font-size: 1.8rem; font-weight: 700; color: var(--primary-red); }
+        .buy-task-box:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0, 123, 255, 0.2); border-color: var(--primary-blue); }
+        .buy-task-box .task-count { font-size: 1.8rem; font-weight: 700; color: var(--primary-blue); }
         .buy-task-box .task-price { font-size: 1rem; font-weight: 500; color: var(--accent-gold); }
         
         /* --- Withdraw Page --- */
         .withdraw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         .withdraw-box { background: var(--bg-element); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; border: 2px solid var(--border-color); transition: all 0.3s ease; position: relative; overflow: hidden; }
-        .withdraw-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, rgba(217, 4, 41, 0.3), transparent 30%); animation: rotate 4s linear infinite; animation-play-state: paused; }
-        .withdraw-box:hover { border-color: var(--primary-red); box-shadow: 0 0 15px rgba(217, 4, 41, 0.4); }
+        .withdraw-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, rgba(0, 123, 255, 0.3), transparent 30%); animation: rotate 4s linear infinite; animation-play-state: paused; }
+        .withdraw-box:hover { border-color: var(--primary-blue); box-shadow: 0 0 15px rgba(0, 123, 255, 0.4); }
         .withdraw-box.selected { border-color: var(--accent-gold); box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
         .withdraw-box.selected::before, .withdraw-box:hover::before { animation-play-state: running; }
-        .withdraw-box .amount { font-size: 2.2rem; font-weight: 700; color: var(--primary-red); margin-bottom: 5px; }
+        .withdraw-box .amount { font-size: 2.2rem; font-weight: 700; color: var(--primary-blue); margin-bottom: 5px; }
         .withdraw-box .requirement { font-size: 0.8rem; color: var(--text-secondary); }
         .withdraw-box .requirement i { color: var(--accent-gold); }
         .withdraw-form .form-group { margin-bottom: 15px; text-align: left; }
         .withdraw-form label { display: block; margin-bottom: 5px; color: var(--text-secondary); }
         .withdraw-form .payment-methods { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
         .withdraw-form .method-btn { flex: 1; min-width: 80px; padding: 10px; border: 2px solid var(--border-color); background: var(--bg-element); color: var(--text-light); border-radius: 8px; cursor: pointer; }
-        .withdraw-form .method-btn.selected { border-color: var(--primary-red); box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); animation: pulse-red 1.5s infinite; }
+        .withdraw-form .method-btn.selected { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 123, 255, 0.3); animation: pulse-blue 1.5s infinite; }
         .withdraw-form input, .modal-form input { width: 100%; padding: 12px; background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-light); font-size: 1rem; margin-bottom: 10px; }
-        .withdraw-form input:focus, .modal-form input:focus { border-color: var(--primary-red); box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); }
+        .withdraw-form input:focus, .modal-form input:focus { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 123, 255, 0.3); }
         .info-box { padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; border: 1px dashed var(--accent-gold); }
         
         /* --- Footer & Modals --- */
         footer { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background-color: var(--bg-element); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid var(--border-color); border-radius: 15px 15px 0 0; z-index: 100; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-secondary); text-decoration: none; font-size: 0.75rem; cursor: pointer; flex: 1; text-align: center; }
         .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
-        .nav-item.active { color: var(--primary-red); }
+        .nav-item.active { color: var(--primary-blue); }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 15px; opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-content { background-color: var(--bg-surface); padding: 25px; border-radius: 15px; width: 100%; max-width: 360px; text-align: center; border: 1px solid var(--primary-red); box-shadow: 0 0 20px rgba(217, 4, 41,0.2); position: relative; }
-        .modal-content h3 { color: var(--primary-red); font-size: 1.5rem; margin-bottom: 15px; }
+        .modal-content { background-color: var(--bg-surface); padding: 25px; border-radius: 15px; width: 100%; max-width: 360px; text-align: center; border: 1px solid var(--primary-blue); box-shadow: 0 0 20px rgba(0, 123, 255,0.2); position: relative; }
+        .modal-content h3 { color: var(--primary-blue); font-size: 1.5rem; margin-bottom: 15px; }
         .modal-content p { color: var(--text-secondary); margin-bottom: 10px; line-height: 1.6; }
         .close-modal-btn { position: absolute; top: 10px; right: 10px; background: var(--border-color); color: var(--text-light); border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 1rem; cursor: pointer; }
-        #countdown-timer { font-size: 3rem; font-weight: bold; color: var(--primary-red); margin: 15px 0; }
+        #countdown-timer { font-size: 3rem; font-weight: bold; color: var(--primary-blue); margin: 15px 0; }
         .history-section { margin-top: 30px; }
-        .history-section h3, .history-section h4 { color: var(--primary-red); margin-bottom: 15px; font-size: 1.3rem; text-align: left;}
+        .history-section h3, .history-section h4 { color: var(--primary-blue); margin-bottom: 15px; font-size: 1.3rem; text-align: left;}
         .history-section h4 { font-size: 1.1rem; color: var(--accent-gold); }
         .history-item { background-color: var(--bg-element); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
         .history-item-info .amount { font-size: 1.1rem; font-weight: 600; color: var(--text-light); }
@@ -172,7 +176,7 @@
         .loot-box-card { background-color: var(--bg-element); padding: 20px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
         .loot-box-info { text-align: left; display: flex; align-items: center; gap: 15px;}
         .loot-box-info .icon { font-size: 2.5rem; animation: pulse-lootbox 2s infinite ease-in-out; }
-        .loot-box-info h3 { margin: 0 0 5px 0; color: var(--primary-red); font-size: 1.1rem; }
+        .loot-box-info h3 { margin: 0 0 5px 0; color: var(--primary-blue); font-size: 1.1rem; }
         .loot-box-info p { margin: 0; color: var(--text-secondary); font-size: 0.9rem; }
         .loot-box-card .btn-claim-loot { background: var(--success-color); color: white; padding: 10px 20px; font-size: 0.9rem; border-radius: 8px; border: none; cursor: pointer; }
         .loot-box-card .btn-claim-loot:disabled { background: var(--border-color); color: var(--text-secondary); cursor: not-allowed; }
@@ -206,9 +210,9 @@
 
         /* --- VISUAL ENHANCEMENTS (VFX) --- */
         .card, .btn, .nav-item, .method-btn, .video-card { transition: all 0.3s ease; }
-        .card:hover, .video-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(217, 4, 41, 0.1); border-color: var(--primary-red); }
+        .card:hover, .video-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0, 123, 255, 0.1); border-color: var(--primary-blue); }
         .btn:hover:not(:disabled) { transform: scale(1.03); filter: brightness(1.15); }
-        .nav-item:hover { color: var(--primary-red); }
+        .nav-item:hover { color: var(--primary-blue); }
         .history-vfx-btn {
             font-size: 1.4rem; /* Bigger icon */
             margin-left: 15px;
@@ -220,7 +224,7 @@
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse-red { 0% { box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); } 50% { box-shadow: 0 0 15px rgba(217, 4, 41, 0.6); } 100% { box-shadow: 0 0 10px rgba(217, 4, 41, 0.3); } }
+        @keyframes pulse-blue { 0% { box-shadow: 0 0 10px rgba(0, 123, 255, 0.3); } 50% { box-shadow: 0 0 15px rgba(0, 123, 255, 0.6); } 100% { box-shadow: 0 0 10px rgba(0, 123, 255, 0.3); } }
         @keyframes pulse-lootbox { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse-gold {
@@ -368,7 +372,6 @@
                         <div class="payment-methods">
                             <button class="method-btn" data-method="Binance">Binance</button>
                             <button class="method-btn" data-method="Bkash">Bkash</button>
-                            <button class="method-btn" data-method="Nagad">Nagad</button>
                         </div>
                     </div>
                     <div class="form-group">
@@ -420,7 +423,7 @@
                         <strong>🤝 Per Valid Referral:</strong> 0.007 USDT<br>
                         <strong>📺 Daily Ads (21 total):</strong> Up to 0.0006 USDT per ad<br>
                         <strong>📹 Video Watching:</strong> Earn for every 15 seconds<br>
-                        <strong>✅ Payment Methods:</strong> Binance / Bkash / Nagad
+                        <strong>✅ Payment Methods:</strong> Binance / Bkash
                     </p>
                     <p style="color: var(--error-color); font-weight: bold;">⚠️ Do NOT use a VPN while working.</p>
                  </div>
@@ -510,10 +513,10 @@
                     <a href="https://t.me/Chili_powder_Payment" target="_blank" class="btn" style="text-decoration: none;" id="welcomePaymentChannel">
                         <i class="fa-brands fa-telegram"></i> Payment Channel
                     </a>
-                    <a href="https://t.me/chili_powder_USDT" target="_blank" class="btn" style="text-decoration: none; background: var(--bg-element); border: 1px solid var(--primary-red);" id="welcomeOfficialChannel">
+                    <a href="https://t.me/chili_powder_USDT" target="_blank" class="btn" style="text-decoration: none; background: var(--bg-element); border: 1px solid var(--primary-blue);" id="welcomeOfficialChannel">
                         <i class="fa-brands fa-telegram"></i> Official Channel
                     </a>
-                    <a href="https://t.me/admin12_admin" target="_blank" class="btn" style="text-decoration: none; background: var(--primary-red);">
+                    <a href="https://t.me/admin12_admin" target="_blank" class="btn" style="text-decoration: none; background: var(--primary-blue);">
                         <i class="fa-brands fa-telegram"></i> Admin Support
                     </a>
                 </div>
@@ -861,13 +864,13 @@
                 button.disabled = false;
             }
 
-            // --- History Logic (Unified) ---
+            // --- History Logic (Unified & Updated) ---
             async function loadUnifiedHistory(userId, containerId) {
                 const historyListEl = document.getElementById(containerId);
                 historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading history...</p>`;
 
                 const withdrawalQuery = query(collection(db, "withdrawals"), where("userId", "==", userId));
-                const referralQuery = query(collection(db, "users"), where("referredBy", "==", userId));
+                const referralQuery = query(collection(db, "users"), where("referredBy", "==", userId, "referralStatus", "==", "completed"));
 
                 onSnapshot(withdrawalQuery, async (withdrawalSnapshot) => {
                     const withdrawalItems = [];
@@ -887,24 +890,20 @@
                         });
                     });
 
-                    // Fetch referral history (only for direct display in main page)
+                    // Fetch referral history
                     const referralSnapshot = await getDocs(referralQuery);
                     const referralItems = [];
                     referralSnapshot.forEach(doc => {
                         const referredUser = doc.data();
-                        const joinDate = referredUser.joinDate?.toDate()?.toLocaleDateString('en-GB') || 'N/A';
-                        const status = referredUser.referralStatus === 'completed' ? 'Earned' : (referredUser.referralStatus === 'pending_channels' ? 'Pending Join' : 'Invalid');
-                        const statusClass = referredUser.referralStatus === 'completed' ? 'completed' : 'pending'; // Use 'pending' for pending_channels too
-
                         referralItems.push({
                             type: 'referral',
                             timestamp: referredUser.joinDate?.toMillis() || 0,
                             html: `<div class="history-item">
                                         <div class="history-item-info">
-                                            <div class="amount">${referredUser.firstName} (Referral)</div>
-                                            <div class="details">Joined: ${joinDate}</div>
+                                            <div class="amount" style="color: var(--success-color);">You have earned 0.007 USDT ✅</div>
+                                            <div class="details">For referring ${referredUser.firstName}</div>
                                         </div>
-                                        <div class="history-item-status ${statusClass}">${status}</div>
+                                        <div class="history-item-status completed">Completed</div>
                                     </div>`
                         });
                     });
@@ -1373,4 +1372,3 @@
     </script>
 </body>
 </html>
---- END OF FILE index.html ---
