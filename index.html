@@ -260,7 +260,7 @@
                 <div class="name" id="userName">Loading...</div>
                 <div class="balance">
                     Balance: <span id="userBalance">0.00</span> USDT 💵 
-                    <i class="fa-solid fa-history history-vfx-btn" id="historyBtn"></i>
+                    <i class="fa-solid fa-file-lines history-vfx-btn" id="historyBtn"></i> <!-- ICON UPDATED -->
                 </div>
             </div>
         </section>
@@ -386,8 +386,8 @@
                 </div>
 
                 <div class="history-section">
-                    <h3>Transaction History</h3> <!-- Renamed from Withdrawal History -->
-                    <div id="unified-history-list" class="history-list">
+                    <h3>Withdrawal History</h3> <!-- UPDATED TITLE -->
+                    <div id="withdrawal-history-list" class="history-list"> <!-- UPDATED ID -->
                         <p style="color: var(--text-secondary); text-align: center;">Loading history...</p>
                     </div>
                 </div>
@@ -496,8 +496,8 @@
         <div class="modal-overlay" id="historyModal">
             <div class="modal-content">
                 <button class="close-modal-btn" data-modal-id="historyModal"><i class="fa-solid fa-times"></i></button>
-                <h3>Transaction History</h3>
-                <div id="modal-unified-history" class="history-list" style="max-height: 400px; overflow-y: auto;">
+                <h3>Full Transaction History</h3> <!-- UPDATED TITLE -->
+                <div id="modal-full-history" class="history-list" style="max-height: 400px; overflow-y: auto;"> <!-- UPDATED ID -->
                     <p style="color: var(--text-secondary); text-align: center;">Loading...</p>
                 </div>
             </div>
@@ -618,7 +618,6 @@
             tg.ready();
             tg.expand();
             
-            // UPDATE 3: Show welcome popup on first session visit
             if (!sessionStorage.getItem('welcomeShown')) {
                 document.getElementById('welcomeModal').classList.add('active');
                 sessionStorage.setItem('welcomeShown', 'true');
@@ -638,12 +637,10 @@
             let watchTimeInterval;
             let sessionWatchTime = 0;
             let adCheckCounter = 0; 
-            const AD_INTERVAL_SECONDS = 300; // 5 minutes
+            const AD_INTERVAL_SECONDS = 300; 
 
-            // Initial state for withdraw page
             document.getElementById('submitWithdrawalBtn').disabled = true;
 
-            // --- EARNINGS LOGIC ---
             async function addEarnings(amount) {
                 await updateDoc(userRef, {
                     balance: increment(amount),
@@ -656,47 +653,43 @@
                     userData = docSnap.data();
                     const today = new Date().toISOString().split('T')[0];
                     if (userData.lastAdWatchDate !== today) {
-                        // UPDATE 2: Add adextraAdsWatchedToday to the daily reset
                         await updateDoc(userRef, { 
                             monetagAdsWatchedToday: 0, 
                             gigaAdsWatchedToday: 0, 
                             adextraAdsWatchedToday: 0, 
                             lastAdWatchDate: today, 
                             lastLogin: serverTimestamp(),
-                            // Reset channel join status for referral validation
                             joinedPaymentChannel: false,
                             joinedOfficialChannel: false
                         });
                     }
                     updateUI(userData);
-                    // Check referral status on UI update
                     checkReferralValidity(userData);
                 } else {
                     const newUserData = {
                         userId: currentUser.id, firstName: currentUser.first_name, userName: currentUser.username || 'N/A',
                         balance: 0, referrals: 0, totalEarned: 0,
-                        monetagAdsWatchedToday: 0, gigaAdsWatchedToday: 0, adextraAdsWatchedToday: 0, // UPDATE 2
+                        monetagAdsWatchedToday: 0, gigaAdsWatchedToday: 0, adextraAdsWatchedToday: 0,
                         lastAdWatchDate: new Date().toISOString().split('T')[0],
                         joinDate: serverTimestamp(), lastLogin: serverTimestamp(),
                         totalWatchTimeSeconds: 0, lootBoxBalance: 0,
-                        // NEW: Referral channel join status
                         joinedPaymentChannel: false,
                         joinedOfficialChannel: false,
                     };
 
-                    // Referral logic (only applies if referredBy exists)
                     if (referrerId && referrerId !== String(currentUser.id)) {
                         newUserData.referredBy = referrerId;
-                        newUserData.referralStatus = 'pending_channels'; // Initial status
+                        newUserData.referralStatus = 'pending_channels';
                     } else {
                         newUserData.referralStatus = 'none';
                     }
-                    await setDoc(userRef, newUserData); // Create new user document
+                    await setDoc(userRef, newUserData); 
                 }
             });
             
-            // Modified: Load unified history
-            loadUnifiedHistory(String(currentUser.id), 'unified-history-list');
+            // --- HISTORY LOGIC UPDATED ---
+            // Load only withdrawal history on the withdraw page
+            loadWithdrawalHistory(String(currentUser.id), 'withdrawal-history-list');
 
             loadAndDisplayTasks();
             loadAndDisplayVideos();
@@ -706,7 +699,6 @@
                 document.getElementById('userAvatar').textContent = data.firstName.charAt(0).toUpperCase();
                 document.getElementById('userBalance').textContent = (data.balance || 0).toFixed(4);
                 
-                // UPDATE 2: Update watched counts from all 3 sources
                 const monetagWatched = data.monetagAdsWatchedToday || 0;
                 const gigaWatched = data.gigaAdsWatchedToday || 0;
                 const adextraWatched = data.adextraAdsWatchedToday || 0;
@@ -715,19 +707,16 @@
                 document.getElementById('referralCount').textContent = data.referrals || 0;
                 document.getElementById('referralLink').textContent = `https://t.me/Chili_powder_Bot/Chilipowder?startapp=${currentUser.id}`;
 
-                // UPDATE 2: Update Monetag button UI
                 const monetagButton = document.getElementById('watchMonetagAdButton');
                 monetagButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${6 - monetagWatched} Times`;
                 monetagButton.disabled = monetagWatched >= 6;
                 if (monetagWatched >= 6) monetagButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
 
-                // UPDATE 2: Update Giga button UI
                 const gigaButton = document.getElementById('watchGigaAdButton');
                 gigaButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${5 - gigaWatched} Times`;
                 gigaButton.disabled = gigaWatched >= 5;
                 if (gigaWatched >= 5) gigaButton.innerHTML = `<i class="fa-solid fa-check"></i> Completed Today`;
 
-                // UPDATE 2: Update Adextra button UI
                 const adextraButton = document.getElementById('watchAdextraAdButton');
                 adextraButton.innerHTML = `<i class="fa-solid fa-play"></i> Claim Reward ${10 - adextraWatched} Times`;
                 adextraButton.disabled = adextraWatched >= 10;
@@ -740,7 +729,6 @@
                 claimLootBtn.textContent = lootBalance >= 0.05 ? 'Claim Now!' : 'Claim';
             }
 
-            // --- REFERRAL CHANNEL JOIN LOGIC ---
             async function checkReferralValidity(data) {
                 if (data.referredBy && data.referralStatus === 'pending_channels') {
                     if (data.joinedPaymentChannel && data.joinedOfficialChannel) {
@@ -751,7 +739,7 @@
                                 if (referrerDoc.exists()) {
                                     transaction.update(referrerRef, { 
                                         referrals: increment(1), 
-                                        balance: increment(0.007) // Changed to 0.007 USDT
+                                        balance: increment(0.007)
                                     });
                                 }
                                 transaction.update(userRef, { referralStatus: 'completed' });
@@ -771,19 +759,13 @@
                 }
             }
 
-            // Attach event listeners for referral channels on Home page
             document.getElementById('referralPaymentChannel').addEventListener('click', () => markChannelJoined('Payment'));
             document.getElementById('referralOfficialChannel').addEventListener('click', () => markChannelJoined('Official'));
-            
-            // Attach event listeners for referral channels in Welcome Modal
             document.getElementById('welcomePaymentChannel').addEventListener('click', () => markChannelJoined('Payment'));
             document.getElementById('welcomeOfficialChannel').addEventListener('click', () => markChannelJoined('Official'));
 
-
-            // --- Ad Handlers ---
             async function handleMonetagAdWatch() {
                 const button = document.getElementById('watchMonetagAdButton');
-                // UPDATE 2: Limit changed to 6
                 if ((userData.monetagAdsWatchedToday || 0) >= 6) return tg.showAlert(`You have watched all Monetag ads for today.`);
                 button.disabled = true;
                 const adTimerModal = document.getElementById('adTimerModal');
@@ -800,7 +782,6 @@
                     await (typeof show_9858506 === 'function' ? show_9858506() : Promise.reject('Monetag SDK not loaded'));
                     if (countdown <= 0) {
                         await updateDoc(userRef, { monetagAdsWatchedToday: increment(1) });
-                        // UPDATE 3: Reward changed to 0.0006
                         await addEarnings(0.0006);
                         tg.HapticFeedback.notificationOccurred('success');
                         tg.showAlert('Congratulations! 0.0006 USDT has been added.');
@@ -818,13 +799,11 @@
 
             async function handleGigaAdWatch() {
                 const button = document.getElementById('watchGigaAdButton');
-                // UPDATE 2: Limit changed to 5
                 if ((userData.gigaAdsWatchedToday || 0) >= 5) return tg.showAlert(`You have watched all Giga Pub ads for today.`);
                 button.disabled = true;
                 try {
                     await (typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.reject('GigaPub SDK not loaded'));
                     await updateDoc(userRef, { gigaAdsWatchedToday: increment(1) });
-                    // UPDATE 3: Reward changed to 0.0006
                     await addEarnings(0.0006);
                     tg.HapticFeedback.notificationOccurred('success');
                     tg.showAlert('Congratulations! 0.0006 USDT has been added.');
@@ -834,19 +813,16 @@
                 }
             }
 
-            // UPDATE 2: New handler for Adextra/Mixed ads
             async function handleAdextraAdWatch() {
                 const button = document.getElementById('watchAdextraAdButton');
                 if ((userData.adextraAdsWatchedToday || 0) >= 10) return tg.showAlert(`You have watched all mixed ads for today.`);
                 button.disabled = true;
-
                 const adChoice = Math.random();
                 let success = false;
-
                 try {
-                    if (adChoice < 0.5) { // 50% for Monetag
+                    if (adChoice < 0.5) { 
                         await (typeof show_9858506 === 'function' ? show_9858506() : Promise.reject('Monetag SDK not loaded'));
-                    } else { // 50% for Giga
+                    } else { 
                         await (typeof window.showGiga === 'function' ? window.showGiga("main") : Promise.reject('GigaPub SDK not loaded'));
                     }
                     success = true;
@@ -856,7 +832,6 @@
 
                 if (success) {
                     await updateDoc(userRef, { adextraAdsWatchedToday: increment(1) });
-                    // UPDATE 3: Reward changed to 0.0006
                     await addEarnings(0.0006);
                     tg.HapticFeedback.notificationOccurred('success');
                     tg.showAlert('Congratulations! 0.0006 USDT has been added.');
@@ -864,66 +839,98 @@
                 button.disabled = false;
             }
 
-            // --- History Logic (Unified & Updated) ---
-            async function loadUnifiedHistory(userId, containerId) {
+            // --- NEW: Function to load ONLY withdrawal history ---
+            async function loadWithdrawalHistory(userId, containerId) {
                 const historyListEl = document.getElementById(containerId);
                 historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading history...</p>`;
 
-                const withdrawalQuery = query(collection(db, "withdrawals"), where("userId", "==", userId));
-                const referralQuery = query(collection(db, "users"), where("referredBy", "==", userId, "referralStatus", "==", "completed"));
+                const q = query(collection(db, "withdrawals"), where("userId", "==", userId), orderBy("requestTimestamp", "desc"));
 
-                onSnapshot(withdrawalQuery, async (withdrawalSnapshot) => {
-                    const withdrawalItems = [];
-                    withdrawalSnapshot.forEach(doc => {
+                onSnapshot(q, (snapshot) => {
+                    if (snapshot.empty) {
+                        historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">No withdrawal history found.</p>`;
+                        return;
+                    }
+                    historyListEl.innerHTML = '';
+                    snapshot.forEach(doc => {
                         const data = doc.data();
                         const date = data.requestTimestamp?.toDate()?.toLocaleDateString('en-GB') || 'N/A';
-                        withdrawalItems.push({
-                            type: 'withdrawal',
-                            timestamp: data.requestTimestamp?.toMillis() || 0,
-                            html: `<div class="history-item">
+                        const itemHtml = `<div class="history-item">
                                         <div class="history-item-info">
                                             <div class="amount">${data.amount} USDT</div>
                                             <div class="details">${data.method} - ${date}</div>
                                         </div>
                                         <div class="history-item-status ${data.status}">${data.status}</div>
-                                    </div>`
-                        });
+                                    </div>`;
+                        historyListEl.innerHTML += itemHtml;
                     });
-
-                    // Fetch referral history
-                    const referralSnapshot = await getDocs(referralQuery);
-                    const referralItems = [];
-                    referralSnapshot.forEach(doc => {
-                        const referredUser = doc.data();
-                        referralItems.push({
-                            type: 'referral',
-                            timestamp: referredUser.joinDate?.toMillis() || 0,
-                            html: `<div class="history-item">
-                                        <div class="history-item-info">
-                                            <div class="amount" style="color: var(--success-color);">You have earned 0.007 USDT ✅</div>
-                                            <div class="details">For referring ${referredUser.firstName}</div>
-                                        </div>
-                                        <div class="history-item-status completed">Completed</div>
-                                    </div>`
-                        });
-                    });
-
-                    const allItems = [...withdrawalItems, ...referralItems];
-                    allItems.sort((a, b) => b.timestamp - a.timestamp); // Sort by most recent
-
-                    historyListEl.innerHTML = allItems.length === 0 ? `<p style="color: var(--text-secondary); text-align: center;">No transaction history found.</p>` : '';
-                    allItems.forEach(item => {
-                        historyListEl.innerHTML += item.html;
-                    });
-
                 }, (error) => {
-                    console.error("Error loading unified history:", error);
+                    console.error("Error loading withdrawal history:", error);
                     historyListEl.innerHTML = `<p style="color: var(--error-color); text-align: center;">Could not load history.</p>`;
                 });
             }
 
+            // --- NEW: Function to load FULL transaction history (withdrawals + referrals) ---
+            async function loadFullHistory(userId, containerId) {
+                const historyListEl = document.getElementById(containerId);
+                historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Loading history...</p>`;
 
-            // --- Withdraw Logic ---
+                const withdrawalsQuery = query(collection(db, "withdrawals"), where("userId", "==", userId));
+                const referralsQuery = query(collection(db, "users"), where("referredBy", "==", userId), where("referralStatus", "==", "completed"));
+
+                try {
+                    const [withdrawalSnap, referralSnap] = await Promise.all([
+                        getDocs(withdrawalsQuery),
+                        getDocs(referralsQuery)
+                    ]);
+
+                    const allItems = [];
+
+                    withdrawalSnap.forEach(doc => {
+                        const data = doc.data();
+                        const date = data.requestTimestamp?.toDate()?.toLocaleDateString('en-GB') || 'N/A';
+                        allItems.push({
+                            timestamp: data.requestTimestamp?.toMillis() || 0,
+                            html: `<div class="history-item">
+                                       <div class="history-item-info">
+                                           <div class="amount">${data.amount} USDT</div>
+                                           <div class="details">${data.method} - ${date}</div>
+                                       </div>
+                                       <div class="history-item-status ${data.status}">${data.status}</div>
+                                   </div>`
+                        });
+                    });
+
+                    referralSnap.forEach(doc => {
+                        const referredUser = doc.data();
+                        allItems.push({
+                            timestamp: referredUser.joinDate?.toMillis() || 0,
+                            html: `<div class="history-item">
+                                       <div class="history-item-info">
+                                           <div class="amount" style="color: var(--success-color);">You have earned 0.007 USDT ✅</div>
+                                           <div class="details">For referring ${referredUser.firstName}</div>
+                                       </div>
+                                       <div class="history-item-status completed">Received</div>
+                                   </div>`
+                        });
+                    });
+
+                    allItems.sort((a, b) => b.timestamp - a.timestamp);
+
+                    if (allItems.length === 0) {
+                        historyListEl.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">No transaction history found.</p>`;
+                    } else {
+                        historyListEl.innerHTML = '';
+                        allItems.forEach(item => {
+                            historyListEl.innerHTML += item.html;
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error loading full history:", error);
+                    historyListEl.innerHTML = `<p style="color: var(--error-color); text-align: center;">Could not load history.</p>`;
+                }
+            }
+            
             document.querySelectorAll('.withdraw-box').forEach(box => {
                 box.addEventListener('click', () => {
                     const amount = parseFloat(box.dataset.amount);
@@ -991,7 +998,6 @@
                 }
             });
 
-            // --- UPDATE 1: Rewritten Task Logic ---
             async function loadAndDisplayTasks() {
                 const taskListEl = document.getElementById('dynamic-task-list');
                 const completedRef = collection(db, "users", String(currentUser.id), "completedTasks");
@@ -1159,7 +1165,6 @@
                 }
             });
 
-            // --- VIDEO AND IN-VIDEO AD LOGIC ---
             async function loadAndDisplayVideos() {
                 const videosRef = collection(db, "videos");
                 const videoListContainer = document.getElementById('video-list-container');
@@ -1247,7 +1252,6 @@
                 } catch (error) { tg.showAlert('Could not claim reward. Please try again.'); }
             });
 
-            // --- General Event Listeners ---
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', (e) => {
                     document.querySelector('.nav-item.active')?.classList.remove('active');
@@ -1259,13 +1263,15 @@
             
             document.getElementById('watchMonetagAdButton').addEventListener('click', handleMonetagAdWatch);
             document.getElementById('watchGigaAdButton').addEventListener('click', handleGigaAdWatch);
-            document.getElementById('watchAdextraAdButton').addEventListener('click', handleAdextraAdWatch); // UPDATE 2
+            document.getElementById('watchAdextraAdButton').addEventListener('click', handleAdextraAdWatch);
             document.querySelector('.btn-copy').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('referralLink').textContent).then(() => tg.showAlert('Referral link copied!')); });
             document.querySelector('.btn-share').addEventListener('click', () => { tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(document.getElementById('referralLink').textContent)}`); });
             
+            // --- UPDATED Event Listener for History Modal ---
             document.getElementById('historyBtn').addEventListener('click', () => {
                 document.getElementById('historyModal').classList.add('active');
-                loadUnifiedHistory(String(currentUser.id), 'modal-unified-history'); // Changed to unified history
+                // Load the full history (referrals + withdrawals) into the modal
+                loadFullHistory(String(currentUser.id), 'modal-full-history');
             });
 
             document.querySelectorAll('.close-modal-btn').forEach(btn => {
@@ -1289,7 +1295,7 @@
             const today = new Date(); today.setHours(0,0,0,0);
             onSnapshot(query(collection(db, 'users'), where("lastLogin", ">=", Timestamp.fromDate(today))), snap => document.getElementById('daily-active-users').textContent = snap.size);
 
-            onSnapshot(query(collection(db, "withdrawals"), where("status", "==", "pending")), (snapshot) => {
+            onSnapshot(query(collection(db, "withdrawals"), where("status", "==", "pending"), orderBy("requestTimestamp", "asc")), (snapshot) => {
                 document.getElementById('pending-withdrawals').textContent = snapshot.size;
                 requestsTableBody.innerHTML = '';
                 snapshot.forEach((doc) => {
